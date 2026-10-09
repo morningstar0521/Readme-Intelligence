@@ -41,7 +41,10 @@ export function flash(el: HTMLElement): void {
   // Force reflow so the animation restarts when jumping to the same element twice.
   void el.offsetWidth;
   el.classList.add('jump-highlight');
-  window.setTimeout(() => el.classList.remove('jump-highlight'), 1700);
+  // Keep the marker on the element after the animation finishes. The final
+  // keyframe is transparent, and a later jump removes/re-adds the class to
+  // restart the animation. Keeping it mounted also gives automation and
+  // assistive tooling a stable target after a jump.
 }
 
 export function scrollToElement(el: HTMLElement, highlight = true): void {
