@@ -289,7 +289,7 @@ const ENV_PROSE_RE = /\b(environment|env)\s+variables?\b|\b\.env(?:\.[A-Za-z0-9_
 
 /** Variables explicitly named in setup/configuration prose, for example `API_KEY`. */
 function envFromProse(node: RootContent, block: Block): RawEnv[] {
-  if (node.type !== 'paragraph' && node.type !== 'blockquote') return [];
+  if (node.type !== 'paragraph' && node.type !== 'blockquote' && node.type !== 'list') return [];
   const text = collapseWhitespace(mdastToString(node));
   const configurationSection = block.section === 'configuration' || block.section === 'installation' || block.section === 'prerequisites';
   const hasInlineAssignment = /`[A-Z][A-Z0-9_]{2,}\s*=/.test(text);

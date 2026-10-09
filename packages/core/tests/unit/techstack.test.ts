@@ -145,6 +145,12 @@ describe('extractTechStack', () => {
 		expect(names).toEqual([]);
 	});
 
+	it('does not treat explicitly rejected technologies as stack claims', () => {
+		expect(techNames('We do not use tRPC or Turborepo.')).toEqual([]);
+		expect(techNames(md('## Why not tRPC, Turborepo or X?'))).toEqual([]);
+		expect(techNames('The project does not only use React; it also uses Vue.')).toEqual(['React', 'Vue']);
+	});
+
 	it('recognizes explicit built-for implementation statements', () => {
 		expect(techNames('This editor is built for React applications.')).toContain('React');
 	});

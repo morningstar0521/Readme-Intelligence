@@ -48,6 +48,7 @@ const MAX_EVIDENCE = 5;
 const PROJECT_CONTEXT_RE = /\b(?:uses?|used|built\s+(?:with|using|for)|powered\s+by|written\s+in|developed\s+in|based\s+on|requires?|implemented\s+(?:in|with)|stack\s+includes?)\b/i;
 const EXCLUDED_BEFORE_CONTEXT_RE = /\b(?:integrat(?:e|es|ed|ion|ions)|connects?|connected|supports?|supported|exports?|exported|compatible|works?|quick\s+start|examples?|such\s+as|used\s+by|community-maintained)\b/i;
 const EXCLUDED_AFTER_CONTEXT_RE = /^\s*(?:sdk|clients?|bindings?)\b/i;
+const NEGATED_TECH_CONTEXT_RE = /\b(?:not|never|without|does\s+not|doesn['’]t|do\s+not|don['’]t|avoid(?:s|ed|ing)?)\s+(?:(?:use|using|choose|choosing|include|including|support|supporting)\s+[^.!?\n]{0,60}|[^.!?\s]*(?:\s+(?:and|or))?)\s*$/i;
 
 /**
  * Tools commonly mentioned while documenting contribution or installation workflows.
@@ -157,7 +158,11 @@ function matchText(
     if (!termMatch) continue;
     const before = work.slice(Math.max(0, termMatch.index - 80), termMatch.index);
     const after = work.slice(termMatch.index + termMatch[0].length, termMatch.index + termMatch[0].length + 50);
-    if (!strong && type === 'text' && (EXCLUDED_BEFORE_CONTEXT_RE.test(before) || EXCLUDED_AFTER_CONTEXT_RE.test(after))) continue;
+    const excludedByContext =
+      !strong &&
+      type === 'text' &&
+      (EXCLUDED_BEFORE_CONTEXT_RE.test(before) || EXCLUDED_AFTER_CONTEXT_RE.test(after));
+    if (excludedByContext || NEGATED_TECH_CONTEXT_RE.test(before)) continue;
     collector.add(term.entry, type, snippetAround(text, term.re), source, strong);
     work = work.replace(term.reAll, (m) => ' '.repeat(m.length));
     workLower = work.toLowerCase();

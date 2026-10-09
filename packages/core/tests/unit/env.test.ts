@@ -153,6 +153,15 @@ describe('extractEnvVars', () => {
     expect(vars.map((v) => v.name)).toEqual(['API_URL', 'BASE_PATH', 'MCP_ENABLED']);
   });
 
+  it('reads variables named in list-form setup prose', () => {
+    expect(names(md(
+      '## Configuration',
+      '',
+      '- Set CSP_POLICY to enable strict content security policy.',
+      '- Provide GOOGLE_API_CREDENTIALS in the .env file.',
+    ))).toEqual(['CSP_POLICY', 'GOOGLE_API_CREDENTIALS']);
+  });
+
   it('ignores common all-caps words', () => {
     expect(names(md('## Configuration', '', 'Use `JSON` over `HTTP` for the `API`.'))).toEqual([]);
   });
