@@ -72,7 +72,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const body = fs.readFileSync('${{ steps.reality.outputs.report-path }}', 'utf8');
+            const body = fs.readFileSync('${{ steps.reality.outputs.report_path }}', 'utf8');
             const marker = '<!-- readme-intelligence:reality-check -->';
             const { owner, repo } = context.repo;
             const issue_number = context.payload.pull_request.number;
