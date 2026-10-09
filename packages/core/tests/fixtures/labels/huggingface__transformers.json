@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "ML library, multiple install methods",
+  "commands": [
+    "pip install transformers"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "PyTorch",
+    "TensorFlow",
+    "Rust"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

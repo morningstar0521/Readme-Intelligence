@@ -1,0 +1,20 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "ML training project",
+  "commands": [
+    "pip install torch numpy transformers datasets tiktoken wandb tqdm",
+    "python data/shakespeare_char/prepare.py",
+    "python train.py config/train_shakespeare_char.py",
+    "python sample.py --out_dir=out-shakespeare-char"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "PyTorch",
+    "NumPy"
+  ],
+  "installSteps": 3,
+  "hasLicense": false,
+  "apiEndpoints": []
+}

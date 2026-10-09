@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Whiteboard app/npm-package README; Quick start is one npm/yarn block (dev setup deferred to docs). React stated via required peer deps. Judgment: Vercel/Sentry/Crowdin appear only in a 'thankful for free services' logo row, treated as sponsors and excluded; TypeScript not mentioned, removed.",
+  "commands": [
+    "npm install react react-dom @excalidraw/excalidraw",
+    "yarn add react react-dom @excalidraw/excalidraw"
+  ],
+  "envVars": [],
+  "techStack": [
+    "React",
+    "TypeScript",
+    "JavaScript"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

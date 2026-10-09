@@ -1,0 +1,23 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Next.js 13 app example",
+  "commands": [
+    "pnpm install",
+    "cp .env.example .env.local",
+    "pnpm dev"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "Prisma",
+    "NextAuth",
+    "Zod"
+  ],
+  "installSteps": 3,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

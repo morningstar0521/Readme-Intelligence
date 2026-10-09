@@ -1,0 +1,34 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Analytics platform. The current README documents DATABASE_URL, API_URL, BASE_PATH, TWO_FACTOR_ENCRYPTION_KEY, and MCP_ENABLED; removed variables from an older README revision.",
+  "commands": [
+    "git clone https://github.com/umami-software/umami.git",
+    "cd umami",
+    "pnpm install",
+    "openssl rand -hex 32",
+    "pnpm run build",
+    "pnpm run start",
+    "docker pull docker.umami.is/umami-software/umami:latest",
+    "docker compose up -d",
+    "git pull",
+    "pnpm build",
+    "docker compose pull",
+    "docker compose up --force-recreate -d"
+  ],
+  "envVars": [
+    "DATABASE_URL",
+    "API_URL",
+    "BASE_PATH",
+    "TWO_FACTOR_ENCRYPTION_KEY",
+    "MCP_ENABLED"
+  ],
+  "techStack": [
+    "Node.js",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "installSteps": 6,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

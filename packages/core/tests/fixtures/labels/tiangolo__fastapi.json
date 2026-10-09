@@ -1,0 +1,19 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Python web framework",
+  "commands": [
+    "pip install fastapi",
+    "pip install \"fastapi[standard]\"",
+    "fastapi dev main.py"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "FastAPI",
+    "Pydantic"
+  ],
+  "installSteps": 2,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

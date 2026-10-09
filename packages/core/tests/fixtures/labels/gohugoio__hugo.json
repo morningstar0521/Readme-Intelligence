@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Static site generator, multiple install methods",
+  "commands": [
+    "brew install hugo",
+    "snap install hugo"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "Hugo"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

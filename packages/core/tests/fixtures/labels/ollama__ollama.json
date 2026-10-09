@@ -1,0 +1,20 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Local LLM runner",
+  "commands": [
+    "curl -fsSL https://ollama.com/install.sh | sh",
+    "ollama run llama3.2",
+    "ollama pull llama3.2"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "Docker"
+  ],
+  "installSteps": 1,
+  "hasLicense": false,
+  "apiEndpoints": [
+    "POST /api/chat"
+  ]
+}

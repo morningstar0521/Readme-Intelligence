@@ -1,0 +1,19 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "TypeScript validation library",
+  "commands": [
+    "npm install zod",
+    "yarn add zod",
+    "pnpm add zod",
+    "bun add zod"
+  ],
+  "envVars": [],
+  "techStack": [
+    "TypeScript",
+    "Zod"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

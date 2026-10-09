@@ -1,0 +1,25 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Link management platform",
+  "commands": [
+    "pnpm prisma:push",
+    "pnpm install",
+    "pnpm build",
+    "cd apps/web",
+    "pnpm run script dev/seed",
+    "pnpm run script dev/seed --truncate"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "Prisma",
+    "Vercel"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

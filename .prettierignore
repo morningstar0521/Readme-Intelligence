@@ -1,0 +1,7 @@
+node_modules
+.next
+coverage
+pnpm-lock.yaml
+packages/core/tests/fixtures/readmes
+playwright-report
+test-results

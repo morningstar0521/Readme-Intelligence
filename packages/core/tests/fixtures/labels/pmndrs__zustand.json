@@ -1,0 +1,16 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "React state management library",
+  "commands": [
+    "npm install zustand"
+  ],
+  "envVars": [],
+  "techStack": [
+    "React",
+    "TypeScript"
+  ],
+  "installSteps": 0,
+  "hasLicense": false,
+  "apiEndpoints": []
+}

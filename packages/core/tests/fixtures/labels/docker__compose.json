@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Container orchestration tool",
+  "commands": [
+    "pip install docker-compose"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "Docker",
+    "Docker Compose"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

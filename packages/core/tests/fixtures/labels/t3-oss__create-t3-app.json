@@ -1,0 +1,23 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "T3 stack scaffold",
+  "commands": [
+    "npm create t3-app@latest",
+    "yarn create t3-app",
+    "pnpm create t3-app@latest",
+    "bun create t3-app@latest"
+  ],
+  "envVars": [],
+  "techStack": [
+    "TypeScript",
+    "Next.js",
+    "tRPC",
+    "Prisma",
+    "Tailwind CSS",
+    "NextAuth"
+  ],
+  "installSteps": 1,
+  "hasLicense": false,
+  "apiEndpoints": []
+}

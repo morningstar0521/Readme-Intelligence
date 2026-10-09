@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Date utility library",
+  "commands": [
+    "npm install date-fns",
+    "yarn add date-fns"
+  ],
+  "envVars": [],
+  "techStack": [
+    "TypeScript",
+    "JavaScript"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

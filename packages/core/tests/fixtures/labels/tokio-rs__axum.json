@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Rust web framework",
+  "commands": [],
+  "envVars": [],
+  "techStack": [
+    "Rust",
+    "Tokio",
+    "Axum"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": [
+    "GET /",
+    "POST /users"
+  ]
+}

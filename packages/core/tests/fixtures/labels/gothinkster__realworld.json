@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Spec project with multiple implementations, no install commands",
+  "commands": [],
+  "envVars": [],
+  "techStack": [
+    "React",
+    "Angular",
+    "Node.js",
+    "Django",
+    "Rails"
+  ],
+  "installSteps": 0,
+  "hasLicense": false,
+  "apiEndpoints": []
+}

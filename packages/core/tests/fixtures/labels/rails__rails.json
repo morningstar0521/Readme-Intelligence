@@ -1,0 +1,19 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Web framework",
+  "commands": [
+    "gem install rails",
+    "rails new myapp",
+    "cd myapp",
+    "bin/rails server"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Ruby",
+    "Rails"
+  ],
+  "installSteps": 5,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

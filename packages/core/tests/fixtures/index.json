@@ -1,0 +1,533 @@
+[
+  {
+    "name": "alacritty__alacritty",
+    "repo": "alacritty/alacritty",
+    "url": "https://github.com/alacritty/alacritty",
+    "ref": "master",
+    "path": "README.md",
+    "category": "rust",
+    "fetchedAt": "2026-10-08T02:58:58.015Z"
+  },
+  {
+    "name": "appwrite__appwrite",
+    "repo": "appwrite/appwrite",
+    "url": "https://github.com/appwrite/appwrite",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:45.045Z"
+  },
+  {
+    "name": "astral-sh__ruff",
+    "repo": "astral-sh/ruff",
+    "url": "https://github.com/astral-sh/ruff",
+    "ref": "main",
+    "path": "README.md",
+    "category": "python-cli",
+    "fetchedAt": "2026-10-08T02:58:50.970Z"
+  },
+  {
+    "name": "AUTOMATIC1111__stable-diffusion-webui",
+    "repo": "AUTOMATIC1111/stable-diffusion-webui",
+    "url": "https://github.com/AUTOMATIC1111/stable-diffusion-webui",
+    "ref": "master",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:54.395Z"
+  },
+  {
+    "name": "axios__axios",
+    "repo": "axios/axios",
+    "url": "https://github.com/axios/axios",
+    "ref": "v1.x",
+    "path": "README.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:45.808Z"
+  },
+  {
+    "name": "BurntSushi__ripgrep",
+    "repo": "BurntSushi/ripgrep",
+    "url": "https://github.com/BurntSushi/ripgrep",
+    "ref": "master",
+    "path": "README.md",
+    "category": "rust-cli",
+    "fetchedAt": "2026-10-08T02:58:56.937Z"
+  },
+  {
+    "name": "calcom__cal.com",
+    "repo": "calcom/cal.com",
+    "url": "https://github.com/calcom/cal.com",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:38.521Z"
+  },
+  {
+    "name": "colinhacks__zod",
+    "repo": "colinhacks/zod",
+    "url": "https://github.com/colinhacks/zod",
+    "ref": "main",
+    "path": "README.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:46.163Z"
+  },
+  {
+    "name": "date-fns__date-fns",
+    "repo": "date-fns/date-fns",
+    "url": "https://github.com/date-fns/date-fns",
+    "ref": "main",
+    "path": "README.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:47.593Z"
+  },
+  {
+    "name": "docker__compose",
+    "repo": "docker/compose",
+    "url": "https://github.com/docker/compose",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "devops",
+    "fetchedAt": "2026-10-08T02:59:00.889Z"
+  },
+  {
+    "name": "documenso__documenso",
+    "repo": "documenso/documenso",
+    "url": "https://github.com/documenso/documenso",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:40.405Z"
+  },
+  {
+    "name": "dubinc__dub",
+    "repo": "dubinc/dub",
+    "url": "https://github.com/dubinc/dub",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:41.471Z"
+  },
+  {
+    "name": "encode__httpx",
+    "repo": "encode/httpx",
+    "url": "https://github.com/encode/httpx",
+    "ref": "master",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:49.918Z"
+  },
+  {
+    "name": "excalidraw__excalidraw",
+    "repo": "excalidraw/excalidraw",
+    "url": "https://github.com/excalidraw/excalidraw",
+    "ref": "master",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:39.286Z"
+  },
+  {
+    "name": "expo__expo",
+    "repo": "expo/expo",
+    "url": "https://github.com/expo/expo",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "mobile",
+    "fetchedAt": "2026-10-08T02:59:02.396Z"
+  },
+  {
+    "name": "expressjs__express",
+    "repo": "expressjs/express",
+    "url": "https://github.com/expressjs/express",
+    "ref": "master",
+    "path": "Readme.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:45.417Z"
+  },
+  {
+    "name": "flutter__flutter",
+    "repo": "flutter/flutter",
+    "url": "https://github.com/flutter/flutter",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "mobile",
+    "fetchedAt": "2026-10-08T02:59:02.008Z"
+  },
+  {
+    "name": "formbricks__formbricks",
+    "repo": "formbricks/formbricks",
+    "url": "https://github.com/formbricks/formbricks",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:41.120Z"
+  },
+  {
+    "name": "gin-gonic__gin",
+    "repo": "gin-gonic/gin",
+    "url": "https://github.com/gin-gonic/gin",
+    "ref": "master",
+    "path": "README.md",
+    "category": "go",
+    "fetchedAt": "2026-10-08T02:58:55.116Z"
+  },
+  {
+    "name": "go-gitea__gitea",
+    "repo": "go-gitea/gitea",
+    "url": "https://github.com/go-gitea/gitea",
+    "ref": "main",
+    "path": "README.md",
+    "category": "go",
+    "fetchedAt": "2026-10-08T02:58:56.591Z"
+  },
+  {
+    "name": "gohugoio__hugo",
+    "repo": "gohugoio/hugo",
+    "url": "https://github.com/gohugoio/hugo",
+    "ref": "master",
+    "path": "README.md",
+    "category": "go-cli",
+    "fetchedAt": "2026-10-08T02:58:56.225Z"
+  },
+  {
+    "name": "gothinkster__realworld",
+    "repo": "gothinkster/realworld",
+    "url": "https://github.com/gothinkster/realworld",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:44.695Z"
+  },
+  {
+    "name": "hashicorp__terraform",
+    "repo": "hashicorp/terraform",
+    "url": "https://github.com/hashicorp/terraform",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "devops",
+    "fetchedAt": "2026-10-08T02:59:01.221Z"
+  },
+  {
+    "name": "hoppscotch__hoppscotch",
+    "repo": "hoppscotch/hoppscotch",
+    "url": "https://github.com/hoppscotch/hoppscotch",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:39.687Z"
+  },
+  {
+    "name": "huggingface__transformers",
+    "repo": "huggingface/transformers",
+    "url": "https://github.com/huggingface/transformers",
+    "ref": "main",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:51.663Z"
+  },
+  {
+    "name": "iluwatar__java-design-patterns",
+    "repo": "iluwatar/java-design-patterns",
+    "url": "https://github.com/iluwatar/java-design-patterns",
+    "ref": "master",
+    "path": "README.md",
+    "category": "java",
+    "fetchedAt": "2026-10-08T02:58:58.819Z"
+  },
+  {
+    "name": "jellyfin__jellyfin",
+    "repo": "jellyfin/jellyfin",
+    "url": "https://github.com/jellyfin/jellyfin",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "dotnet",
+    "fetchedAt": "2026-10-08T02:59:01.562Z"
+  },
+  {
+    "name": "junegunn__fzf",
+    "repo": "junegunn/fzf",
+    "url": "https://github.com/junegunn/fzf",
+    "ref": "master",
+    "path": "README.md",
+    "category": "go-cli",
+    "fetchedAt": "2026-10-08T02:58:55.825Z"
+  },
+  {
+    "name": "karpathy__nanoGPT",
+    "repo": "karpathy/nanoGPT",
+    "url": "https://github.com/karpathy/nanoGPT",
+    "ref": "master",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:54.752Z"
+  },
+  {
+    "name": "langchain-ai__langchain",
+    "repo": "langchain-ai/langchain",
+    "url": "https://github.com/langchain-ai/langchain",
+    "ref": "master",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:52.404Z"
+  },
+  {
+    "name": "laravel__laravel",
+    "repo": "laravel/laravel",
+    "url": "https://github.com/laravel/laravel",
+    "ref": "13.x",
+    "path": "README.md",
+    "category": "php",
+    "fetchedAt": "2026-10-08T02:59:00.060Z"
+  },
+  {
+    "name": "louislam__uptime-kuma",
+    "repo": "louislam/uptime-kuma",
+    "url": "https://github.com/louislam/uptime-kuma",
+    "ref": "master",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:43.943Z"
+  },
+  {
+    "name": "ollama__ollama",
+    "repo": "ollama/ollama",
+    "url": "https://github.com/ollama/ollama",
+    "ref": "main",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:53.640Z"
+  },
+  {
+    "name": "openai__whisper",
+    "repo": "openai/whisper",
+    "url": "https://github.com/openai/whisper",
+    "ref": "main",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:53.279Z"
+  },
+  {
+    "name": "pallets__flask",
+    "repo": "pallets/flask",
+    "url": "https://github.com/pallets/flask",
+    "ref": "main",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:49.211Z"
+  },
+  {
+    "name": "pmndrs__zustand",
+    "repo": "pmndrs/zustand",
+    "url": "https://github.com/pmndrs/zustand",
+    "ref": "main",
+    "path": "README.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:47.253Z"
+  },
+  {
+    "name": "prettier__prettier",
+    "repo": "prettier/prettier",
+    "url": "https://github.com/prettier/prettier",
+    "ref": "main",
+    "path": "README.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:46.522Z"
+  },
+  {
+    "name": "psf__requests",
+    "repo": "psf/requests",
+    "url": "https://github.com/psf/requests",
+    "ref": "main",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:49.572Z"
+  },
+  {
+    "name": "pydantic__pydantic",
+    "repo": "pydantic/pydantic",
+    "url": "https://github.com/pydantic/pydantic",
+    "ref": "main",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:50.615Z"
+  },
+  {
+    "name": "rails__rails",
+    "repo": "rails/rails",
+    "url": "https://github.com/rails/rails",
+    "ref": "main",
+    "path": "README.md",
+    "category": "ruby",
+    "fetchedAt": "2026-10-08T02:59:00.469Z"
+  },
+  {
+    "name": "run-llama__llama_index",
+    "repo": "run-llama/llama_index",
+    "url": "https://github.com/run-llama/llama_index",
+    "ref": "main",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:54.035Z"
+  },
+  {
+    "name": "shadcn-ui__taxonomy",
+    "repo": "shadcn-ui/taxonomy",
+    "url": "https://github.com/shadcn-ui/taxonomy",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:43.569Z"
+  },
+  {
+    "name": "sharkdp__bat",
+    "repo": "sharkdp/bat",
+    "url": "https://github.com/sharkdp/bat",
+    "ref": "master",
+    "path": "README.md",
+    "category": "rust-cli",
+    "fetchedAt": "2026-10-08T02:58:57.299Z"
+  },
+  {
+    "name": "sindresorhus__got",
+    "repo": "sindresorhus/got",
+    "url": "https://github.com/sindresorhus/got",
+    "ref": "main",
+    "path": "readme.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:48.080Z"
+  },
+  {
+    "name": "spf13__cobra",
+    "repo": "spf13/cobra",
+    "url": "https://github.com/spf13/cobra",
+    "ref": "main",
+    "path": "README.md",
+    "category": "go",
+    "fetchedAt": "2026-10-08T02:58:55.464Z"
+  },
+  {
+    "name": "spring-projects__spring-petclinic",
+    "repo": "spring-projects/spring-petclinic",
+    "url": "https://github.com/spring-projects/spring-petclinic",
+    "ref": "main",
+    "path": "README.md",
+    "category": "java",
+    "fetchedAt": "2026-10-08T02:58:58.421Z"
+  },
+  {
+    "name": "square__okhttp",
+    "repo": "square/okhttp",
+    "url": "https://github.com/square/okhttp",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "java",
+    "fetchedAt": "2026-10-08T02:58:59.652Z"
+  },
+  {
+    "name": "steven-tey__novel",
+    "repo": "steven-tey/novel",
+    "url": "https://github.com/steven-tey/novel",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:41.932Z"
+  },
+  {
+    "name": "streamlit__streamlit",
+    "repo": "streamlit/streamlit",
+    "url": "https://github.com/streamlit/streamlit",
+    "ref": "develop",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:51.313Z"
+  },
+  {
+    "name": "supabase__supabase",
+    "repo": "supabase/supabase",
+    "url": "https://github.com/supabase/supabase",
+    "ref": "master",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:38.921Z"
+  },
+  {
+    "name": "t3-oss__create-t3-app",
+    "repo": "t3-oss/create-t3-app",
+    "url": "https://github.com/t3-oss/create-t3-app",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:43.161Z"
+  },
+  {
+    "name": "Textualize__rich",
+    "repo": "Textualize/rich",
+    "url": "https://github.com/Textualize/rich",
+    "ref": "main",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:50.260Z"
+  },
+  {
+    "name": "tiangolo__fastapi",
+    "repo": "tiangolo/fastapi",
+    "url": "https://github.com/tiangolo/fastapi",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "python",
+    "fetchedAt": "2026-10-08T02:58:48.847Z"
+  },
+  {
+    "name": "tokio-rs__axum",
+    "repo": "tokio-rs/axum",
+    "url": "https://github.com/tokio-rs/axum",
+    "ref": "main",
+    "path": "README.md",
+    "category": "rust",
+    "fetchedAt": "2026-10-08T02:58:57.651Z"
+  },
+  {
+    "name": "twentyhq__twenty",
+    "repo": "twentyhq/twenty",
+    "url": "https://github.com/twentyhq/twenty",
+    "ref": "main",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:40.763Z"
+  },
+  {
+    "name": "ultralytics__ultralytics",
+    "repo": "ultralytics/ultralytics",
+    "url": "https://github.com/ultralytics/ultralytics",
+    "ref": "main",
+    "path": "README.md",
+    "category": "ml",
+    "fetchedAt": "2026-10-08T02:58:52.873Z"
+  },
+  {
+    "name": "umami-software__umami",
+    "repo": "umami-software/umami",
+    "url": "https://github.com/umami-software/umami",
+    "ref": "master",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:40.035Z"
+  },
+  {
+    "name": "vercel__ai-chatbot",
+    "repo": "vercel/ai-chatbot",
+    "url": "https://github.com/vercel/ai-chatbot",
+    "ref": "HEAD",
+    "path": "README.md",
+    "category": "web-app",
+    "fetchedAt": "2026-10-08T02:58:42.755Z"
+  },
+  {
+    "name": "vitejs__vite",
+    "repo": "vitejs/vite",
+    "url": "https://github.com/vitejs/vite",
+    "ref": "main",
+    "path": "README.md",
+    "category": "js-library",
+    "fetchedAt": "2026-10-08T02:58:46.857Z"
+  }
+]

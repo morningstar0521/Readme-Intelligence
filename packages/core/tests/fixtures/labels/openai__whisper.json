@@ -1,0 +1,22 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Speech recognition model",
+  "commands": [
+    "pip install -U openai-whisper",
+    "pip install git+https://github.com/openai/whisper.git",
+    "sudo apt update && sudo apt install ffmpeg",
+    "sudo pacman -S ffmpeg",
+    "brew install ffmpeg",
+    "choco install ffmpeg",
+    "whisper audio.flac audio.mp3 audio.wav --model medium"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "PyTorch"
+  ],
+  "installSteps": 2,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

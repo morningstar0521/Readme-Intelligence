@@ -1,0 +1,16 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Python web framework",
+  "commands": [
+    "pip install flask"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "Flask"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

@@ -1,0 +1,21 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Monitoring tool",
+  "commands": [
+    "docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1",
+    "docker pull louislam/uptime-kuma:1",
+    "docker stop uptime-kuma",
+    "docker rm uptime-kuma"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Node.js",
+    "Vue",
+    "Docker",
+    "SQLite"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

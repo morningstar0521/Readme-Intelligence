@@ -1,0 +1,23 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "HTTP client library, readme shows usage not install steps",
+  "commands": [
+    "npm install axios",
+    "yarn add axios",
+    "pnpm add axios",
+    "bun add axios",
+    "deno add axios",
+    "npm install",
+    "npm ci",
+    "npm rebuild husky && npx husky"
+  ],
+  "envVars": [],
+  "techStack": [
+    "JavaScript",
+    "TypeScript"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

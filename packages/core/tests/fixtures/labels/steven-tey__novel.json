@@ -1,0 +1,25 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "WYSIWYG editor, uses OpenAI",
+  "commands": [
+    "vc env pull",
+    "pnpm i",
+    "pnpm dev"
+  ],
+  "envVars": [
+    "OPENAI_API_KEY",
+    "BLOB_READ_WRITE_TOKEN"
+  ],
+  "techStack": [
+    "React",
+    "TypeScript",
+    "Next.js",
+    "Tailwind CSS",
+    "Vercel",
+    "OpenAI"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

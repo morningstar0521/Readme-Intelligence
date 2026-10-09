@@ -1,0 +1,15 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Python HTTP library",
+  "commands": [
+    "pip install requests"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

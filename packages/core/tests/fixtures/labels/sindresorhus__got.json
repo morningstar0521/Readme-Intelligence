@@ -1,0 +1,16 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "HTTP client for Node.js",
+  "commands": [
+    "npm install got"
+  ],
+  "envVars": [],
+  "techStack": [
+    "TypeScript",
+    "Node.js"
+  ],
+  "installSteps": 1,
+  "hasLicense": false,
+  "apiEndpoints": []
+}

@@ -1,0 +1,15 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Python HTTP client",
+  "commands": [
+    "pip install httpx"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

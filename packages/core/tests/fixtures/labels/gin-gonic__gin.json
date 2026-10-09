@@ -1,0 +1,16 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Go web framework",
+  "commands": [
+    "go get -u github.com/gin-gonic/gin"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "Gin"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

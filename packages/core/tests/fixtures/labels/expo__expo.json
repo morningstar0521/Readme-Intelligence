@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "React Native framework",
+  "commands": [
+    "npx create-expo-app@latest"
+  ],
+  "envVars": [],
+  "techStack": [
+    "React Native",
+    "TypeScript",
+    "JavaScript"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "PHP web framework",
+  "commands": [
+    "composer create-project laravel/laravel example-app",
+    "php artisan serve"
+  ],
+  "envVars": [],
+  "techStack": [
+    "PHP",
+    "Laravel",
+    "Composer"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

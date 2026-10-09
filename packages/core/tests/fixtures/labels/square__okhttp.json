@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Java/Kotlin HTTP client",
+  "commands": [
+    "./gradlew okcurl:nativeImage",
+    "./okcurl/build/graal/okcurl https://httpbin.org/get"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Java",
+    "Kotlin",
+    "Gradle"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

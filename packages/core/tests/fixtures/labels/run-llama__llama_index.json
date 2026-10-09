@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "LLM framework",
+  "commands": [
+    "pip install llama-index"
+  ],
+  "envVars": [
+    "OPENAI_API_KEY"
+  ],
+  "techStack": [
+    "Python",
+    "OpenAI"
+  ],
+  "installSteps": 1,
+  "hasLicense": false,
+  "apiEndpoints": []
+}

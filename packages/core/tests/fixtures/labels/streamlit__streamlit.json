@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Python data app framework",
+  "commands": [
+    "pip install streamlit",
+    "streamlit hello"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "Streamlit"
+  ],
+  "installSteps": 2,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

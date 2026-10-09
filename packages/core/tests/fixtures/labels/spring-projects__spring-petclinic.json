@@ -1,0 +1,31 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Java web app sample",
+  "commands": [
+    "git clone https://github.com/spring-projects/spring-petclinic.git",
+    "cd spring-petclinic",
+    "./mvnw spring-boot:run",
+    "./gradlew bootRun",
+    "./mvnw spring-boot:build-image",
+    "docker images | grep petclinic",
+    "docker run -p 8080:8080 docker.io/library/spring-petclinic:latest",
+    "docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:9.7",
+    "docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:18.4",
+    "docker compose up mysql",
+    "docker compose up postgres",
+    "./mvnw package -P css",
+    "./mvnw generate-resources"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Java",
+    "Spring Boot",
+    "Maven",
+    "MySQL",
+    "PostgreSQL"
+  ],
+  "installSteps": 3,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

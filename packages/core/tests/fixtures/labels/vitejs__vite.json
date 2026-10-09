@@ -1,0 +1,14 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Frontend build tool",
+  "commands": [],
+  "envVars": [],
+  "techStack": [
+    "TypeScript",
+    "JavaScript"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

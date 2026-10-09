@@ -1,0 +1,14 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Code formatter",
+  "commands": [],
+  "envVars": [],
+  "techStack": [
+    "JavaScript",
+    "TypeScript"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

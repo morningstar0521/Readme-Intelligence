@@ -1,0 +1,14 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Infrastructure as code tool",
+  "commands": [],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "Terraform"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

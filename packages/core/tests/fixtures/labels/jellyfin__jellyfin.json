@@ -1,0 +1,22 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Media server, C# based",
+  "commands": [
+    "docker pull jellyfin/jellyfin",
+    "docker run -d -v /path/to/config:/config -v /path/to/cache:/cache -v /path/to/media:/media --net=host jellyfin/jellyfin:latest"
+  ],
+  "envVars": [
+    "JELLYFIN_NOWEBCONTENT"
+  ],
+  "techStack": [
+    "C#",
+    ".NET",
+    "Docker",
+    "TypeScript",
+    "JavaScript"
+  ],
+  "installSteps": 4,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

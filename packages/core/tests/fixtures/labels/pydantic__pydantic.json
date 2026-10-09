@@ -1,0 +1,16 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Python data validation library",
+  "commands": [
+    "pip install pydantic"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "Rust"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

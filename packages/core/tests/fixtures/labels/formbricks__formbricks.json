@@ -1,0 +1,22 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Survey platform",
+  "commands": [
+    "pnpm install",
+    "pnpm go"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "Prisma",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "installSteps": 3,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

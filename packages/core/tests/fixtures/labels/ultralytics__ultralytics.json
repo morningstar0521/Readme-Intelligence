@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "YOLO object detection",
+  "commands": [
+    "pip install ultralytics"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Python",
+    "PyTorch",
+    "ONNX"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

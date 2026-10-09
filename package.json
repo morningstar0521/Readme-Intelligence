@@ -1,0 +1,37 @@
+{
+  "name": "readme-intelligence",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "README Intelligence Viewer: render any README and extract structured, evidence-backed project intelligence.",
+  "scripts": {
+    "dev": "pnpm --filter @readme-intel/web dev",
+    "build": "pnpm --filter @readme-intel/web build",
+    "start": "pnpm --filter @readme-intel/web start",
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run test",
+    "lint": "pnpm -r --parallel run lint",
+    "typecheck": "pnpm -r run typecheck && tsc -p tsconfig.scripts.json",
+    "test": "pnpm --filter @readme-intel/core test",
+    "test:coverage": "pnpm --filter @readme-intel/core test:coverage",
+    "e2e": "pnpm --filter @readme-intel/web e2e",
+    "eval": "tsx scripts/eval.ts",
+    "fixtures:fetch": "tsx scripts/fetch-fixtures.ts",
+    "fixtures:labels": "tsx scripts/label-template.ts",
+    "reality": "tsx scripts/reality.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.11",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

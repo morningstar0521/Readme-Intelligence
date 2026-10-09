@@ -1,0 +1,325 @@
+import type { TechCategory } from '../types';
+
+/**
+ * Built-in technology dictionary (Extractor spec 4.7).
+ *
+ * Fields:
+ * - aliases:   case-insensitive whole-word matches in prose, headings, tables and badge text.
+ * - strict:    case-sensitive whole-word matches (for words that are also common English).
+ * - ambiguous: prose matches only count inside Tech stack / Prerequisites sections or headings;
+ *              elsewhere only `strict`, badges, commands, code and language tags count.
+ * - badge:     extra keywords found in badge URLs (simple-icons slugs such as "nextdotjs").
+ * - commands:  patterns matched against extracted shell commands.
+ * - langTags:  fenced code block language tags.
+ * - code:      patterns matched against non-shell code block content (imports etc.).
+ */
+export interface TechEntry {
+  name: string;
+  category: TechCategory;
+  aliases: string[];
+  strict?: string[];
+  ambiguous?: boolean;
+  badge?: string[];
+  commands?: RegExp[];
+  langTags?: string[];
+  code?: RegExp[];
+}
+
+type Opts = Omit<TechEntry, 'name' | 'category' | 'aliases'>;
+
+const t = (name: string, category: TechCategory, aliases: string[], opts: Opts = {}): TechEntry => ({
+  name,
+  category,
+  aliases,
+  ...opts,
+});
+
+export const TECH_DICTIONARY: TechEntry[] = [
+  // ---------------------------------------------------------------- languages
+  t('JavaScript', 'language', ['javascript', 'ecmascript', 'es6', 'es2015'], { badge: ['javascript'], langTags: ['js', 'javascript', 'jsx', 'mjs', 'cjs'] }),
+  t('TypeScript', 'language', ['typescript'], { badge: ['typescript'], langTags: ['ts', 'typescript', 'tsx', 'mts', 'cts'], commands: [/^(npx\s+)?tsc\b/] }),
+  t('Python', 'language', ['python', 'python3', 'python 3'], { badge: ['python'], langTags: ['py', 'python', 'python3', 'py3'], commands: [/^(python3?|py)\b/, /^pip3?\b/] }),
+  t('Java', 'language', ['java', 'openjdk', 'jdk'], { badge: ['java', 'openjdk'], langTags: ['java'], commands: [/^java\b/] }),
+  t('Go', 'language', ['golang'], { strict: ['Go', 'Golang'], ambiguous: true, badge: ['go', 'golang'], langTags: ['go', 'golang'], commands: [/^go (run|build|test|mod|get|install|generate|vet)\b/] }),
+  t('Rust', 'language', ['rust'], { strict: ['Rust'], ambiguous: true, badge: ['rust'], langTags: ['rust', 'rs'], commands: [/^(cargo|rustup|rustc)\b/] }),
+  t('C++', 'language', ['c++', 'cpp'], { badge: ['cplusplus', 'c++'], langTags: ['cpp', 'c++', 'cc', 'cxx', 'hpp'] }),
+  t('C', 'language', [], { strict: ['C'], ambiguous: true, langTags: ['c'] }),
+  t('C#', 'language', ['c#', 'csharp'], { badge: ['csharp', 'c#', 'c%23'], langTags: ['cs', 'csharp', 'c#'] }),
+  t('PHP', 'language', ['php'], { badge: ['php'], langTags: ['php'], commands: [/^php\b/] }),
+  t('Ruby', 'language', ['ruby'], { badge: ['ruby'], langTags: ['ruby', 'rb'], commands: [/^(ruby|gem|rake)\b/] }),
+  t('Kotlin', 'language', ['kotlin'], { badge: ['kotlin'], langTags: ['kotlin', 'kt', 'kts'] }),
+  t('Swift', 'language', ['swift'], { strict: ['Swift'], ambiguous: true, badge: ['swift'], langTags: ['swift'], commands: [/^swift (build|run|test|package)\b/] }),
+  t('Dart', 'language', ['dart'], { badge: ['dart'], langTags: ['dart'], commands: [/^dart\b/] }),
+  t('Scala', 'language', ['scala'], { badge: ['scala'], langTags: ['scala', 'sc'], commands: [/^sbt\b/] }),
+  t('R', 'language', [], { strict: ['R'], ambiguous: true, langTags: ['r'] }),
+  t('Elixir', 'language', ['elixir'], { badge: ['elixir'], langTags: ['elixir', 'ex', 'exs'], commands: [/^mix\b/] }),
+  t('Haskell', 'language', ['haskell'], { badge: ['haskell'], langTags: ['haskell', 'hs'], commands: [/^(cabal|stack build)\b/] }),
+  t('Lua', 'language', ['lua'], { badge: ['lua'], langTags: ['lua'] }),
+  t('Perl', 'language', ['perl'], { badge: ['perl'], langTags: ['perl', 'pl'] }),
+  t('Julia', 'language', ['julia'], { strict: ['Julia'], ambiguous: true, badge: ['julia'], langTags: ['julia', 'jl'] }),
+  t('SQL', 'language', ['sql'], { langTags: ['sql', 'pgsql', 'plsql', 'mysql'] }),
+  t('HTML', 'language', ['html', 'html5'], { ambiguous: true, badge: ['html5', 'html'], langTags: ['html', 'htm'] }),
+  t('CSS', 'language', ['css', 'css3'], { ambiguous: true, badge: ['css3', 'css'], langTags: ['css'] }),
+  t('Solidity', 'language', ['solidity'], { badge: ['solidity'], langTags: ['solidity', 'sol'] }),
+  t('Zig', 'language', ['ziglang'], { strict: ['Zig'], ambiguous: true, badge: ['zig'], langTags: ['zig'], commands: [/^zig\b/] }),
+  t('Clojure', 'language', ['clojure'], { badge: ['clojure'], langTags: ['clojure', 'clj'], commands: [/^lein\b/] }),
+  t('Objective-C', 'language', ['objective-c', 'objc'], { langTags: ['objc', 'objective-c'] }),
+  t('MATLAB', 'language', ['matlab'], { badge: ['mathworks', 'matlab'], langTags: ['matlab'] }),
+  t('Shell', 'language', ['shell script', 'shell scripting', 'bash script', 'bash scripting'], { badge: ['gnubash'] }),
+
+  // ---------------------------------------------------------------- frontend
+  t('React', 'frontend', ['react.js', 'reactjs', 'react js'], { strict: ['React', 'ReactJS', 'React.js'], badge: ['react'], code: [/from\s+['"]react['"]/, /require\(\s*['"]react['"]\s*\)/], commands: [/create-react-app/] }),
+  t('React Router', 'frontend', ['react router', 'react-router'], { badge: ['reactrouter'] }),
+  t('Next.js', 'frontend', ['next.js', 'nextjs', 'next js'], { badge: ['nextdotjs', 'next.js', 'nextjs'], commands: [/\bnext (dev|build|start|lint)\b/, /create-next-app/], code: [/from\s+['"]next\//] }),
+  t('Vue', 'frontend', ['vue', 'vue.js', 'vuejs', 'vue 3', 'vue3'], { badge: ['vuedotjs', 'vue.js', 'vue'], langTags: ['vue'], commands: [/\bvue (create|add)\b/, /create-vue/] }),
+  t('Nuxt', 'frontend', ['nuxt', 'nuxt.js', 'nuxtjs'], { badge: ['nuxtdotjs', 'nuxt'], commands: [/\bnuxi\b/] }),
+  t('Angular', 'frontend', ['angular', 'angularjs'], { badge: ['angular', 'angularjs'], commands: [/^ng (new|serve|build|test|generate)\b/, /@angular\/cli/] }),
+  t('Svelte', 'frontend', ['svelte'], { badge: ['svelte'], langTags: ['svelte'] }),
+  t('SvelteKit', 'frontend', ['sveltekit', 'svelte kit'], { badge: ['sveltekit'] }),
+  t('SolidJS', 'frontend', ['solidjs', 'solid.js'], { badge: ['solid'] }),
+  t('Preact', 'frontend', ['preact'], { badge: ['preact'] }),
+  t('Remix', 'frontend', ['remix.run', 'remix run'], { strict: ['Remix'], ambiguous: true, badge: ['remix'] }),
+  t('Astro', 'frontend', ['astro'], { strict: ['Astro'], ambiguous: true, badge: ['astro'], langTags: ['astro'] }),
+  t('Gatsby', 'frontend', ['gatsby', 'gatsbyjs'], { badge: ['gatsby'], commands: [/^gatsby\b/] }),
+  t('Ember.js', 'frontend', ['ember.js', 'emberjs'], { badge: ['emberdotjs'] }),
+  t('jQuery', 'frontend', ['jquery'], { badge: ['jquery'] }),
+  t('Alpine.js', 'frontend', ['alpine.js', 'alpinejs'], { badge: ['alpinedotjs'] }),
+  t('HTMX', 'frontend', ['htmx'], { badge: ['htmx'] }),
+  t('Tailwind CSS', 'frontend', ['tailwind', 'tailwindcss', 'tailwind css'], { badge: ['tailwindcss', 'tailwind'] }),
+  t('Bootstrap', 'frontend', ['bootstrap 5', 'bootstrap 4', 'react-bootstrap'], { strict: ['Bootstrap'], ambiguous: true, badge: ['bootstrap'] }),
+  t('Sass', 'frontend', ['sass', 'scss'], { badge: ['sass'], langTags: ['scss', 'sass'] }),
+  t('Material UI', 'frontend', ['material-ui', 'material ui', 'mui'], { badge: ['mui'] }),
+  t('Chakra UI', 'frontend', ['chakra ui', 'chakra-ui'], { badge: ['chakraui'] }),
+  t('shadcn/ui', 'frontend', ['shadcn/ui', 'shadcn', 'shadcn-ui'], { badge: ['shadcnui'], commands: [/shadcn(-ui)?@?\S*\s+(add|init)/] }),
+  t('Ant Design', 'frontend', ['ant design', 'antd'], { badge: ['antdesign'] }),
+  t('Redux', 'frontend', ['redux', 'redux toolkit', 'rtk query'], { badge: ['redux'] }),
+  t('Zustand', 'frontend', ['zustand'], {}),
+  t('Jotai', 'frontend', ['jotai'], {}),
+  t('Linaria', 'frontend', ['linaria'], {}),
+  t('TanStack Query', 'frontend', ['tanstack query', 'react query', 'react-query'], { badge: ['reactquery'] }),
+  t('Vite', 'frontend', ['vite', 'vitejs'], { badge: ['vite'], commands: [/create-vite/, /^(npx\s+)?vite\b/] }),
+  t('Webpack', 'frontend', ['webpack'], { badge: ['webpack'] }),
+  t('Three.js', 'frontend', ['three.js', 'threejs'], { badge: ['threedotjs'] }),
+  t('D3.js', 'frontend', ['d3.js', 'd3js'], { badge: ['d3dotjs'] }),
+  t('Chart.js', 'frontend', ['chart.js', 'chartjs'], { badge: ['chartdotjs'] }),
+  t('Framer Motion', 'frontend', ['framer motion', 'framer-motion'], { badge: ['framer'] }),
+  t('Electron', 'frontend', ['electron', 'electron.js', 'electronjs'], { badge: ['electron'] }),
+  t('React Native', 'frontend', ['react native', 'react-native'], { badge: ['reactnative'] }),
+  t('Expo', 'frontend', ['expo'], { strict: ['Expo'], ambiguous: true, badge: ['expo'], commands: [/^(npx\s+)?expo\b/] }),
+  t('Flutter', 'frontend', ['flutter'], { badge: ['flutter'], commands: [/^flutter\b/] }),
+  t('Ionic', 'frontend', ['ionic framework'], { strict: ['Ionic'], ambiguous: true, badge: ['ionic'] }),
+  t('Styled Components', 'frontend', ['styled-components', 'styled components'], { badge: ['styledcomponents'] }),
+  t('Streamlit', 'frontend', ['streamlit'], { badge: ['streamlit'], commands: [/\bstreamlit run\b/], code: [/import streamlit/] }),
+  t('Storybook', 'frontend', ['storybook'], { badge: ['storybook'] }),
+  t('Leaflet', 'frontend', ['leaflet', 'leaflet.js'], { badge: ['leaflet'] }),
+
+  // ---------------------------------------------------------------- backend
+  t('Node.js', 'backend', ['node.js', 'nodejs', 'node js'], { strict: ['Node'], badge: ['nodedotjs', 'node.js', 'nodejs'], commands: [/^(node|nodemon)\b/] }),
+  t('Express', 'backend', ['express.js', 'expressjs', 'express js'], { strict: ['Express', 'Express.js'], ambiguous: true, badge: ['express'], code: [/require\(\s*['"]express['"]\s*\)/, /from\s+['"]express['"]/] }),
+  t('NestJS', 'backend', ['nestjs', 'nest.js'], { badge: ['nestjs'], commands: [/^nest (new|start|build|generate|g)\b/] }),
+  t('Fastify', 'backend', ['fastify'], { badge: ['fastify'] }),
+  t('Koa', 'backend', ['koa.js', 'koajs'], { strict: ['Koa'], ambiguous: true, badge: ['koa'] }),
+  t('Hono', 'backend', ['hono'], { strict: ['Hono'], ambiguous: true, badge: ['hono'] }),
+  t('Deno', 'backend', ['deno'], { badge: ['deno'], commands: [/^deno\b/] }),
+  t('Bun', 'backend', ['bun.js', 'bun.sh'], { strict: ['Bun'], ambiguous: true, badge: ['bun'], commands: [/^(bun|bunx)\b/] }),
+  t('FastAPI', 'backend', ['fastapi'], { badge: ['fastapi'], commands: [/\buvicorn\b/, /\bfastapi (dev|run)\b/], code: [/from fastapi import/, /import fastapi/] }),
+  t('Django', 'backend', ['django', 'django rest framework', 'drf'], { badge: ['django'], commands: [/manage\.py\b/, /\bdjango-admin\b/], code: [/from django/] }),
+  t('Flask', 'backend', ['flask'], { badge: ['flask'], commands: [/\bflask run\b/], code: [/from flask import/] }),
+  t('Spring Boot', 'backend', ['spring boot', 'spring-boot', 'springboot'], { badge: ['springboot', 'spring'], commands: [/spring-boot:run/] }),
+  t('Ruby on Rails', 'backend', ['ruby on rails', 'rubyonrails', 'rails 7', 'rails 6'], { strict: ['Rails'], ambiguous: true, badge: ['rubyonrails', 'rails'], commands: [/^(bin\/)?rails\b/] }),
+  t('Laravel', 'backend', ['laravel'], { badge: ['laravel'], commands: [/\bartisan\b/] }),
+  t('Symfony', 'backend', ['symfony'], { badge: ['symfony'] }),
+  t('.NET', 'backend', ['.net', 'dotnet', '.net core', 'asp.net', 'asp.net core'], { badge: ['dotnet', '.net'], commands: [/^dotnet\b/] }),
+  t('Gin', 'backend', ['gin-gonic', 'gin gonic'], { strict: ['Gin'], ambiguous: true }),
+  t('GraphQL', 'backend', ['graphql'], { badge: ['graphql'], langTags: ['graphql', 'gql'] }),
+  t('Apollo', 'backend', ['apollo graphql', 'apollo server', 'apollo client'], { badge: ['apollographql'] }),
+  t('tRPC', 'backend', ['trpc'], { badge: ['trpc'] }),
+  t('Socket.IO', 'backend', ['socket.io', 'socketio'], { badge: ['socketdotio'] }),
+  t('gRPC', 'backend', ['grpc'], { badge: ['grpc'] }),
+  t('Strapi', 'backend', ['strapi'], { badge: ['strapi'] }),
+  t('Celery', 'backend', ['celery'], { badge: ['celery'], commands: [/^celery\b/] }),
+  t('Apache Kafka', 'backend', ['kafka', 'apache kafka'], { badge: ['apachekafka'] }),
+  t('RabbitMQ', 'backend', ['rabbitmq'], { badge: ['rabbitmq'] }),
+  t('Actix Web', 'backend', ['actix-web', 'actix web', 'actix'], { badge: ['actix'] }),
+  t('Axum', 'backend', ['axum'], {}),
+  t('Tokio', 'backend', ['tokio'], {}),
+  t('Phoenix', 'backend', ['phoenix framework', 'phoenix liveview'], { strict: ['Phoenix'], ambiguous: true }),
+  t('Gunicorn', 'backend', ['gunicorn'], { badge: ['gunicorn'], commands: [/^gunicorn\b/] }),
+  t('Pydantic', 'backend', ['pydantic'], { badge: ['pydantic'] }),
+  t('BullMQ', 'backend', ['bullmq'], {}),
+  t('Daily.co', 'backend', ['daily.co', 'daily'], { strict: ['Daily'], ambiguous: true }),
+  t('Cobra', 'tooling', ['cobra', 'cobra-cli'], { commands: [/^cobra(?:-cli)?\b/] }),
+  t('Hugo', 'tooling', ['hugo'], { commands: [/^hugo\b/] }),
+  t('Swagger / OpenAPI', 'backend', ['swagger', 'openapi', 'swagger ui'], { badge: ['swagger', 'openapiinitiative'] }),
+
+  // ---------------------------------------------------------------- database
+  t('PostgreSQL', 'database', ['postgres', 'postgresql', 'psql', 'pgsql'], { badge: ['postgresql', 'postgres'], commands: [/^psql\b/] }),
+  t('MySQL', 'database', ['mysql'], { badge: ['mysql'], commands: [/^mysql\b/] }),
+  t('MariaDB', 'database', ['mariadb'], { badge: ['mariadb'] }),
+  t('SQLite', 'database', ['sqlite', 'sqlite3'], { badge: ['sqlite'] }),
+  t('MongoDB', 'database', ['mongodb', 'mongo db', 'mongodb atlas'], { strict: ['Mongo'], badge: ['mongodb'], commands: [/^mongo(sh|d)?\b/] }),
+  t('Redis', 'database', ['redis'], { badge: ['redis'], commands: [/\bredis-(server|cli)\b/] }),
+  t('Elasticsearch', 'database', ['elasticsearch', 'elastic search'], { badge: ['elasticsearch'] }),
+  t('Cassandra', 'database', ['cassandra', 'apache cassandra'], { badge: ['apachecassandra'] }),
+  t('DynamoDB', 'database', ['dynamodb'], { badge: ['amazondynamodb'] }),
+  t('Firestore', 'database', ['firestore', 'cloud firestore'], {}),
+  t('Supabase', 'database', ['supabase'], { badge: ['supabase'], commands: [/^(npx\s+)?supabase\b/] }),
+  t('PlanetScale', 'database', ['planetscale'], { badge: ['planetscale'] }),
+  t('Neo4j', 'database', ['neo4j'], { badge: ['neo4j'] }),
+  t('CockroachDB', 'database', ['cockroachdb'], { badge: ['cockroachlabs'] }),
+  t('ClickHouse', 'database', ['clickhouse'], { badge: ['clickhouse'] }),
+  t('InfluxDB', 'database', ['influxdb'], { badge: ['influxdb'] }),
+  t('Microsoft SQL Server', 'database', ['sql server', 'mssql', 'microsoft sql server'], { badge: ['microsoftsqlserver'] }),
+  t('Prisma', 'database', ['prisma', 'prisma orm'], { badge: ['prisma'], commands: [/\bprisma\b/] }),
+  t('Drizzle ORM', 'database', ['drizzle', 'drizzle orm', 'drizzle-orm'], { badge: ['drizzle'], commands: [/drizzle-kit/] }),
+  t('TypeORM', 'database', ['typeorm'], { badge: ['typeorm'] }),
+  t('Sequelize', 'database', ['sequelize'], { badge: ['sequelize'], commands: [/sequelize(-cli)?\b/] }),
+  t('Mongoose', 'database', ['mongoose'], { badge: ['mongoose'] }),
+  t('SQLAlchemy', 'database', ['sqlalchemy'], { badge: ['sqlalchemy'] }),
+  t('Alembic', 'database', ['alembic'], { commands: [/^alembic\b/] }),
+  t('Pinecone', 'database', ['pinecone'], {}),
+  t('ChromaDB', 'database', ['chromadb', 'chroma db'], {}),
+  t('Qdrant', 'database', ['qdrant'], {}),
+  t('Weaviate', 'database', ['weaviate'], {}),
+  t('pgvector', 'database', ['pgvector'], {}),
+  t('Milvus', 'database', ['milvus'], {}),
+
+  // ---------------------------------------------------------------- auth
+  t('NextAuth.js', 'auth', ['next-auth', 'nextauth', 'nextauth.js'], {}),
+  t('Auth.js', 'auth', ['auth.js', 'authjs'], {}),
+  t('Clerk', 'auth', ['clerk.com', 'clerk auth'], { strict: ['Clerk'], ambiguous: true, badge: ['clerk'] }),
+  t('Auth0', 'auth', ['auth0'], { badge: ['auth0'] }),
+  t('Firebase Authentication', 'auth', ['firebase auth', 'firebase authentication'], {}),
+  t('Passport.js', 'auth', ['passport.js', 'passportjs'], { strict: ['Passport'], ambiguous: true, badge: ['passport'] }),
+  t('JWT', 'auth', ['jwt', 'json web token', 'json web tokens', 'jsonwebtoken'], { badge: ['jsonwebtokens'] }),
+  t('OAuth', 'auth', ['oauth', 'oauth2', 'oauth 2.0'], {}),
+  t('Keycloak', 'auth', ['keycloak'], { badge: ['keycloak'] }),
+  t('Okta', 'auth', ['okta'], { badge: ['okta'] }),
+  t('bcrypt', 'auth', ['bcrypt', 'bcryptjs'], {}),
+
+  // ---------------------------------------------------------------- ai-ml
+  t('OpenAI', 'ai-ml', ['openai', 'open ai', 'gpt-4', 'gpt-4o', 'gpt-3.5', 'gpt-3.5-turbo', 'chatgpt api'], { badge: ['openai'], code: [/from openai import|import openai|from\s+['"]openai['"]/] }),
+  t('Vercel AI Gateway', 'ai-ml', ['vercel ai gateway', 'ai gateway'], {}),
+  t('AI SDK', 'ai-ml', ['ai sdk', 'ai-sdk'], { badge: ['aisdk'] }),
+  t('Anthropic Claude', 'ai-ml', ['anthropic', 'claude api'], { badge: ['anthropic'], code: [/from anthropic import|import anthropic|@anthropic-ai\/sdk/] }),
+  t('Gemini', 'ai-ml', ['gemini', 'google gemini', 'google generative ai', 'gemini api'], { badge: ['googlegemini'], code: [/google\.generativeai|@google\/generative-ai/] }),
+  t('Hugging Face', 'ai-ml', ['hugging face', 'huggingface', 'hf transformers'], { badge: ['huggingface'], code: [/from transformers import/] }),
+  t('LangChain', 'ai-ml', ['langchain'], { badge: ['langchain'], code: [/from langchain|langchain/] }),
+  t('LlamaIndex', 'ai-ml', ['llamaindex', 'llama-index', 'llama index'], {}),
+  t('TensorFlow', 'ai-ml', ['tensorflow', 'tensorflow.js', 'tf.keras'], { badge: ['tensorflow'], code: [/import tensorflow/] }),
+  t('PyTorch', 'ai-ml', ['pytorch', 'torch'], { badge: ['pytorch'], code: [/import torch\b|from torch\b/] }),
+  t('Keras', 'ai-ml', ['keras'], { badge: ['keras'], code: [/from keras|import keras/] }),
+  t('scikit-learn', 'ai-ml', ['scikit-learn', 'sklearn', 'scikit learn'], { badge: ['scikitlearn', 'scikit-learn'], code: [/from sklearn/] }),
+  t('Pandas', 'ai-ml', ['pandas'], { badge: ['pandas'], code: [/import pandas/] }),
+  t('NumPy', 'ai-ml', ['numpy'], { badge: ['numpy'], code: [/import numpy/] }),
+  t('Matplotlib', 'ai-ml', ['matplotlib'], { badge: ['matplotlib'], code: [/import matplotlib/] }),
+  t('Jupyter', 'ai-ml', ['jupyter', 'jupyter notebook', 'jupyterlab', 'ipython notebook'], { badge: ['jupyter'], commands: [/^jupyter\b/] }),
+  t('OpenCV', 'ai-ml', ['opencv', 'cv2', 'opencv-python'], { badge: ['opencv'], code: [/import cv2/] }),
+  t('Ollama', 'ai-ml', ['ollama'], { badge: ['ollama'], commands: [/^ollama\b/] }),
+  t('XGBoost', 'ai-ml', ['xgboost'], {}),
+  t('LightGBM', 'ai-ml', ['lightgbm'], {}),
+  t('spaCy', 'ai-ml', ['spacy'], { badge: ['spacy'] }),
+  t('NLTK', 'ai-ml', ['nltk'], {}),
+  t('Gradio', 'ai-ml', ['gradio'], { code: [/import gradio/] }),
+  t('MLflow', 'ai-ml', ['mlflow'], { badge: ['mlflow'] }),
+  t('Weights & Biases', 'ai-ml', ['wandb', 'weights & biases', 'weights and biases'], { badge: ['weightsandbiases'] }),
+  t('Ultralytics YOLO', 'ai-ml', ['ultralytics', 'yolov5', 'yolov8', 'yolov11'], {}),
+  t('CUDA', 'ai-ml', ['cuda'], { badge: ['nvidia'] }),
+  t('Stable Diffusion', 'ai-ml', ['stable diffusion', 'stable-diffusion'], {}),
+  t('ONNX', 'ai-ml', ['onnx', 'onnxruntime'], { code: [/import onnx|onnxruntime/] }),
+
+  // ---------------------------------------------------------------- cloud
+  t('Vercel', 'cloud', ['vercel'], { ambiguous: true, badge: ['vercel'], commands: [/^(npx\s+)?vercel\b/] }),
+  t('Netlify', 'cloud', ['netlify'], { badge: ['netlify'], commands: [/^(npx\s+)?netlify\b/] }),
+  t('Render', 'cloud', ['render.com'], { strict: ['Render'], ambiguous: true, badge: ['render'] }),
+  t('Railway', 'cloud', ['railway', 'railway.app'], { badge: ['railway'], commands: [/^railway\b/] }),
+  t('Heroku', 'cloud', ['heroku'], { badge: ['heroku'], commands: [/^heroku\b/] }),
+  t('AWS', 'cloud', ['aws', 'amazon web services'], { badge: ['amazonaws', 'amazonwebservices'], commands: [/^aws\b/] }),
+  t('AWS Lambda', 'cloud', ['aws lambda'], { badge: ['awslambda'] }),
+  t('Amazon S3', 'cloud', ['amazon s3', 'aws s3'], { strict: ['S3'], badge: ['amazons3'] }),
+  t('Amazon EC2', 'cloud', ['ec2', 'amazon ec2', 'aws ec2'], { badge: ['amazonec2'] }),
+  t('Google Cloud', 'cloud', ['gcp', 'google cloud', 'google cloud platform'], { badge: ['googlecloud'], commands: [/^gcloud\b/] }),
+  t('Google Cloud Run', 'cloud', ['cloud run', 'google cloud run'], { badge: ['googlecloudrun'] }),
+  t('Microsoft Azure', 'cloud', ['azure', 'microsoft azure'], { badge: ['microsoftazure', 'azure'], commands: [/^az\b/] }),
+  t('Firebase', 'cloud', ['firebase'], { badge: ['firebase'], commands: [/^firebase\b/] }),
+  t('Cloudflare', 'cloud', ['cloudflare', 'cloudflare workers', 'cloudflare pages'], { badge: ['cloudflare'], commands: [/^(npx\s+)?wrangler\b/] }),
+  t('DigitalOcean', 'cloud', ['digitalocean', 'digital ocean'], { badge: ['digitalocean'] }),
+  t('Fly.io', 'cloud', ['fly.io', 'flyio'], { commands: [/^(fly|flyctl)\b/] }),
+  t('GitHub Pages', 'cloud', ['github pages', 'gh-pages'], {}),
+  t('Cloudinary', 'cloud', ['cloudinary'], { badge: ['cloudinary'] }),
+
+  // ---------------------------------------------------------------- devops
+  t('Docker', 'devops', ['docker', 'dockerfile', 'docker image', 'docker hub'], { badge: ['docker'], langTags: ['dockerfile', 'docker'], commands: [/^docker\b/] }),
+  t('Docker Compose', 'devops', ['docker compose', 'docker-compose'], { commands: [/^docker[- ]compose\b/] }),
+  t('Kubernetes', 'devops', ['kubernetes', 'k8s'], { badge: ['kubernetes'], commands: [/^(kubectl|minikube|kind)\b/] }),
+  t('Helm', 'devops', ['helm chart', 'helm charts'], { strict: ['Helm'], ambiguous: true, badge: ['helm'], commands: [/^helm\b/] }),
+  t('Terraform', 'devops', ['terraform'], { badge: ['terraform'], langTags: ['hcl', 'terraform', 'tf'], commands: [/^terraform\b/] }),
+  t('Ansible', 'devops', ['ansible'], { badge: ['ansible'], commands: [/^ansible(-playbook)?\b/] }),
+  t('GitHub Actions', 'devops', ['github actions', 'github action'], { ambiguous: true, badge: ['githubactions'] }),
+  t('GitLab CI', 'devops', ['gitlab ci', 'gitlab-ci', 'gitlab ci/cd'], { badge: ['gitlab'] }),
+  t('Jenkins', 'devops', ['jenkins'], { badge: ['jenkins'] }),
+  t('CircleCI', 'devops', ['circleci'], { badge: ['circleci'] }),
+  t('Travis CI', 'devops', ['travis ci', 'travis-ci'], { badge: ['travisci', 'travis-ci'] }),
+  t('Nginx', 'devops', ['nginx'], { badge: ['nginx'] }),
+  t('Prometheus', 'devops', ['prometheus'], { badge: ['prometheus'] }),
+  t('Grafana', 'devops', ['grafana'], { badge: ['grafana'] }),
+  t('Vagrant', 'devops', ['vagrant'], { badge: ['vagrant'], commands: [/^vagrant\b/] }),
+  t('Podman', 'devops', ['podman'], { badge: ['podman'], commands: [/^podman\b/] }),
+  t('Sentry', 'devops', ['sentry'], { badge: ['sentry'] }),
+  t('PM2', 'devops', ['pm2'], { commands: [/^pm2\b/] }),
+
+  // ---------------------------------------------------------------- testing
+  t('Jest', 'testing', ['jest'], { badge: ['jest'], commands: [/\bjest\b/] }),
+  t('Vitest', 'testing', ['vitest'], { badge: ['vitest'], commands: [/\bvitest\b/] }),
+  t('Mocha', 'testing', ['mocha.js', 'mochajs'], { strict: ['Mocha'], ambiguous: true, badge: ['mocha'], commands: [/\bmocha\b/] }),
+  t('Chai', 'testing', ['chai.js', 'chaijs'], { strict: ['Chai'], ambiguous: true, badge: ['chai'] }),
+  t('Pytest', 'testing', ['pytest'], { badge: ['pytest'], commands: [/\bpytest\b/] }),
+  t('Playwright', 'testing', ['playwright'], { badge: ['playwright'], commands: [/\bplaywright\b/] }),
+  t('Cypress', 'testing', ['cypress'], { badge: ['cypress'], commands: [/\bcypress\b/] }),
+  t('Selenium', 'testing', ['selenium'], { badge: ['selenium'] }),
+  t('Puppeteer', 'testing', ['puppeteer'], { badge: ['puppeteer'] }),
+  t('Testing Library', 'testing', ['testing library', 'react testing library', '@testing-library'], { badge: ['testinglibrary'] }),
+  t('JUnit', 'testing', ['junit', 'junit5'], { badge: ['junit5'] }),
+  t('RSpec', 'testing', ['rspec'], { commands: [/\brspec\b/] }),
+  t('PHPUnit', 'testing', ['phpunit'], { commands: [/\bphpunit\b/] }),
+  t('Jasmine', 'testing', ['jasmine'], { badge: ['jasmine'] }),
+  t('Supertest', 'testing', ['supertest'], {}),
+  t('Postman', 'testing', ['postman'], { badge: ['postman'] }),
+
+  // ---------------------------------------------------------------- tooling
+  t('npm', 'tooling', ['npm'], { ambiguous: true, badge: ['npm'], commands: [/^npm\b/, /^npx\b/] }),
+  t('Yarn', 'tooling', ['yarn'], { ambiguous: true, badge: ['yarn'], commands: [/^yarn\b/] }),
+  t('pnpm', 'tooling', ['pnpm'], { ambiguous: true, badge: ['pnpm'], commands: [/^pnpm\b/] }),
+  t('Poetry', 'tooling', ['python poetry'], { strict: ['Poetry'], ambiguous: true, badge: ['poetry'], commands: [/^poetry\b/] }),
+  t('uv', 'tooling', [], { commands: [/^uvx?\b/] }),
+  t('Conda', 'tooling', ['conda', 'anaconda', 'miniconda'], { badge: ['anaconda'], commands: [/^conda\b/, /^mamba\b/] }),
+  t('Maven', 'tooling', ['maven', 'apache maven'], { badge: ['apachemaven'], commands: [/^(mvn|\.\/mvnw|mvnw)\b/] }),
+  t('Cargo', 'tooling', ['cargo'], { commands: [/^cargo\b/] }),
+  t('Composer', 'tooling', ['composer'], { commands: [/^composer\b/] }),
+  t('Gradle', 'tooling', ['gradle'], { badge: ['gradle'], commands: [/^(gradle|\.\/gradlew|gradlew)\b/] }),
+  t('Babel', 'tooling', ['babel', 'babel.js'], { badge: ['babel'] }),
+  t('ESLint', 'tooling', ['eslint'], { badge: ['eslint'], commands: [/\beslint\b/] }),
+  t('Prettier', 'tooling', ['prettier'], { badge: ['prettier'], commands: [/\bprettier\b/] }),
+  t('Husky', 'tooling', ['husky'], {}),
+  t('Turborepo', 'tooling', ['turborepo'], { badge: ['turborepo'], commands: [/^turbo\b/] }),
+  t('Nx', 'tooling', [], { strict: ['Nx'], ambiguous: true, badge: ['nx'], commands: [/^(npx\s+)?nx\b/] }),
+  t('Lerna', 'tooling', ['lerna'], { badge: ['lerna'] }),
+  t('Git', 'tooling', [], { strict: ['Git'], ambiguous: true, badge: ['git'] }),
+  t('VS Code', 'tooling', ['vs code', 'vscode', 'visual studio code'], { badge: ['visualstudiocode'] }),
+  t('esbuild', 'tooling', ['esbuild'], { badge: ['esbuild'] }),
+  t('Ruff', 'tooling', ['ruff'], { badge: ['ruff'], commands: [/^ruff\b/] }),
+  t('Make', 'tooling', ['makefile', 'gnu make'], { commands: [/^make\b/] }),
+  t('CMake', 'tooling', ['cmake'], { badge: ['cmake'], commands: [/^cmake\b/] }),
+  t('Bazel', 'tooling', ['bazel'], { badge: ['bazel'], commands: [/^bazel\b/] }),
+];
+
+/** Lookup by canonical name or any alias (lowercase). Used by the evaluator to normalise labels. */
+export function canonicalTechName(name: string): string | null {
+  const lower = name.trim().toLowerCase();
+  for (const entry of TECH_DICTIONARY) {
+    if (entry.name.toLowerCase() === lower) return entry.name;
+    if (entry.aliases.some((a) => a.toLowerCase() === lower)) return entry.name;
+    if (entry.strict?.some((s) => s.toLowerCase() === lower)) return entry.name;
+  }
+  return null;
+}

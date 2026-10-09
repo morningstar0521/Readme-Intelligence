@@ -1,0 +1,18 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Self-hosted Git service",
+  "commands": [
+    "./gitea web",
+    "./gitea help"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "JavaScript",
+    "Docker"
+  ],
+  "installSteps": 0,
+  "hasLicense": true,
+  "apiEndpoints": []
+}

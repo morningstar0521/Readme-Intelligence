@@ -1,0 +1,17 @@
+{
+  "labeled": true,
+  "labeledBy": "Shubh + Claude (corrected against README text)",
+  "notes": "Go CLI framework",
+  "commands": [
+    "go get -u github.com/spf13/cobra@latest",
+    "go install github.com/spf13/cobra-cli@latest"
+  ],
+  "envVars": [],
+  "techStack": [
+    "Go",
+    "Cobra"
+  ],
+  "installSteps": 1,
+  "hasLicense": true,
+  "apiEndpoints": []
+}
