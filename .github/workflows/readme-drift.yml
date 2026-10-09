@@ -27,6 +27,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.base.sha }}
           path: base
+          persist-credentials: false
 
       - name: Checkout PR head (files only)
         uses: actions/checkout@v4
@@ -66,7 +67,8 @@ jobs:
         run: |
           set +e
           pnpm --silent reality ../head --base . --format md --out ../drift.md --fail-on new-contradiction
-          echo "exit=$?" >> "$GITHUB_OUTPUT"
+          exit_code=$?
+          echo "exit=$exit_code" >> "$GITHUB_OUTPUT"
           cat ../drift.md >> "$GITHUB_STEP_SUMMARY"
 
       # Fork PRs get a read-only token, so commenting can fail there; the job summary still has the report.
@@ -87,7 +89,13 @@ jobs:
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
       - name: Fail on new contradictions
-        if: steps.tool.outputs.ok == 'true' && steps.reality.outputs.exit != '0'
+        if: steps.tool.outputs.ok == 'true' && steps.reality.outputs.exit == '1'
         run: |
-          echo "The PR introduces a README contradiction (exit ${{ steps.reality.outputs.exit }}). See the job summary or the PR comment."
+          echo "The PR introduces a README contradiction. See the job summary or the PR comment."
+          exit 1
+
+      - name: Fail on checker errors
+        if: steps.tool.outputs.ok == 'true' && steps.reality.outputs.exit != '' && steps.reality.outputs.exit != '0' && steps.reality.outputs.exit != '1'
+        run: |
+          echo "README Reality Check failed to run (exit ${{ steps.reality.outputs.exit }}). See the job summary for details."
           exit 1
