@@ -20,7 +20,7 @@ export const SECTION_RULES: Rule[] = [
   ['testing', ['test', 'testing', 'tests', 'running tests', 'run tests']],
   ['deployment', ['deployment', 'deploy', 'deploying', 'hosting', 'production']],
   ['api', ['api', 'endpoints', 'endpoint', 'routes', 'reference', 'api reference', 'rest api']],
-  ['techstack', ['tech stack', 'techstack', 'built with', 'technologies', 'technologies used', 'stack', 'powered by', 'tech']],
+  ['techstack', ['tech stack', 'techstack', 'built with', 'built on', 'technologies', 'technologies used', 'stack', 'powered by', 'tech']],
   ['prerequisites', ['prerequisites', 'prerequisite', 'requirements', 'before you begin', 'system requirements']],
   ['features', ['features', 'feature', 'highlights', 'key features', 'capabilities', 'what it does']],
   ['installation', ['installation', 'install', 'installing', 'getting started', 'get started', 'setup', 'set up', 'setting up', 'quick start', 'quickstart']],

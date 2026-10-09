@@ -45,7 +45,7 @@ const CATEGORY_ORDER: TechCategory[] = [
 ];
 
 const MAX_EVIDENCE = 5;
-const PROJECT_CONTEXT_RE = /\b(?:uses?|used|built\s+(?:with|using|for)|powered\s+by|written\s+in|developed\s+in|based\s+on|requires?|implemented\s+(?:in|with)|stack\s+includes?)\b/i;
+const PROJECT_CONTEXT_RE = /\b(?:uses?|using|used|built\s+(?:with|using|for)|powered\s+by|written\s+in|developed\s+in|based\s+on|requires?|implemented\s+(?:in|with)|stack\s+includes?)\b/i;
 const EXCLUDED_BEFORE_CONTEXT_RE = /\b(?:integrat(?:e|es|ed|ion|ions)|connects?|connected|supports?|supported|exports?|exported|compatible|works?|quick\s+start|examples?|such\s+as|used\s+by|community-maintained|generat(?:e|es|ed|ing))\b/i;
 const EXCLUDED_AFTER_CONTEXT_RE = /^\s*(?:sdk|clients?|bindings?)\b/i;
 const NEGATED_TECH_CONTEXT_RE = /\b(?:not|never|without|does\s+not|doesn['’]t|do\s+not|don['’]t|avoid(?:s|ed|ing)?)\s+(?:(?:use|using|choose|choosing|include|including|support|supporting)\s+[^.!?\n]{0,60}|[^.!?\s]*(?:\s+(?:and|or))?)\s*$/i;
@@ -143,12 +143,13 @@ function matchText(
   source: SourceRef,
   type: 'text' | 'heading',
   inTechSection: boolean,
-  allowAmbiguous: boolean
+  allowAmbiguous: boolean,
+  inPrerequisites = false
 ): void {
   if (!text) return;
   let work = text;
   let workLower = text.toLowerCase();
-  const strong = inTechSection || type === 'heading';
+  const strong = inTechSection || inPrerequisites || type === 'heading';
   for (const term of TERMS) {
     if (term.gated && !allowAmbiguous) continue;
     // Outside a dedicated stack section, a bare ecosystem mention is not enough
@@ -164,6 +165,7 @@ function matchText(
     if (!strong && type === 'text' && LONG_CATALOG_RE.test(text)) continue;
     if (!strong && type === 'text' && HOSTED_SERVICE_CONTEXT_RE.test(before)) continue;
     if (type === 'text' && term.entry.name === 'CSS' && /tailwind\s+css/i.test(text)) continue;
+    if (type === 'text' && term.entry.name === 'SQL' && /\b(?:postgres|postgresql)\b/i.test(text)) continue;
     if (type === 'text' && TRANSPILE_OUTPUT_NAMES.has(term.entry.name) && /\btranspil\w*\b/i.test(text)) continue;
     if (type === 'text' && term.entry.name === 'OpenAI' && /\bmodels?\s*:/i.test(text)) continue;
     const excludedByContext =
@@ -293,7 +295,7 @@ function scanBlock(collector: Collector, block: Block): void {
   const allowAmbiguous = inTech || block.section === 'prerequisites';
 
   if (block.isHeading) {
-    matchText(collector, block.headingText ?? '', refFor(block), 'heading', inTech, allowAmbiguous || inTech);
+    matchText(collector, block.headingText ?? '', refFor(block), 'heading', inTech, allowAmbiguous || inTech, block.section === 'prerequisites');
     return;
   }
 
@@ -339,7 +341,7 @@ function scanBlock(collector: Collector, block: Block): void {
     const source = refFor(block);
     source.line = unit.line || block.line;
     const contextual = allowAmbiguous || PROJECT_CONTEXT_RE.test(unit.text);
-    matchText(collector, unit.text, source, 'text', inTech, contextual);
+    matchText(collector, unit.text, source, 'text', inTech, contextual, block.section === 'prerequisites');
   }
 }
 

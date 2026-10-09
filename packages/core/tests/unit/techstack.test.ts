@@ -33,6 +33,10 @@ describe('extractTechStack', () => {
     expect(techNames(md('## Tech Stack', '- Next.js', '- PostgreSQL', '- Tailwind CSS'))).toEqual(['Next.js', 'Tailwind CSS', 'PostgreSQL']);
   });
 
+	it('treats Built on Open Source as an explicit stack section', () => {
+		expect(techNames(md('## Built on Open Source', '- TypeScript', '- React', '- Prisma'))).toEqual(['TypeScript', 'React', 'Prisma']);
+	});
+
   it('reads Tech Stack tables without gluing cells', () => {
     expect(techNames(md('## Built With', '', '| Layer | Tech |', '|---|---|', '| Database | PostgreSQL |', '| Backend | Node.js |'))).toEqual(['Node.js', 'PostgreSQL']);
   });
@@ -105,6 +109,15 @@ describe('extractTechStack', () => {
     expect(names).toEqual(expect.arrayContaining(['npm', 'GitHub Actions', 'Make']));
   });
 
+	it('keeps technologies declared in prerequisites when a Tech Stack section exists', () => {
+		const names = techNames(md('## Tech Stack', '- TypeScript', '', '## Requirements', '- Node.js', '- PostgreSQL', '- Docker'));
+		expect(names).toEqual(expect.arrayContaining(['TypeScript', 'Node.js', 'PostgreSQL', 'Docker']));
+	});
+
+	it('does not split PostgreSQL into a standalone SQL item', () => {
+		expect(techNames(md('## Requirements', '- Postgres SQL Database'))).toEqual(['PostgreSQL']);
+	});
+
 	it('does not promote command-only workflow tooling with a Tech Stack section', () => {
 		const names = techNames(md('## Tech Stack', '- React', '', fence('bash', 'npm install', 'pnpm test', 'git clone URL', 'make build')));
 		expect(names).toEqual(['React']);
@@ -116,6 +129,10 @@ describe('extractTechStack', () => {
 
 	it('recognizes named tools in project-context prose', () => {
 		expect(techNames('The app uses React Router and the AI SDK.')).toEqual(['React Router', 'AI SDK']);
+	});
+
+	it('recognizes technologies in using-context prose', () => {
+		expect(techNames('The ORM is using Prisma and the UI is using Tailwind CSS.')).toEqual(['Tailwind CSS', 'Prisma']);
 	});
 
 	it('detects technologies from package-style install commands', () => {
