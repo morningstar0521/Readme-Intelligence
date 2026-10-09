@@ -34,7 +34,7 @@ Try the deployed application at [readme-intelligence.vercel.app](https://readme-
 
 ![README Intelligence live dashboard](docs/assets/readme-intelligence-live.png)
 
-The screenshot above was captured from the production deployment.
+The screenshot above was captured from the production deployment on Vercel.
 
 ## Why use it?
 
