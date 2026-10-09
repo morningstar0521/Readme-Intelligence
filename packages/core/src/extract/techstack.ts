@@ -354,6 +354,7 @@ export function extractTechStack(ctx: DocContext, commands: CommandItem[]): Tech
   for (const f of collector.found.values()) {
     if (f.evidence.length === 0) continue;
     if (techSectionExists && !f.strong) continue;
+    if (INCIDENTAL_STACK_NAMES.has(f.entry.name) && f.evidence.every((e) => e.type === 'command' || e.type === 'code')) continue;
     if (!techSectionExists && INCIDENTAL_STACK_NAMES.has(f.entry.name)) continue;
     items.push({
       name: f.entry.name,

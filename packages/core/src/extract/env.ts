@@ -285,7 +285,7 @@ function envFromInlineCode(node: RootContent, block: Block): RawEnv[] {
   return out;
 }
 
-const ENV_PROSE_RE = /\b(environment|env)\s+variables?\b|\b\.env(?:\.[A-Za-z0-9_-]+)?\b|\b(?:configure|provide|define|pass)\b/i;
+const ENV_PROSE_RE = /\b(environment(?:al)?|env)\s+variables?\b|\b\.env(?:\.[A-Za-z0-9_-]+)?\b|\b(?:configure|provide|define|pass|set(?:ting)?)\b/i;
 
 /** Variables explicitly named in setup/configuration prose, for example `API_KEY`. */
 function envFromProse(node: RootContent, block: Block): RawEnv[] {
@@ -314,6 +314,17 @@ function envFromProse(node: RootContent, block: Block): RawEnv[] {
     }
     out.push({ name: m[1]!, value: m[2] ?? null, description: text, required: requiredFromText(text), line: lineOf(ic) || block.line, block });
   });
+  if (/\b(?:environment(?:al)?|env)\s+variables?\b/i.test(text)) {
+    const seen = new Set(out.map((item) => item.name));
+    const plain = /\b(?:environment(?:al)?|env)\s+variables?\b[^.!?\n]{0,60}:\s*([A-Z][A-Z0-9_]*_[A-Z0-9_]+)\b/gi;
+    let match: RegExpExecArray | null;
+    while ((match = plain.exec(text)) !== null) {
+      const name = match[1]!.toUpperCase();
+      if (seen.has(name) || !isEnvLikeName(name)) continue;
+      seen.add(name);
+      out.push({ name, value: null, description: text, required: requiredFromText(text), line: block.line, block });
+    }
+  }
   if (configurationSection) {
     const seen = new Set(out.map((item) => item.name));
     const plain = /\b(?:set|configure|provide|define|under|via|using)\s+(?:the\s+)?([A-Z][A-Z0-9_]{2,})\b/gi;

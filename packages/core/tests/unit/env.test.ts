@@ -162,6 +162,14 @@ describe('extractEnvVars', () => {
     ))).toEqual(['CSP_POLICY', 'GOOGLE_API_CREDENTIALS']);
   });
 
+  it('reads an assigned variable from inline setup prose', () => {
+    expect(names('If needed, set `NODE_TLS_REJECT_UNAUTHORIZED=0` before starting the server.')).toEqual(['NODE_TLS_REJECT_UNAUTHORIZED']);
+  });
+
+  it('reads a variable named in an environment-variable error message', () => {
+    expect(names('If you see `Environment variable not found: DATABASE_DIRECT_URL`, configure the database connection.')).toEqual(['DATABASE_DIRECT_URL']);
+  });
+
   it('ignores common all-caps words', () => {
     expect(names(md('## Configuration', '', 'Use `JSON` over `HTTP` for the `API`.'))).toEqual([]);
   });

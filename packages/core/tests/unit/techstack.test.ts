@@ -93,6 +93,11 @@ describe('extractTechStack', () => {
     expect(names).toEqual(expect.arrayContaining(['npm', 'GitHub Actions', 'Make']));
   });
 
+	it('does not promote command-only workflow tooling with a Tech Stack section', () => {
+		const names = techNames(md('## Tech Stack', '- React', '', fence('bash', 'npm install', 'pnpm test', 'git clone URL', 'make build')));
+		expect(names).toEqual(['React']);
+	});
+
   it('keeps technologies named in explicit project-context prose', () => {
     expect(techNames('This project is written in Rust and uses PostgreSQL.')).toEqual(['Rust', 'PostgreSQL']);
   });
