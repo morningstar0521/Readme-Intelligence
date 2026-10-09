@@ -10,17 +10,17 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 |---|---:|---:|---:|---:|---:|---:|
 | commands | 67.9% | 83.5% | **74.9%** | 328 | 155 | 65 |
 | envVars | 79.3% | 68.7% | **73.6%** | 46 | 12 | 21 |
-| techStack | 57.2% | 62.9% | **59.9%** | 127 | 95 | 75 |
+| techStack | 58.4% | 61.9% | **60.1%** | 125 | 89 | 77 |
 | apiEndpoints | 100.0% | 100.0% | **100.0%** | 3 | 0 | 0 |
 
 ## Performance and target status
 
 | Metric | Value | Status |
 |---|---:|---|
-| Parse + extract p95 | 70.3 ms | met |
+| Parse + extract p95 | 54.9 ms | met |
 | Commands F1 target | 74.9% | not met |
 | Environment variables F1 target | 73.6% | not met |
-| Tech stack F1 target | 59.9% | not met |
+| Tech stack F1 target | 60.1% | not met |
 
 ## Highest-impact failure examples
 
@@ -33,13 +33,13 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 | BurntSushi__ripgrep | commands | make defconfig && make -j8, rg -n -w '[A-Z]+_SUSPEND', git grep -P -n -w '[A-Z]+_SUSPEND', LC_ALL=C git grep -E -n -w '[A-Z]+_SUSPEND', LC_ALL=en_US.UTF-8 git grep -E -n -w '[A-Z]+_SUSPEND', rg -uuu -tc -n -w '[A-Z]+_SUSPEND', rg -w 'Sherlock [A-Z]\w+', rg -w '[A-Z]\w+ Sherlock [A-Z]\w+', rg '[A-Za-z]{30}', rg the, rg --json | rg -Tjs foo |
 | karpathy__nanoGPT | commands | python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0, python sample.py --out_dir=out-shakespeare-char --device=cpu, python data/openwebtext/prepare.py, python sample.py, python train.py, python train.py config/eval_gpt2.py, python train.py config/eval_gpt2_medium.py, python train.py config/eval_gpt2_large.py, python train.py config/eval_gpt2_xl.py, python train.py config/finetune_shakespeare.py, python sample.py --init_from=gpt2-xl --start="What is the answer to life, the universe, and everything?" --num_samples=5 --max_new_tokens=100, python sample.py --start=FILE:prompt.txt | - |
 | supabase__supabase | techStack | html, supabase, firebase | typescript, javascript, python, dart, kotlin, swift, ruby, postgresql, elixir |
-| documenso__documenso | techStack | css, shadcn/ui, trpc, render, playwright, vs code, npm | postgresql, docker compose, node.js |
 | openai__whisper | commands | pip install --upgrade --no-deps --force-reinstall git+https://github.com/openai/whisper.git, scoop install ffmpeg, pip install, export PATH="$HOME/.cargo/bin:$PATH", pip install setuptools-rust, whisper audio.flac audio.mp3 audio.wav --model turbo, whisper japanese.wav --language Japanese, whisper japanese.wav --model medium --language Japanese --task translate, whisper --help | whisper audio.flac audio.mp3 audio.wav --model medium |
+| documenso__documenso | techStack | css, shadcn/ui, trpc, playwright, vs code, npm | postgresql, docker compose, node.js |
 | jellyfin__jellyfin | commands | git clone https://github.com/jellyfin/jellyfin.git, dotnet run, cd jellyfin, dotnet run --project Jellyfin.Server --webdir /absolute/path/to/jellyfin-web/dist, dotnet build, cd Jellyfin.Server/bin/Debug/net10.0, dotnet test | docker pull jellyfin/jellyfin, docker run -d -v /path/to/config:/config -v /path/to/cache:/cache -v /path/to/media:/media --net=host jellyfin/jellyfin:latest |
+| formbricks__formbricks | techStack | node.js | next.js, react, typescript, tailwind css, prisma, postgresql, docker |
 | ollama__ollama | commands | ollama, ollama launch claude, ollama launch openclaw, ollama run gemma4, pip install ollama, npm i ollama | ollama run llama3.2, ollama pull llama3.2 |
 | tiangolo__fastapi | commands | uv add "fastapi[standard]", uv run fastapi dev, uv run fastapi deploy, uv add fastapi, uv add "fastapi[standard-no-fastapi-cloud-cli]" | pip install fastapi, pip install "fastapi[standard]", fastapi dev main.py |
 | dubinc__dub | techStack | css, redis, planetscale, nextauth.js, turborepo, pnpm | react |
-| formbricks__formbricks | techStack | node.js | next.js, react, typescript, tailwind css, prisma, postgresql |
 | gohugoio__hugo | commands | CGO_ENABLED=0 go install github.com/gohugoio/hugo@latest, CGO_ENABLED=0 go install -tags withdeploy github.com/gohugoio/hugo@latest, CGO_ENABLED=1 go install -tags extended github.com/gohugoio/hugo@latest, CGO_ENABLED=1 go install -tags extended,withdeploy github.com/gohugoio/hugo@latest, hugo env --logLevel info | brew install hugo, snap install hugo |
 | run-llama__llama_index | commands | pip install llama-index-core, pip install llama-index-llms-openai, pip install llama-index-llms-ollama, pip install llama-index-embeddings-huggingface, echo "Verifying: $file", gh attestation verify "$file" -R "$REPO" || echo "Failed to verify: $file" | pip install llama-index |
 | shadcn-ui__taxonomy | techStack | trpc, turborepo | react, tailwind css, prisma, nextauth.js, zod |

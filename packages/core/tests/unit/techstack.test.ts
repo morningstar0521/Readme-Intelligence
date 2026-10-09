@@ -51,6 +51,10 @@ describe('extractTechStack', () => {
     expect(t[0]!.evidence[0]!.type).toBe('badge');
   });
 
+	it('does not infer single-letter languages from noisy badge paths', () => {
+		expect(techNames('![codecov](https://img.shields.io/codecov/c/github/example/project?logo=codecov)')).not.toContain('C');
+	});
+
   it('detects languages from code block tags', () => {
     expect(techNames(md(fence('python', 'print(1)'), fence('rust', 'fn main() {}')))).toEqual(['Python', 'Rust']);
   });
@@ -122,6 +126,13 @@ describe('extractTechStack', () => {
 		const names = techNames('This project uses React and integrates with Sentry. It supports Vercel deployments and exports to AWS.');
 		expect(names).toContain('React');
 		expect(names).not.toEqual(expect.arrayContaining(['Sentry', 'Vercel', 'AWS']));
+	});
+
+	it('does not treat deployment instructions as implementation stack', () => {
+		const names = techNames(md('## Deployment', '### Docker Compose', '- Deploy to Railway', '- Deploy to Render'));
+		expect(names).not.toContain('Docker Compose');
+		expect(names).not.toContain('Railway');
+		expect(names).not.toContain('Render');
 	});
 
 	it('does not treat SDK and quick-start catalogs as implementation stack', () => {

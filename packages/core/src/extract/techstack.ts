@@ -25,7 +25,9 @@ interface CompiledEntry {
 
 const COMPILED: CompiledEntry[] = TECH_DICTIONARY.map((entry) => ({
   entry,
-  badgeRes: [...entry.aliases, ...(entry.badge ?? []), ...(entry.strict ?? [])].map((a) => wholeWordRegExp(a, 'i')),
+  // Strict aliases are useful for disambiguating prose (for example, Go vs. go),
+  // but badge URLs contain noisy path/query tokens such as the /c/ in codecov.
+  badgeRes: [...entry.aliases, ...(entry.badge ?? [])].map((a) => wholeWordRegExp(a, 'i')),
   langTags: new Set((entry.langTags ?? []).map((l) => l.toLowerCase())),
 }));
 
@@ -268,6 +270,10 @@ function proseUnits(node: RootContent): { text: string; line: number }[] {
 }
 
 function scanBlock(collector: Collector, block: Block): void {
+  // Deployment targets and deployment tooling describe where/how the project is
+  // shipped, not the implementation stack. Keep those claims in deployment data.
+  if (block.section === 'deployment') return;
+
   const inTech = block.section === 'techstack';
   const allowAmbiguous = inTech || block.section === 'prerequisites';
 
