@@ -1,9 +1,18 @@
-# README Intelligence Viewer
+# README Intelligence
 
-README Intelligence Viewer turns a README into an evidence-backed project map.
-Open a GitHub repository, drop a local Markdown file, or paste text. The app renders the document and extracts commands, environment variables, setup steps, technology evidence, API endpoints, deployment notes, links, and documentation health. Each extracted item points back to the README line that produced it.
+README Intelligence helps developers understand an unfamiliar GitHub repository before running anything.
+
+Open a repository and get a source-linked map of its commands, environment variables, setup steps, technology evidence, API endpoints, deployment notes, links, and documentation health. On pull requests, the same deterministic engine detects new contradictions between the README and the repository.
 
 This is a deterministic developer tool. It does not call an LLM, invent missing values, or upload local Markdown.
+
+## The product thesis
+
+The useful question is not only **"what does this README say?"**. It is **"which parts can I trust before I run the project?"**
+
+README Intelligence keeps the README visible, links every extraction to its source line, and checks explicit claims against repository evidence such as manifests, lockfiles, CI, Docker files, source samples, `.env.example`, and `LICENSE`.
+
+It is intentionally narrower than an AI codebase chatbot and documentation publishing platforms. The first product surface is fast, explainable onboarding; the second is preventing README drift in pull requests.
 
 ## At a glance
 
@@ -11,9 +20,10 @@ This is a deterministic developer tool. It does not call an LLM, invent missing 
 | ---------- | --------------------------------------------------------------------------- |
 | Input      | GitHub URL, local Markdown, or pasted text                                  |
 | Output     | Rendered README plus source-linked project intelligence                     |
-| Extraction | Deterministic TypeScript rules with typed results                           |
+| Extraction | Deterministic TypeScript rules with typed, source-linked results            |
 | Security   | Sanitized Markdown, masked environment values, local-first file handling    |
 | Benchmark  | 59 hand-labeled READMEs; current metrics are published in `docs/RESULTS.md` |
+| CI         | GitHub Action comments on PR drift and fails only on new contradictions     |
 | Runtime    | Next.js web app with a pure TypeScript core package                         |
 
 The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands, environment variables, and tech stack are still below their PRD targets. See [Benchmark status](#benchmark-status) before quoting performance numbers.
@@ -30,6 +40,24 @@ README files are useful documentation but poor operational interfaces. A develop
 
 The viewer makes those answers scannable while preserving the original document for context. GitHub inputs can also run through Reality Check, which compares README claims with manifests, lockfiles, CI, Docker, source files, `.env.example`, and `LICENSE`.
 
+## Who it is for
+
+- Engineers joining an unfamiliar repository and needing a safe first pass.
+- Open-source contributors checking setup instructions before filing a change.
+- Maintainers who want pull requests to expose stale commands, links, runtimes, or environment variables.
+- Teams that prefer deterministic, reviewable checks over an opaque generated summary.
+
+## What makes it different
+
+| Typical tool                          | README Intelligence                                      |
+| ------------------------------------- | -------------------------------------------------------- |
+| Renders documentation                 | Renders it and extracts an operational project map       |
+| Generates an AI summary               | Preserves evidence and does not invent claims            |
+| Checks Markdown syntax                | Compares explicit README claims with repository evidence |
+| Reports drift after users discover it | Comments on the pull request that introduces it          |
+
+The product is not finished. The benchmark currently shows strong API extraction, but commands, environment variables, and tech-stack extraction remain below their targets. Accuracy numbers are published without rounding them up.
+
 ## Features
 
 - GitHub repository, branch folder, README file, raw URL, local file, and pasted Markdown inputs
@@ -40,11 +68,12 @@ The viewer makes those answers scannable while preserving the original document 
 - Documentation health score with transparent checks and ordered suggestions
 - Setup Readiness score based on static repository evidence; it does not install or execute project code
 - Reality Check for GitHub repositories, with per-claim evidence and contradiction detection
+- GitHub Action for pull-request README drift detection
 - Dark, light, and system themes
 
 ## Run it locally
 
-Requirements: Node.js 20 or newer and pnpm 9 or newer.
+Requirements: Node.js 20 or newer and pnpm 12.10.1.
 
 ```bash
 pnpm install
@@ -82,6 +111,19 @@ README input -> rendered document -> extracted cards -> source-line check -> JSO
 ```
 
 The source-line check is part of the workflow, not an afterthought. Extraction is heuristic, so the viewer always keeps the original README visible beside the structured result.
+
+## Pull-request drift checks
+
+The repository includes a GitHub Action at `.github/workflows/readme-drift.yml`. It checks the target branch and pull-request files with the base version of the checker, posts one readable comment, and fails only when the pull request introduces a new explicit contradiction.
+
+The check is static: it reads text and metadata, but does not install dependencies or execute code from the pull request.
+
+Run the same check locally:
+
+```bash
+pnpm reality ../my-pr --base ../main --format md
+pnpm reality . --fail-on new-contradiction
+```
 
 ## Development commands
 
@@ -189,16 +231,6 @@ The project is still below the PRD targets for commands, environment variables, 
 
 The benchmark is README-only. Do not add repository manifest facts to it; those belong in Reality Check.
 
-## README drift checks
-
-`.github/workflows/readme-drift.yml` runs Reality Check on pull requests and reports contradictions introduced or resolved by the change. Try it locally:
-
-```bash
-pnpm reality .
-pnpm reality ../my-pr --base ../main --format md
-pnpm reality . --fail-on new-contradiction
-```
-
 ## Known limitations
 
 - Extraction is heuristic. Commands in images, prose-only setup, unusual tab layouts, and unsupported wording can be missed.
@@ -211,6 +243,17 @@ pnpm reality . --fail-on new-contradiction
 ## Deployment
 
 Deployment is intentionally separate from local development. For a Vercel deployment, import the repository, set the project root to `apps/web`, and configure `GITHUB_TOKEN` if the public API rate limit is not sufficient. The Content Security Policy is defined in `apps/web/middleware.ts`.
+
+Deploy after CI is green, then add a short screen recording or hosted demo URL here. Do not add a fake demo link or unsupported accuracy badge.
+
+## Roadmap
+
+1. Improve command, environment-variable, and tech-stack precision against the labeled fixtures.
+2. Publish a small CLI for local and CI use: `npx readme-intel README.md --format json`.
+3. Make the GitHub Action independently reusable by other repositories.
+4. Add a Chrome side panel for GitHub README pages, reusing `packages/core`.
+
+The Action and CLI come before a browser extension because they create a repeatable maintenance workflow, not only a one-time viewer demo.
 
 ## License
 
