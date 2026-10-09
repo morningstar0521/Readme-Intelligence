@@ -28,6 +28,14 @@ It is intentionally narrower than an AI codebase chatbot and documentation publi
 
 The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands, environment variables, and tech stack are still below their PRD targets. See [Benchmark status](#benchmark-status) before quoting performance numbers.
 
+## Live demo
+
+Try the deployed application at [readme-intelligence.vercel.app](https://readme-intelligence.vercel.app/).
+
+![README Intelligence live dashboard](docs/assets/readme-intelligence-live.png)
+
+The screenshot above was captured from the production deployment.
+
 ## Why use it?
 
 README files are useful documentation but poor operational interfaces. A developer usually needs a short list of answers:
