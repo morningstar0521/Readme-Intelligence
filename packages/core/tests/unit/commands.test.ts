@@ -115,6 +115,10 @@ describe('extractCommands', () => {
     ))).toEqual(['pip install rich', 'pip install requests', 'npx create-expo-app']);
   });
 
+  it('recognizes documented standalone tool commands in inline code', () => {
+    expect(cmdText('Run `strip` on the binary.')).toEqual(['strip']);
+  });
+
   it('flags risky commands', () => {
     const list = commands(fence('bash', 'curl -fsSL https://x.sh | sh', 'rm -rf node_modules', 'chmod 777 data', 'npm test'));
     expect(list.map((c) => c.risky)).toEqual([true, true, true, false]);

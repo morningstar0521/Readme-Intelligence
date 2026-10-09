@@ -118,6 +118,17 @@ The repository includes a GitHub Action at `.github/workflows/readme-drift.yml`.
 
 The check is static: it reads text and metadata, but does not install dependencies or execute code from the pull request.
 
+The checker is also available as a composite action for other repositories. Pin it to a release commit when adopting it:
+
+```yaml
+- uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@main
+  with:
+    head-path: .
+    fail-on: new-contradiction
+```
+
+For PR-level comparison, provide separate `base-path` and `head-path` checkouts.
+
 Run the same check locally:
 
 ```bash
@@ -137,6 +148,8 @@ Run these from the repository root:
 | `pnpm check`           | Run lint, typecheck, and core tests.                                                                            |
 | `pnpm test:coverage`   | Run core tests with coverage thresholds.                                                                        |
 | `pnpm e2e`             | Build and run Playwright smoke tests. Install Chromium once with `pnpm --filter @readme-intel/web e2e:install`. |
+| `pnpm cli README.md`   | Print a deterministic README intelligence summary. Add `--format md` or `--format json` for other outputs.     |
+| `pnpm cli:build`       | Typecheck the CLI package before packaging it for distribution.                                                  |
 | `pnpm eval`            | Evaluate the labeled README benchmark and regenerate `docs/RESULTS.md` and `docs/BENCHMARK.md`.                 |
 | `pnpm reality [dir]`   | Run Reality Check against a local checkout without network access.                                              |
 | `pnpm fixtures:fetch`  | Fetch the benchmark READMEs listed in `scripts/fixture-repos.json`.                                             |
@@ -249,8 +262,8 @@ Deploy after CI is green, then add a short screen recording or hosted demo URL h
 ## Roadmap
 
 1. Improve command, environment-variable, and tech-stack precision against the labeled fixtures.
-2. Publish a small CLI for local and CI use: `npx readme-intel README.md --format json`.
-3. Make the GitHub Action independently reusable by other repositories.
+2. Package and publish the CLI for local and CI use: `npx readme-intel README.md --format json`.
+3. Add examples and release automation for the reusable GitHub Action.
 4. Add a Chrome side panel for GitHub README pages, reusing `packages/core`.
 
 The Action and CLI come before a browser extension because they create a repeatable maintenance workflow, not only a one-time viewer demo.

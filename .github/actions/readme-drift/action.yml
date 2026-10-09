@@ -1,0 +1,76 @@
+name: README drift check
+description: Compare README claims with repository evidence and fail on newly introduced contradictions.
+inputs:
+  head-path:
+    description: Absolute or workspace-relative path to the checkout being checked.
+    required: true
+  base-path:
+    description: Optional absolute or workspace-relative path to the comparison checkout.
+    required: false
+    default: ''
+  readme-path:
+    description: Optional README path relative to the repository root.
+    required: false
+    default: ''
+  fail-on:
+    description: "Failure policy: none, contradiction, or new-contradiction."
+    required: false
+    default: new-contradiction
+  repo:
+    description: Optional owner/repository used for evidence links.
+    required: false
+    default: ''
+  ref:
+    description: Optional revision used for evidence links.
+    required: false
+    default: ''
+outputs:
+  report_path:
+    description: Absolute path to the generated Markdown report.
+    value: ${{ steps.reality.outputs.report_path }}
+  exit_code:
+    description: Reality Check exit code.
+    value: ${{ steps.reality.outputs.exit_code }}
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 12.10.1
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Run README Reality Check
+      id: reality
+      shell: bash
+      env:
+        INPUT_HEAD_PATH: ${{ inputs.head-path }}
+        INPUT_BASE_PATH: ${{ inputs.base-path }}
+        INPUT_README_PATH: ${{ inputs.readme-path }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_REPO: ${{ inputs.repo }}
+        INPUT_REF: ${{ inputs.ref }}
+      run: |
+        set -u
+        action_root="$GITHUB_ACTION_PATH/../../.."
+        head_path="$INPUT_HEAD_PATH"
+        base_path="$INPUT_BASE_PATH"
+        report_path="$GITHUB_WORKSPACE/readme-intelligence-drift.md"
+        if [[ "$head_path" != /* ]]; then head_path="$GITHUB_WORKSPACE/$head_path"; fi
+        if [[ -n "$base_path" && "$base_path" != /* ]]; then base_path="$GITHUB_WORKSPACE/$base_path"; fi
+
+        pnpm --dir "$action_root" install --frozen-lockfile
+        args=("$head_path" --format md --out "$report_path" --fail-on "$INPUT_FAIL_ON")
+        if [[ -n "$base_path" ]]; then args+=(--base "$base_path"); fi
+        if [[ -n "$INPUT_README_PATH" ]]; then args+=(--readme "$INPUT_README_PATH"); fi
+        if [[ -n "$INPUT_REPO" ]]; then args+=(--repo "$INPUT_REPO"); fi
+        if [[ -n "$INPUT_REF" ]]; then args+=(--ref "$INPUT_REF"); fi
+
+        set +e
+        pnpm --dir "$action_root" reality "${args[@]}"
+        exit_code=$?
+        set -e
+        echo "report_path=$report_path" >> "$GITHUB_OUTPUT"
+        echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+        cat "$report_path" >> "$GITHUB_STEP_SUMMARY"
+        exit "$exit_code"

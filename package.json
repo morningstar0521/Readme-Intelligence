@@ -15,6 +15,8 @@
     "test": "pnpm --filter @readme-intel/core test",
     "test:coverage": "pnpm --filter @readme-intel/core test:coverage",
     "e2e": "pnpm --filter @readme-intel/web e2e",
+    "cli": "tsx packages/cli/src/index.ts",
+    "cli:build": "pnpm --filter @readme-intel/cli build",
     "eval": "tsx scripts/eval.ts",
     "fixtures:fetch": "tsx scripts/fetch-fixtures.ts",
     "fixtures:labels": "tsx scripts/label-template.ts",

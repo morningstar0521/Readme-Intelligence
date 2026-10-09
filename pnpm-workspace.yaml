@@ -1,5 +1,6 @@
 packages:
   - packages/core
+  - packages/cli
   - apps/web
 allowBuilds:
   esbuild: false

@@ -8,7 +8,7 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 
 | Field | Precision | Recall | F1 | TP | FP | FN |
 |---|---:|---:|---:|---:|---:|---:|
-| commands | 67.8% | 83.2% | **74.7%** | 327 | 155 | 66 |
+| commands | 67.9% | 83.5% | **74.9%** | 328 | 155 | 65 |
 | envVars | 79.3% | 68.7% | **73.6%** | 46 | 12 | 21 |
 | techStack | 57.2% | 62.9% | **59.9%** | 127 | 95 | 75 |
 | apiEndpoints | 100.0% | 100.0% | **100.0%** | 3 | 0 | 0 |
@@ -17,8 +17,8 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 
 | Metric | Value | Status |
 |---|---:|---|
-| Parse + extract p95 | 57.2 ms | met |
-| Commands F1 target | 74.7% | not met |
+| Parse + extract p95 | 70.3 ms | met |
+| Commands F1 target | 74.9% | not met |
 | Environment variables F1 target | 73.6% | not met |
 | Tech stack F1 target | 59.9% | not met |
 
@@ -30,7 +30,7 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 | sharkdp__bat | commands | bat f - g # output 'f', then stdin, then 'g'., git show, git diff, bat -> batcat, cargo install, bat --theme=default "$@", bat --theme=GitHub "$@" | alias cat='bat --paging=never', yaml2json .travis.yml | json_pp | bat -l json, bat f - g, find … -exec bat {} +, fd … -X bat, batgrep needle src/, tail -f /var/log/pacman.log | bat --paging=never -l log, man 2 select, help cp, help git commit, alias -g -- -h='-h 2>&1 | bat --language=help --style=plain', alias -g -- --help='--help 2>&1 | bat --language=help --style=plain', abbr -a --position anywhere -- --help '--help | bat -plhelp', abbr -a --position anywhere -- -h '-h | bat -plhelp', abbr -e -- --help, abbr -e -- -h, ls \-h, batcat --version, ln -s /usr/bin/batcat ~/.local/bin/bat, alias bat="batcat", zypper install bat, alias cat="bat --theme auto:system --theme-dark default --theme-light GitHub", iconv -f ISO-8859-1 -t UTF-8 my-file.php | bat, bash assets/create.sh |
 | calcom__cal.com | envVars | TRIAL | DATABASE_DIRECT_URL, NODE_TLS_REJECT_UNAUTHORIZED, CSP_POLICY, GOOGLE_API_CREDENTIALS, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, ZOOM_CLIENT_ID, ZOOM_CLIENT_SECRET, DAILY_API_KEY, DAILY_SCALE_PLAN, BASECAMP3_CLIENT_ID, BASECAMP3_CLIENT_SECRET, HUBSPOT_CLIENT_ID, HUBSPOT_CLIENT_SECRET, ZOHOCRM_CLIENT_ID, ZOHOCRM_CLIENT_SECRET, UNKEY_ROOT_KEY |
 | louislam__uptime-kuma | commands | mkdir uptime-kuma, cd uptime-kuma, curl -o compose.yaml https://raw.githubusercontent.com/louislam/uptime-kuma/master/compose.yaml, docker compose up -d, docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:2, docker run ... -p 127.0.0.1:3001:3001 ..., git clone https://github.com/louislam/uptime-kuma.git, npm run setup, node server/server.js, npm install pm2 -g && pm2 install pm2-logrotate | docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1, docker pull louislam/uptime-kuma:1, docker stop uptime-kuma, docker rm uptime-kuma |
-| BurntSushi__ripgrep | commands | make defconfig && make -j8, rg -n -w '[A-Z]+_SUSPEND', git grep -P -n -w '[A-Z]+_SUSPEND', LC_ALL=C git grep -E -n -w '[A-Z]+_SUSPEND', LC_ALL=en_US.UTF-8 git grep -E -n -w '[A-Z]+_SUSPEND', rg -uuu -tc -n -w '[A-Z]+_SUSPEND', rg -w 'Sherlock [A-Z]\w+', rg -w '[A-Z]\w+ Sherlock [A-Z]\w+', rg '[A-Za-z]{30}', rg the, rg --json | rg -Tjs foo, strip |
+| BurntSushi__ripgrep | commands | make defconfig && make -j8, rg -n -w '[A-Z]+_SUSPEND', git grep -P -n -w '[A-Z]+_SUSPEND', LC_ALL=C git grep -E -n -w '[A-Z]+_SUSPEND', LC_ALL=en_US.UTF-8 git grep -E -n -w '[A-Z]+_SUSPEND', rg -uuu -tc -n -w '[A-Z]+_SUSPEND', rg -w 'Sherlock [A-Z]\w+', rg -w '[A-Z]\w+ Sherlock [A-Z]\w+', rg '[A-Za-z]{30}', rg the, rg --json | rg -Tjs foo |
 | karpathy__nanoGPT | commands | python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0, python sample.py --out_dir=out-shakespeare-char --device=cpu, python data/openwebtext/prepare.py, python sample.py, python train.py, python train.py config/eval_gpt2.py, python train.py config/eval_gpt2_medium.py, python train.py config/eval_gpt2_large.py, python train.py config/eval_gpt2_xl.py, python train.py config/finetune_shakespeare.py, python sample.py --init_from=gpt2-xl --start="What is the answer to life, the universe, and everything?" --num_samples=5 --max_new_tokens=100, python sample.py --start=FILE:prompt.txt | - |
 | supabase__supabase | techStack | html, supabase, firebase | typescript, javascript, python, dart, kotlin, swift, ruby, postgresql, elixir |
 | documenso__documenso | techStack | css, shadcn/ui, trpc, render, playwright, vs code, npm | postgresql, docker compose, node.js |

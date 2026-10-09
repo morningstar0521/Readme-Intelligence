@@ -33,6 +33,7 @@ export const SHELL_LANGS = new Set([
 
 /** Languages treated like "no language": checked with the majority rule. */
 const PLAIN_LANGS = new Set(['', 'text', 'txt', 'plaintext', 'plain']);
+const STANDALONE_COMMANDS = new Set(['strip']);
 
 export const COMMAND_PREFIXES = new Set([
   'npm', 'npx', 'yarn', 'pnpm', 'pnpx', 'bun', 'bunx', 'node', 'deno',
@@ -220,7 +221,7 @@ function pushCommand(
 export function isInlineCommand(value: string): boolean {
   const v = stripPrompt(value.trim());
   if (!v || v.length > 200 || v.includes('\n')) return false;
-  if (v.split(/\s+/).length < 2) return /\.(?:sh|bash|bat|cmd)$/i.test(v) && isCommandLine(v);
+  if (v.split(/\s+/).length < 2) return STANDALONE_COMMANDS.has(v.toLowerCase()) || (/\.(?:sh|bash|bat|cmd)$/i.test(v) && isCommandLine(v));
   return isCommandLine(v);
 }
 

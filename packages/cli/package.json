@@ -1,0 +1,17 @@
+{
+  "name": "@readme-intel/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic README intelligence CLI.",
+  "bin": {
+    "readme-intel": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@readme-intel/core": "workspace:*"
+  }
+}
