@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Analytics platform. The current README documents DATABASE_URL, API_URL, BASE_PATH, TWO_FACTOR_ENCRYPTION_KEY, and MCP_ENABLED; removed variables from an older README revision.",
   "commands": [
     "git clone https://github.com/umami-software/umami.git",

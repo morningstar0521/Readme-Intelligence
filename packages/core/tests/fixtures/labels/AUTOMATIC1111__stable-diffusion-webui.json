@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "AI image generation, complex installation",
   "commands": [
     "update.bat",

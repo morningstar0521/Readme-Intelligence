@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Long CLI README (1150 lines) with many usage examples. Judgment calls: multi-line commands (\\ continuations, pipes and quoted strings spanning lines) joined into one entry; shell-function definitions (_fzf_comprun, _fzf_compgen_*, _fzf_complete_*) and fish/nu function bodies excluded as source code; vim config / :PlugUpdate excluded; the 'DO NOT DO THIS' block excluded; **<TAB> completion examples kept since they are in sh blocks. The package-manager install commands shown in the Linux packages table are included. Tech stack is empty: README never says what fzf is written in; Bash/Zsh/Fish/Vim are integrations and package managers are distribution channels, not stack. FZF_QUERY/FZF_MATCH_COUNT are set by fzf, not read, so excluded. FZF_API_KEY and FZF_TMUX_* are not present in this README and are excluded. installSteps = 8 Installation sub-headings. installSteps: brew install fzf then set up shell integration.",
   "commands": [
     "brew install fzf",

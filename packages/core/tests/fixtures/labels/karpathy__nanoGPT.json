@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "ML training project",
   "commands": [
     "pip install torch numpy transformers datasets tiktoken wandb tqdm",

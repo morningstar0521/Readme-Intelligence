@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "CLI search tool, many install methods but no numbered install section",
   "commands": [
     "rg -uuu",

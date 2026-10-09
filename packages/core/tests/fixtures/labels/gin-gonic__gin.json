@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Go web framework",
   "commands": [
     "go get -u github.com/gin-gonic/gin"

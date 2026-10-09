@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "T3 stack scaffold",
   "commands": [
     "npm create t3-app@latest",

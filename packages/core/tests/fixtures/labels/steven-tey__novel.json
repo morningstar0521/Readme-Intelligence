@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "WYSIWYG editor, uses OpenAI",
   "commands": [
     "vc env pull",

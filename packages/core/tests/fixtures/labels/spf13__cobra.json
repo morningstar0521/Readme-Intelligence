@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Go CLI framework",
   "commands": [
     "go get -u github.com/spf13/cobra@latest",

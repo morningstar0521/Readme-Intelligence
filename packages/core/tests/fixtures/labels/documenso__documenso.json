@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Document signing platform. Stack labels follow the README Tech Stack and Local Development sections; React Router v7 is used instead of the stale Next.js/React labels.",
   "commands": [
     "git clone https://github.com/<your-username>/documenso",

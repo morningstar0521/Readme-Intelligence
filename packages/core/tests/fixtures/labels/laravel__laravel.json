@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "PHP web framework",
   "commands": [
     "composer create-project laravel/laravel example-app",

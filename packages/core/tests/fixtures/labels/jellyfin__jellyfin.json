@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Media server, C# based",
   "commands": [
     "docker pull jellyfin/jellyfin",

@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "CRM platform. Stack labels follow the explicit Stack section and the self-hosting sentence; removed generic or unsupported labels such as Node.js, Docker, and GraphQL.",
   "commands": [
     "npx create-twenty-app my-app",

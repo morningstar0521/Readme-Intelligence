@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Java web app sample",
   "commands": [
     "git clone https://github.com/spring-projects/spring-petclinic.git",

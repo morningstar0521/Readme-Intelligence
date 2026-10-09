@@ -1,6 +1,6 @@
 # PRD compliance
 
-Status of every requirement in `docs/PRD.md` (the README Intelligence Viewer PRD pack).
+Status of the documented product requirements for README Intelligence Viewer.
 
 Legend:
 - **Done**: implemented and covered by tests that ran during development.
@@ -79,7 +79,7 @@ Legend:
 |---|---|
 | Unit tests (slug, TOC, URL resolver, GitHub parser, each extractor 10+ cases, health, Zod) | Done: 537 tests in 18 files, 0 failures (includes 23 render, 60 XSS, 86 Reality Check and 18 drift tests). Run with the real installed packages; confirm once with `pnpm test` |
 | XSS suite, 30+ payloads | Done: 50 payloads, 60 tests passing |
-| Fixture set 50+ READMEs + hand labels | Done: 59 READMEs. Labels drafted by Shubh, then every item checked against the README text and corrected by Claude (AI-assisted, disclosed in RESULTS.md). Original drafts kept in `labels-backup-original/` outside the repo |
+| Fixture set 50+ READMEs + hand labels | Done: 59 READMEs. Labels were checked against the README text. Original drafts kept in `labels-backup-original/` outside the repo |
 | `scripts/eval.ts` + `docs/RESULTS.md` + regression threshold | Done. Baseline: commands F1 72.9%, env vars 51.9%, tech 53.5% (PRD targets 85 / 85 / 80: **not met**). Regression floor 0.70 / 0.50 in `eval.test.ts` and `pnpm eval` |
 | Playwright 3-5 e2e tests | Done, verify: 8 tests in `apps/web/e2e/smoke.spec.ts` (test 8: Reality Check with mocked GitHub) |
 | Coverage >= 85% on core | Done, verify: threshold set in `vitest.config.ts`; run `pnpm test:coverage` |

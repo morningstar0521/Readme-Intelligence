@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Self-hosted app monorepo README (Cal.diy); removed log-output lines from draft; installSteps = Development Setup 5 numbered items + yarn dx quick start (judgment); deploy targets (Vercel/Railway/Render/Northflank) treated as optional deploy options, not stack; CRON_API_KEY only inside Vercel button URL so excluded; Turborepo inferred from 'Turbo' note and bcrypt from password instructions (judgment). installSteps: Setup steps 1-5 (clone, cd, yarn, .env, nvm) plus yarn dx.",
   "commands": [
     "git clone https://github.com/calcom/cal.diy.git",

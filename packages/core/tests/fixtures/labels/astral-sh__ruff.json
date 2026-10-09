@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Python linter written in Rust",
   "commands": [
     "uvx ruff@0.16.10 check",

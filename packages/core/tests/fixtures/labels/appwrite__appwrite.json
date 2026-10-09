@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Platform README with many SDK links",
   "commands": [
     "docker run -it --rm --init --name appwrite --volume /var/run/docker.sock:/var/run/docker.sock --volume \"$(pwd)\"/appwrite:/usr/src/code/appwrite:rw --entrypoint=\"install\" appwrite/appwrite:1.7.4"

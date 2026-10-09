@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "React Native framework",
   "commands": [
     "npx create-expo-app@latest"

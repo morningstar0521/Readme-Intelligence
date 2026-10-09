@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "AI chatbot template. The current README explicitly documents AI_GATEWAY_API_KEY; removed the older AUTH_SECRET, OPENAI_API_KEY, BLOB_READ_WRITE_TOKEN, and POSTGRES_URL labels that are only implied by the linked .env.example and are not named in this README.",
   "commands": [
     "npm i -g vercel",

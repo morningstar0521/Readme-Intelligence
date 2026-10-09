@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "Node.js web framework library README; installSteps counted literally as 1 code block in Installation section (Quick Start has 4 blocks, not counted); `app.get('/')` is example code, not a project API.",
   "commands": [
     "npm init",

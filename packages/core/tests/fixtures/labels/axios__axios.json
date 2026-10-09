@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "HTTP client library, readme shows usage not install steps",
   "commands": [
     "npm install axios",

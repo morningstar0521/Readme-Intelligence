@@ -1,6 +1,5 @@
 {
   "labeled": true,
-  "labeledBy": "Shubh + Claude (corrected against README text)",
   "notes": "API testing tool, no install commands in main README, points to external docs",
   "commands": [],
   "envVars": [],

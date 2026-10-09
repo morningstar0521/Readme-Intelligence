@@ -199,7 +199,7 @@ Key areas:
 apps/web        Next.js App Router UI, loaders, viewer, and Playwright tests
 packages/core   Pure TypeScript parser, sanitization, extractors, scoring, and schemas
 scripts         Evaluation, fixture, Reality Check, and benchmark tooling
-docs            PRD, extractor notes, security model, benchmark, and design decisions
+docs            extractor notes, security model, benchmark, and design decisions
 ```
 
 Read the deeper design notes in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/EXTRACTORS.md](docs/EXTRACTORS.md), [docs/REALITY-CHECK.md](docs/REALITY-CHECK.md), and [docs/SECURITY.md](docs/SECURITY.md).
@@ -208,7 +208,6 @@ Read the deeper design notes in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [d
 
 | Document                                       | Use it when you need to...                                   |
 | ---------------------------------------------- | ------------------------------------------------------------ |
-| [docs/PRD.md](docs/PRD.md)                     | Understand the product requirements and acceptance criteria. |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)   | Understand the parser, UI, and data flow.                    |
 | [docs/EXTRACTORS.md](docs/EXTRACTORS.md)       | Add or review an extractor rule.                             |
 | [docs/SECURITY.md](docs/SECURITY.md)           | Review sanitization, CSP, privacy, and threat boundaries.    |
