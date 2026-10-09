@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.10.1",
   "description": "README Intelligence Viewer: render any README and extract structured, evidence-backed project intelligence.",
   "scripts": {
     "dev": "pnpm --filter @readme-intel/web dev",
