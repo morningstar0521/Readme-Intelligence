@@ -51,6 +51,18 @@ describe('extractTechStack', () => {
     expect(t[0]!.evidence[0]!.type).toBe('badge');
   });
 
+	it('does not split Tailwind CSS badges into standalone CSS', () => {
+		expect(techNames('![Tailwind CSS](https://img.shields.io/badge/tailwindcss-0F172A?logo=tailwindcss)')).toEqual(['Tailwind CSS']);
+	});
+
+	it('does not split Tailwind CSS rows into standalone CSS', () => {
+		expect(techNames(md('## Tech Stack', '- Tailwind CSS - CSS'))).toEqual(['Tailwind CSS']);
+	});
+
+	it('does not infer VS Code from a generic devcontainer badge', () => {
+		expect(techNames('![open in devcontainer](https://img.shields.io/static/v1?label=Dev%20Containers&message=Enabled&logo=visualstudiocode)')).toEqual([]);
+	});
+
 	it('does not infer single-letter languages from noisy badge paths', () => {
 		expect(techNames('![codecov](https://img.shields.io/codecov/c/github/example/project?logo=codecov)')).not.toContain('C');
 	});
@@ -162,6 +174,26 @@ describe('extractTechStack', () => {
 
 	it('requires stronger evidence for HTML and CSS prose mentions', () => {
 		expect(techNames('The documentation renders HTML and CSS examples.')).toEqual([]);
+	});
+
+	it('does not treat transpiler output as the implementation stack', () => {
+		expect(techNames('This project uses Dart Sass to transpile Sass to CSS.')).toEqual([]);
+	});
+
+	it('does not treat generated CSS as the implementation stack', () => {
+		expect(techNames('This project uses a stylesheet tool that generates CSS files.')).toEqual([]);
+	});
+
+	it('does not treat model catalogs as implementation dependencies', () => {
+		expect(techNames('This template uses a model router to access multiple AI models: Mistral, Moonshot, DeepSeek, OpenAI, and xAI.')).toEqual([]);
+	});
+
+	it('does not treat long ecosystem catalogs as implementation dependencies', () => {
+		expect(techNames('This project uses GitHub, GitLab, npmjs, PyPi, Packagist, Docker Hub, Terraform, CircleCI, and more.')).toEqual([]);
+	});
+
+	it('does not treat hosted service options as implementation dependencies', () => {
+		expect(techNames('Choose between Appwrite databases or managed PostgreSQL and MySQL. The hosted MCP server uses OAuth.')).toEqual([]);
 	});
 
   it('keeps weak prose mentions when there is no Tech Stack section', () => {

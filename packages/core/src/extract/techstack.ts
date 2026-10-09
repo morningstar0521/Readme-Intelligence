@@ -46,9 +46,12 @@ const CATEGORY_ORDER: TechCategory[] = [
 
 const MAX_EVIDENCE = 5;
 const PROJECT_CONTEXT_RE = /\b(?:uses?|used|built\s+(?:with|using|for)|powered\s+by|written\s+in|developed\s+in|based\s+on|requires?|implemented\s+(?:in|with)|stack\s+includes?)\b/i;
-const EXCLUDED_BEFORE_CONTEXT_RE = /\b(?:integrat(?:e|es|ed|ion|ions)|connects?|connected|supports?|supported|exports?|exported|compatible|works?|quick\s+start|examples?|such\s+as|used\s+by|community-maintained)\b/i;
+const EXCLUDED_BEFORE_CONTEXT_RE = /\b(?:integrat(?:e|es|ed|ion|ions)|connects?|connected|supports?|supported|exports?|exported|compatible|works?|quick\s+start|examples?|such\s+as|used\s+by|community-maintained|generat(?:e|es|ed|ing))\b/i;
 const EXCLUDED_AFTER_CONTEXT_RE = /^\s*(?:sdk|clients?|bindings?)\b/i;
 const NEGATED_TECH_CONTEXT_RE = /\b(?:not|never|without|does\s+not|doesn['’]t|do\s+not|don['’]t|avoid(?:s|ed|ing)?)\s+(?:(?:use|using|choose|choosing|include|including|support|supporting)\s+[^.!?\n]{0,60}|[^.!?\s]*(?:\s+(?:and|or))?)\s*$/i;
+const TRANSPILE_OUTPUT_NAMES = new Set(['Dart', 'Sass', 'CSS']);
+const LONG_CATALOG_RE = /(?:[^,]*,){3,}[^,]*\band\s+more\b/i;
+const HOSTED_SERVICE_CONTEXT_RE = /\b(?:managed|hosted)\b[^.!?\n]{0,80}$/i;
 
 /**
  * Tools commonly mentioned while documenting contribution or installation workflows.
@@ -158,6 +161,11 @@ function matchText(
     if (!termMatch) continue;
     const before = work.slice(Math.max(0, termMatch.index - 80), termMatch.index);
     const after = work.slice(termMatch.index + termMatch[0].length, termMatch.index + termMatch[0].length + 50);
+    if (!strong && type === 'text' && LONG_CATALOG_RE.test(text)) continue;
+    if (!strong && type === 'text' && HOSTED_SERVICE_CONTEXT_RE.test(before)) continue;
+    if (type === 'text' && term.entry.name === 'CSS' && /tailwind\s+css/i.test(text)) continue;
+    if (type === 'text' && TRANSPILE_OUTPUT_NAMES.has(term.entry.name) && /\btranspil\w*\b/i.test(text)) continue;
+    if (type === 'text' && term.entry.name === 'OpenAI' && /\bmodels?\s*:/i.test(text)) continue;
     const excludedByContext =
       !strong &&
       type === 'text' &&
@@ -238,6 +246,8 @@ function matchBadge(collector: Collector, alt: string, url: string, source: Sour
   // shields.io: /badge/React-18-blue?logo=react ; separators become spaces
   const haystack = `${alt} ${decoded}`.replace(/[-_/=&?+:]/g, ' ');
   for (const c of COMPILED) {
+    if (c.entry.name === 'CSS' && /tailwind\s*css/i.test(alt)) continue;
+    if (c.entry.name === 'VS Code' && /devcontainer|dev\s+containers?/i.test(alt)) continue;
     const re = c.badgeRes.find((r) => r.test(haystack));
     if (!re) continue;
     collector.add(c.entry, 'badge', alt || url, source, true);

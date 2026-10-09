@@ -10,17 +10,17 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 |---|---:|---:|---:|---:|---:|---:|
 | commands | 67.9% | 83.5% | **74.9%** | 328 | 155 | 65 |
 | envVars | 81.9% | 88.1% | **84.9%** | 59 | 13 | 8 |
-| techStack | 61.9% | 61.9% | **61.9%** | 125 | 77 | 77 |
+| techStack | 66.5% | 61.9% | **64.1%** | 125 | 63 | 77 |
 | apiEndpoints | 100.0% | 100.0% | **100.0%** | 3 | 0 | 0 |
 
 ## Performance and target status
 
 | Metric | Value | Status |
 |---|---:|---|
-| Parse + extract p95 | 70.8 ms | met |
+| Parse + extract p95 | 72.8 ms | met |
 | Commands F1 target | 74.9% | not met |
 | Environment variables F1 target | 84.9% | not met |
-| Tech stack F1 target | 61.9% | not met |
+| Tech stack F1 target | 64.1% | not met |
 
 ## Highest-impact failure examples
 
@@ -34,17 +34,17 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 | supabase__supabase | techStack | html, supabase, firebase | typescript, javascript, python, dart, kotlin, swift, ruby, postgresql, elixir |
 | openai__whisper | commands | pip install --upgrade --no-deps --force-reinstall git+https://github.com/openai/whisper.git, scoop install ffmpeg, pip install, export PATH="$HOME/.cargo/bin:$PATH", pip install setuptools-rust, whisper audio.flac audio.mp3 audio.wav --model turbo, whisper japanese.wav --language Japanese, whisper japanese.wav --model medium --language Japanese --task translate, whisper --help | whisper audio.flac audio.mp3 audio.wav --model medium |
 | jellyfin__jellyfin | commands | git clone https://github.com/jellyfin/jellyfin.git, dotnet run, cd jellyfin, dotnet run --project Jellyfin.Server --webdir /absolute/path/to/jellyfin-web/dist, dotnet build, cd Jellyfin.Server/bin/Debug/net10.0, dotnet test | docker pull jellyfin/jellyfin, docker run -d -v /path/to/config:/config -v /path/to/cache:/cache -v /path/to/media:/media --net=host jellyfin/jellyfin:latest |
-| documenso__documenso | techStack | css, shadcn/ui, trpc, playwright, vs code | postgresql, docker compose, node.js |
 | formbricks__formbricks | techStack | node.js | next.js, react, typescript, tailwind css, prisma, postgresql, docker |
 | ollama__ollama | commands | ollama, ollama launch claude, ollama launch openclaw, ollama run gemma4, pip install ollama, npm i ollama | ollama run llama3.2, ollama pull llama3.2 |
 | tiangolo__fastapi | commands | uv add "fastapi[standard]", uv run fastapi dev, uv run fastapi deploy, uv add fastapi, uv add "fastapi[standard-no-fastapi-cloud-cli]" | pip install fastapi, pip install "fastapi[standard]", fastapi dev main.py |
 | gohugoio__hugo | commands | CGO_ENABLED=0 go install github.com/gohugoio/hugo@latest, CGO_ENABLED=0 go install -tags withdeploy github.com/gohugoio/hugo@latest, CGO_ENABLED=1 go install -tags extended github.com/gohugoio/hugo@latest, CGO_ENABLED=1 go install -tags extended,withdeploy github.com/gohugoio/hugo@latest, hugo env --logLevel info | brew install hugo, snap install hugo |
 | run-llama__llama_index | commands | pip install llama-index-core, pip install llama-index-llms-openai, pip install llama-index-llms-ollama, pip install llama-index-embeddings-huggingface, echo "Verifying: $file", gh attestation verify "$file" -R "$REPO" || echo "Failed to verify: $file" | pip install llama-index |
-| sindresorhus__got | techStack | javascript, html, docker, terraform, circleci | typescript, node.js |
 | appwrite__appwrite | commands | docker run -it --rm --publish 127.0.0.1:20080:20080 --volume /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)"/appwrite:/usr/src/code/appwrite:rw --entrypoint="install" appwrite/appwrite:2.3.0, docker run -it --rm --publish 127.0.0.1:20080:20080 --volume //var/run/docker.sock:/var/run/docker.sock --volume "%cd%"/appwrite:/usr/src/code/appwrite:rw --entrypoint="install" appwrite/appwrite:2.3.0, docker run -it --rm --publish 127.0.0.1:20080:20080 --volume /var/run/docker.sock:/var/run/docker.sock --volume ${pwd}/appwrite:/usr/src/code/appwrite:rw --entrypoint="install" appwrite/appwrite:2.3.0, docker run -it --rm --env DOCKER_API_VERSION=1.42 --publish 127.0.0.1:20080:20080 --volume /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)"/appwrite:/usr/src/code/appwrite:rw --entrypoint="install" appwrite/appwrite:2.3.0, npx skills add appwrite/agent-skills | docker run -it --rm --init --name appwrite --volume /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)"/appwrite:/usr/src/code/appwrite:rw --entrypoint="install" appwrite/appwrite:1.7.4 |
 | astral-sh__ruff | commands | - | ruff check path/to/code/, ruff check path/to/code/*.py, ruff check path/to/code/to/file.py, ruff format path/to/code/, ruff format path/to/code/*.py, ruff format path/to/code/to/file.py |
 | calcom__cal.com | envVars | TRIAL | CSP_POLICY, GOOGLE_API_CREDENTIALS, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, UNKEY_ROOT_KEY |
+| documenso__documenso | techStack | shadcn/ui, trpc, playwright | postgresql, docker compose, node.js |
 | dubinc__dub | techStack | css, redis, planetscale, nextauth.js, turborepo | react |
-| vercel__ai-chatbot | techStack | openai, vercel | react, tailwind css, postgresql, auth.js |
+| axios__axios | techStack | html, sveltekit, angular, deno, node.js | - |
+| gothinkster__realworld | techStack | - | react, angular, node.js, django, ruby on rails |
 
 False positives reduce precision. Missed labels reduce recall. These examples are the starting point for the next extractor change, not evidence that the labels should be changed.
