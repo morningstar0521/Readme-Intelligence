@@ -1,0 +1,22 @@
+name: README drift report
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readme-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # This writes the report to the job summary without failing the workflow.
+      # Replace @main with a reviewed release commit when adopting this workflow.
+      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@main
+        with:
+          head-path: .
+          fail-on: none

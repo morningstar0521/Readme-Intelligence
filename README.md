@@ -150,6 +150,8 @@ The checker is also available as a composite action for other repositories. Pin 
 
 For PR-level comparison, provide separate `base-path` and `head-path` checkouts.
 
+See [docs/ADOPTION.md](docs/ADOPTION.md) for copy-pasteable workflows covering standard pull requests, explicit base/head checkouts, and report-only CI runs.
+
 Run the same check locally:
 
 ```bash
