@@ -68,7 +68,8 @@ describe('benchmark fixture split', () => {
     expect(first).toEqual(second);
     expect(new Set(first.development.map((fx) => fx.name)).size).toBe(first.development.length);
     expect(new Set(first.holdout.map((fx) => fx.name)).size).toBe(first.holdout.length);
-    expect(new Set(first.development.map((fx) => fx.name)).intersection(new Set(first.holdout.map((fx) => fx.name))).size).toBe(0);
+    const holdoutNames = new Set(first.holdout.map((fx) => fx.name));
+    expect(first.development.some((fx) => holdoutNames.has(fx.name))).toBe(false);
     expect(first.development.length + first.holdout.length).toBe(fixtures.length);
   });
 });
