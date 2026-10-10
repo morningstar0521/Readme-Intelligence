@@ -17,7 +17,7 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 
 | Metric | Value | Status |
 |---|---:|---|
-| Parse + extract p95 | 84.2 ms | met |
+| Parse + extract p95 | 81.2 ms | met |
 | Commands F1 target | 76.0% | not met |
 | Environment variables F1 target | 84.9% | not met |
 | Tech stack F1 target | 67.8% | not met |

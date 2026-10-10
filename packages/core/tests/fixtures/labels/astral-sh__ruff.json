@@ -39,5 +39,10 @@
   ],
   "installSteps": 1,
   "hasLicense": true,
-  "apiEndpoints": []
+  "apiEndpoints": [],
+  "reality": {
+    "labeled": false,
+    "contradictions": [],
+    "undocumentedEnv": []
+  }
 }

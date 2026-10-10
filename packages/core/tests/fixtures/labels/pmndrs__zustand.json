@@ -11,5 +11,10 @@
   ],
   "installSteps": 0,
   "hasLicense": false,
-  "apiEndpoints": []
+  "apiEndpoints": [],
+  "reality": {
+    "labeled": false,
+    "contradictions": [],
+    "undocumentedEnv": []
+  }
 }

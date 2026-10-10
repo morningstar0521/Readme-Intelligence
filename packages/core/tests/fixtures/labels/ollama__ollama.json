@@ -15,5 +15,10 @@
   "hasLicense": false,
   "apiEndpoints": [
     "POST /api/chat"
-  ]
+  ],
+  "reality": {
+    "labeled": false,
+    "contradictions": [],
+    "undocumentedEnv": []
+  }
 }

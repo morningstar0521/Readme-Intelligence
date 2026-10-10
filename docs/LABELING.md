@@ -7,7 +7,7 @@ not copied from the extractor. Budget 3 to 4 minutes per README.
 
 1. `pnpm fixtures:fetch` (set `GITHUB_TOKEN` first if you hit the rate limit). Add your own repos and
    5 to 10 low-quality READMEs (classmates, old projects) to `scripts/fixture-repos.json` for variety.
-2. `pnpm fixtures:labels` creates `packages/core/tests/fixtures/labels/<owner>__<repo>.json`.
+2. `pnpm fixtures:labels` creates missing `packages/core/tests/fixtures/labels/<owner>__<repo>.json` files and migrates existing labels to include an empty `reality` block.
 3. Open the README in a plain text editor (not in the viewer) and fill in the label file.
 4. Set `"labeled": true` and `"labeledBy": "<your name>"`.
 5. `pnpm eval --verbose` lists false positives and misses per fixture. Fix labels only when the label

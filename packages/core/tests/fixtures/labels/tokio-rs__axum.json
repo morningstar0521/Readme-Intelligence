@@ -13,5 +13,10 @@
   "apiEndpoints": [
     "GET /",
     "POST /users"
-  ]
+  ],
+  "reality": {
+    "labeled": false,
+    "contradictions": [],
+    "undocumentedEnv": []
+  }
 }

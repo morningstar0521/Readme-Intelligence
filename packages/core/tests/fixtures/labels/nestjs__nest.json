@@ -1,0 +1,16 @@
+{
+  "labeled": false,
+  "labeledBy": "",
+  "notes": "",
+  "commands": [],
+  "envVars": [],
+  "techStack": [],
+  "installSteps": 0,
+  "hasLicense": false,
+  "apiEndpoints": [],
+  "reality": {
+    "labeled": false,
+    "contradictions": [],
+    "undocumentedEnv": []
+  }
+}

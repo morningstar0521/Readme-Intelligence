@@ -288,6 +288,15 @@
     "fetchedAt": "2026-10-08T02:58:43.943Z"
   },
   {
+    "name": "nestjs__nest",
+    "repo": "nestjs/nest",
+    "url": "https://github.com/nestjs/nest",
+    "ref": "master",
+    "path": "Readme.md",
+    "category": "js-backend",
+    "fetchedAt": "2026-10-10T22:33:48.411Z"
+  },
+  {
     "name": "ollama__ollama",
     "repo": "ollama/ollama",
     "url": "https://github.com/ollama/ollama",
