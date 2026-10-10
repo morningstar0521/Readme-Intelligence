@@ -15,8 +15,8 @@ jobs:
       - uses: actions/checkout@v4
 
       # This writes the report to the job summary without failing the workflow.
-      # Replace @main with a reviewed release commit when adopting this workflow.
-      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@main
+      # Update the pin to the reviewed release commit when a tagged release is available.
+      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@91447c4
         with:
           head-path: .
           fail-on: none

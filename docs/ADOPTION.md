@@ -16,7 +16,7 @@ Copy one example into `.github/workflows/readme-drift.yml` and adjust `readme-pa
 
 ## Pin the action
 
-The examples use `@main` because the first public release has not been created yet. Before relying on the action for production checks, replace it with the full commit SHA of a reviewed release. Do not use a moving branch as a permanent supply-chain pin.
+The examples are pinned to the reviewed `91447c4` implementation commit. Keep the full commit SHA until a tagged release is available, then update the pin to the reviewed release commit. Do not use a moving branch as a permanent supply-chain pin.
 
 ## Failure policy
 

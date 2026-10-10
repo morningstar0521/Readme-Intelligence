@@ -26,8 +26,8 @@ jobs:
           persist-credentials: false
 
       # Use the checker from base so the pull request cannot change the judging code.
-      # Replace @main with a reviewed release commit when adopting this workflow.
-      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@main
+      # Update the pin to the reviewed release commit when a tagged release is available.
+      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@91447c4
         with:
           head-path: head
           base-path: base
