@@ -5,9 +5,11 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider, THEME_INIT_SCRIPT } from '@/lib/theme';
 import { SettingsProvider } from '@/lib/settings';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
+const isVercelDeployment = process.env.VERCEL === '1';
 
 export const metadata: Metadata = {
   title: 'README Intelligence Viewer',
@@ -36,6 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider>
           <SettingsProvider>{children}</SettingsProvider>
         </ThemeProvider>
+        {isVercelDeployment && <Analytics />}
       </body>
     </html>
   );

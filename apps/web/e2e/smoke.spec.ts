@@ -34,6 +34,18 @@ async function pasteAndOpen(page: Page, markdown = PASTED) {
   await expect(page.getByTestId('markdown')).toBeVisible();
 }
 
+test('feedback links open the focused GitHub issue template', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByTestId('feedback-link')).toHaveAttribute(
+    'href',
+    'https://github.com/morningstar0521/Readme-Intelligence/issues/new?template=extraction-feedback.yml'
+  );
+  await expect(page.getByTestId('feedback-link')).toHaveAttribute('target', '_blank');
+
+  await pasteAndOpen(page);
+  await expect(page.getByTestId('feedback-link')).toBeVisible();
+});
+
 test('1. pasted Markdown renders with intelligence cards', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));

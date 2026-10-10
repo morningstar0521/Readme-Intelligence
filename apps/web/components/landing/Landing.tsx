@@ -21,6 +21,7 @@ import {
 import { saveDoc } from '@/lib/storage';
 import { Logo } from '@/components/common/Logo';
 import { SettingsMenu } from '@/components/common/SettingsMenu';
+import { FeedbackLink } from '@/components/common/FeedbackLink';
 
 const ACCEPTED = /\.(md|markdown|mdx|mdown|txt)$/i;
 const SIGNALS = [
@@ -215,6 +216,7 @@ export function Landing() {
               >
                 <FileText className="h-4 w-4" aria-hidden /> Try an example
               </button>
+              <FeedbackLink />
             </div>
 
             {pasteOpen && (
@@ -245,8 +247,9 @@ export function Landing() {
 
             <p className="mt-10 flex items-start gap-2 border-t border-border pt-5 text-xs leading-5 text-fg-2">
               <ShieldCheck className="h-4 w-4 shrink-0 text-accent" aria-hidden />
-              No AI, no tracking, no accounts. Local files and pasted text never leave your browser;
-              only GitHub links are fetched through this site.
+              No AI, no third-party tracking, no accounts. Anonymous, cookieless aggregate analytics
+              help measure usage. Local files and pasted text never leave your browser; only GitHub
+              links are fetched through this site.
             </p>
           </section>
 

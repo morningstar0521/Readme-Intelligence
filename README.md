@@ -21,7 +21,7 @@ It is intentionally narrower than an AI codebase chatbot and documentation publi
 | Input      | GitHub URL, local Markdown, or pasted text                                  |
 | Output     | Rendered README plus source-linked project intelligence                     |
 | Extraction | Deterministic TypeScript rules with typed, source-linked results            |
-| Security   | Sanitized Markdown, masked environment values, local-first file handling    |
+| Security   | Sanitized Markdown, masked environment values, local-first file handling, cookieless aggregate analytics |
 | Benchmark  | 59 hand-labeled READMEs; current metrics are published in `docs/RESULTS.md` |
 | CI         | GitHub Action comments on PR drift and fails only on new contradictions     |
 | Runtime    | Next.js web app with a pure TypeScript core package                         |
@@ -241,6 +241,7 @@ Read the deeper design notes in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [d
 ## Determinism, privacy, and security
 
 - Local files and pasted text remain in the browser tab.
+- When enabled on Vercel, Vercel Analytics collects anonymous, cookieless aggregate page-usage metrics only. It does not receive local Markdown, pasted text, README contents, extracted values, or secrets.
 - GitHub URLs are fetched through the application server because browser CORS rules prevent reliable direct repository access.
 - README HTML is parsed and sanitized with an allow-list. The rendered tree is converted to React elements instead of being inserted as raw HTML.
 - Extractors use explicit rules, section context, source lines, and typed schemas. There are no AI or external inference calls.

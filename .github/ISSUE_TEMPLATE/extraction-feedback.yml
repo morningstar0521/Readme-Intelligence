@@ -1,0 +1,45 @@
+name: Extraction feedback
+description: Report a README extraction that was missing, incorrect, or confusing.
+title: "[Extraction] "
+labels:
+  - extraction-feedback
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing README Intelligence. Specific failures help improve the benchmark.
+
+        Please do not include API keys, passwords, tokens, private repository contents, or other secrets.
+  - type: input
+    id: repository
+    attributes:
+      label: Which repo did you try?
+      description: Include the public GitHub repository URL and branch or commit if relevant.
+      placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: dropdown
+    id: commands-match
+    attributes:
+      label: Did the extracted commands match what you needed?
+      options:
+        - Yes
+        - Partly
+        - No
+        - The README did not contain commands
+    validations:
+      required: true
+  - type: textarea
+    id: extraction-problem
+    attributes:
+      label: What was missing or incorrect?
+      description: Name the extracted item and what the README actually says. Redact secrets before submitting.
+      placeholder: The README has `pnpm dev`, but the viewer did not list it under Commands.
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Additional details
+      description: Include the README section, source line, or a screenshot if it helps reproduce the issue.
+      placeholder: The command appears under the "Local development" heading.

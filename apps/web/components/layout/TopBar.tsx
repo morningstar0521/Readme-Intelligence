@@ -18,6 +18,7 @@ import type { SourceInfo } from '@readme-intel/core';
 import { Logo } from '@/components/common/Logo';
 import { SettingsMenu } from '@/components/common/SettingsMenu';
 import { useIsMac, copyText } from '@/lib/hooks';
+import { FeedbackLink } from '@/components/common/FeedbackLink';
 
 interface TopBarProps {
   projectName: string | null;
@@ -120,6 +121,7 @@ export function TopBar(props: TopBarProps) {
             </kbd>
           </button>
           <SourceBadge source={props.source} />
+          <FeedbackLink className="hidden lg:inline-flex" />
           <div
             className="hidden items-center rounded-btn border border-border p-0.5 md:flex"
             role="group"

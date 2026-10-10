@@ -20,6 +20,7 @@ mitigation in the code, and the test that proves it.
 | Command execution | Nothing is executed. Commands are copy-only; risky ones get a warning icon. | `extract/commands.ts`, `CommandsCard.tsx` | `commands.test.ts` (risky flags) |
 | Remote image tracking | Images load from their original host with `referrerpolicy="no-referrer"` and a global `Referrer-Policy: no-referrer`. Settings shows "Images are loaded from their original URLs" and a "Block remote images" toggle (click-to-load per image). | `SafeImage.tsx`, `SettingsMenu.tsx`, `next.config.mjs` | manual |
 | Local content leaving the browser | Local files are read with `File.text()` and passed to the viewer through `sessionStorage` (same tab). No request carries the content. | `Landing.tsx`, `lib/storage.ts` | e2e test 7 |
+| Analytics data boundary | When enabled on a Vercel deployment, Vercel Web Analytics is anonymous and cookieless. The app sends page-usage metrics only; local Markdown, pasted text, README contents, extracted values, and secrets are not sent as analytics data. Analytics is disabled for local non-Vercel runs. | `app/layout.tsx`, Vercel Web Analytics | manual: inspect network payloads and dashboard events |
 | CSP | `default-src 'self'; script-src 'self' 'nonce-…' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'` | `apps/web/middleware.ts` | e2e tests run against the production build with this CSP |
 
 ## Documented relaxations
@@ -36,4 +37,5 @@ mitigation in the code, and the test that proves it.
 ## Reporting
 
 This is a personal project. Open an issue for any bypass of the sanitizer; include the Markdown that
-reproduces it.
+reproduces it, after removing secrets and private content. Extraction problems can be reported through
+the public feedback issue template.
