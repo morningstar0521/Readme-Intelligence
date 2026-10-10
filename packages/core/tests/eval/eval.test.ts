@@ -48,6 +48,9 @@ describe('metrics', () => {
 
   it('normalisers', () => {
     expect(normalizeCommandLabel('$  npm   install ')).toBe('npm install');
+    expect(normalizeCommandLabel('npx create-expo-app@latest')).toBe('npx create-expo-app');
+    expect(normalizeCommandLabel('python -m pip install -U "pydantic"')).toBe('pip install pydantic');
+    expect(normalizeCommandLabel("pip install 'transformers[torch]' --upgrade")).toBe('pip install transformers');
     expect(normalizeTechLabel('postgres')).toBe('postgresql');
     expect(normalizeTechLabel('SomethingNew')).toBe('somethingnew');
     expect(normalizeEndpointLabel('get /users/')).toBe('GET /users');

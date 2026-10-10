@@ -13,7 +13,9 @@ import type { Claim, RepoSnapshot } from '../../src/repo/types';
 /**
  * Evaluation harness (Test plan 6.3).
  * Runs the extractors on hand-labeled fixtures and computes precision, recall and F1
- * per field with exact match on normalised strings. Used by scripts/eval.ts (writes
+ * per field with exact match on field-specific canonical strings. Commands collapse
+ * equivalent package-manager spelling and safe flags; other fields use canonical names.
+ * Used by scripts/eval.ts (writes
  * docs/RESULTS.md) and tests/eval/eval.test.ts (regression threshold).
  */
 
@@ -96,7 +98,16 @@ export interface EvalReport {
 // ---------------------------------------------------------------- normalisation
 
 export function normalizeCommandLabel(cmd: string): string {
-  return stripPrompt(cmd.trim()).replace(/\s+/g, ' ').replace(/;+$/, '').trim();
+  let normalized = stripPrompt(cmd.trim())
+    .replace(/\s+/g, ' ')
+    .replace(/\b(?!https?:\/\/)([^\s]+)@latest\b/gi, '$1')
+    .replace(/;+$/, '')
+    .trim();
+  normalized = normalized.replace(/^(?:python3?|py)\s+-m\s+pip\b/i, 'pip');
+  normalized = normalized.replace(/^(pip3?)\s+install\s+((?:-[A-Za-z][\w-]*(?:=\S+)?\s+)+)/i, '$1 install ');
+  normalized = normalized.replace(/\b([@A-Za-z0-9_./-]+)\[[^\]]+\]/g, '$1');
+  normalized = normalized.replace(/\s+--(?:save(?:-dev)?|upgrade|user|force-reinstall|no-deps|pre|editable|no-cache-dir)\b/gi, '');
+  return normalized.replace(/["']/g, '').replace(/\s+/g, ' ').trim();
 }
 
 export function normalizeTechLabel(name: string): string {
@@ -393,7 +404,8 @@ export function renderResultsMarkdown(report: EvalReport, meta: { date: string; 
     ...(meta.labelers && Object.keys(meta.labelers).length > 0
       ? [`- Labels by: ${Object.entries(meta.labelers).map(([who, n]) => `${who} (${n})`).join(', ')}. Labels follow docs/LABELING.md and were written from the README text, never from extractor output.`]
       : []),
-    '- Matching: exact match on normalised strings (commands: prompt and whitespace normalised; tech: canonical names; endpoints: "METHOD /path").',
+    '- Matching: exact match after field-specific canonicalisation (commands: prompt, whitespace, package-manager spelling, safe install flags and package extras; tech: canonical names; endpoints: "METHOD /path").',
+    '- Validation status: development benchmark only; no independent holdout set has been reserved yet.',
     '- Averaging: micro-average (true/false positives summed over all fixtures).',
     '',
     '## Extraction accuracy',

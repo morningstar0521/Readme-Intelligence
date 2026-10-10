@@ -34,13 +34,21 @@ export function extractLicense(ctx: DocContext, links: LinkItem[], badges: Badge
     const text = collapseWhitespace(mdastToString(block.node as Paragraph));
     if (text) return { value: truncate(text, 120), source: refFor(block), confidence: 'explicit' };
   }
-  // 2. A link to a LICENSE file or labelled "license"
+  // 2. Explicit licensing prose outside a dedicated License section.
+  for (const block of ctx.blocks) {
+    if (block.isHeading) continue;
+    const text = blockText(block.node);
+    if (!text || !/\b(?:dual[- ]licensed|licensed|licenced|released under|license is)\b/i.test(text)) continue;
+    const name = licenseNameIn(text);
+    if (name) return { value: name, source: refFor(block), confidence: 'explicit' };
+  }
+  // 3. A link to a LICENSE file or labelled "license"
   const link = links.find((l) => l.type === 'license');
   if (link) {
     const name = licenseNameIn(link.text) ?? licenseNameIn(link.url);
     return { value: name ?? link.text, source: link.source, confidence: 'explicit' };
   }
-  // 3. A license badge
+  // 4. A license badge
   const badge = badges.find((b) => /licen[cs]e/i.test(b.alt) || /licen[cs]e/i.test(b.imageUrl));
   if (badge) {
     let decoded = badge.imageUrl;

@@ -28,6 +28,10 @@ describe('extractLicense', () => {
     expect(license('Released under the [MIT license](https://github.com/a/b/blob/main/LICENSE).')?.value).toBe('MIT');
   });
 
+  it('reads explicit licensing prose outside a License section', () => {
+    expect(license('This project is dual-licensed under MIT or the Unlicense.')?.value).toBe('MIT');
+  });
+
   it('uses a license badge as a last resort', () => {
     expect(license('![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)')?.value).toMatch(/BSD/);
   });

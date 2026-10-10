@@ -28,6 +28,19 @@ It is intentionally narrower than an AI codebase chatbot and documentation publi
 
 The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands, environment variables, and tech stack are still below their PRD targets. See [Benchmark status](#benchmark-status) before quoting performance numbers.
 
+### Benchmark snapshot
+
+Development-set results on 59 hand-labeled README fixtures:
+
+| Field | F1 | Precision | Recall |
+| --- | ---: | ---: | ---: |
+| Commands | 76.0% | 69.1% | 84.4% |
+| Environment variables | 84.9% | 81.9% | 88.1% |
+| Tech stack | 67.8% | 65.0% | 70.8% |
+| API endpoints | 100.0% | 100.0% | 100.0% |
+
+These are development-set measurements, not an independent holdout result. The benchmark uses field-specific canonical matching for equivalent command variants, and the complete failure breakdown is in [docs/RESULTS.md](docs/RESULTS.md).
+
 ## Live demo
 
 Try the deployed application at [readme-intelligence.vercel.app](https://readme-intelligence.vercel.app/).
@@ -255,6 +268,7 @@ The benchmark is README-only. Do not add repository manifest facts to it; those 
 
 - Extraction is heuristic. Commands in images, prose-only setup, unusual tab layouts, and unsupported wording can be missed.
 - Section names and matching rules currently target English READMEs.
+- The benchmark is a tuned development set with no independent holdout yet; labels are currently recorded with an unknown author in the report.
 - Reality Check reads at most 60 repository files, including a 30-file source sample, so it cannot prove every repository fact.
 - Relative images in local files and pasted text cannot be loaded without a base URL.
 - Mermaid, KaTeX, and footnotes are not rendered yet.
