@@ -95,6 +95,29 @@ export interface EvalReport {
   perFixture: { name: string; f1: Record<Field, number | null>; ms: number; misses: Record<Field, { fp: string[]; fn: string[] }> }[];
 }
 
+export const HOLDOUT_BUCKET_COUNT = 5;
+export const HOLDOUT_BUCKET = 0;
+
+function fixtureBucket(name: string): number {
+  let hash = 2166136261;
+  for (const char of name) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619) >>> 0;
+  }
+  return hash % HOLDOUT_BUCKET_COUNT;
+}
+
+export function splitFixtures<T extends Pick<Fixture, 'name'>>(fixtures: T[]): { development: T[]; holdout: T[] } {
+  return fixtures.reduce<{ development: T[]; holdout: T[] }>(
+    (split, fixture) => {
+      if (fixtureBucket(fixture.name) === HOLDOUT_BUCKET) split.holdout.push(fixture);
+      else split.development.push(fixture);
+      return split;
+    },
+    { development: [], holdout: [] },
+  );
+}
+
 // ---------------------------------------------------------------- normalisation
 
 export function normalizeCommandLabel(cmd: string): string {
@@ -385,7 +408,12 @@ export function renderRealityEvalMarkdown(r: RealityEval): string[] {
   ];
 }
 
-export function renderResultsMarkdown(report: EvalReport, meta: { date: string; totalFixtures: number; unlabeled: number; nodeVersion: string; labelers?: Record<string, number> }, reality?: RealityEval): string {
+export function renderResultsMarkdown(
+  report: EvalReport,
+  meta: { date: string; totalFixtures: number; unlabeled: number; nodeVersion: string; labelers?: Record<string, number> },
+  reality?: RealityEval,
+  holdout?: EvalReport,
+): string {
   const rows = FIELDS.map((f) => {
     const m = report.fields[f];
     return `| ${f} | ${m.tp} | ${m.fp} | ${m.fn} | ${pct(m.precision)} | ${pct(m.recall)} | **${pct(m.f1)}** |`;
@@ -405,7 +433,7 @@ export function renderResultsMarkdown(report: EvalReport, meta: { date: string; 
       ? [`- Labels by: ${Object.entries(meta.labelers).map(([who, n]) => `${who} (${n})`).join(', ')}. Labels follow docs/LABELING.md and were written from the README text, never from extractor output.`]
       : []),
     '- Matching: exact match after field-specific canonicalisation (commands: prompt, whitespace, package-manager spelling, safe install flags and package extras; tech: canonical names; endpoints: "METHOD /path").',
-    '- Validation status: development benchmark only; no independent holdout set has been reserved yet.',
+    `- Validation status: development benchmark plus deterministic holdout; the primary score uses all ${report.fixtureCount} labeled fixtures and holdout metrics are reported separately.`,
     '- Averaging: micro-average (true/false positives summed over all fixtures).',
     '',
     '## Extraction accuracy',
@@ -444,12 +472,27 @@ export function renderResultsMarkdown(report: EvalReport, meta: { date: string; 
       return `| ${w.name} | ${pct(p.f1.commands)} | ${pct(p.f1.envVars)} | ${pct(p.f1.techStack)} |`;
     }),
     '',
+    ...(holdout
+      ? [
+          '## Holdout accuracy',
+          '',
+          `The deterministic holdout contains **${holdout.fixtureCount}** fixtures reserved from extractor tuning. These metrics are descriptive and do not replace the primary development-set score or regression floor.`,
+          '',
+          '| Field | Precision | Recall | F1 |',
+          '|---|---:|---:|---:|',
+          ...FIELDS.map((field) => {
+            const m = holdout.fields[field];
+            return `| ${field} | ${pct(m.precision)} | ${pct(m.recall)} | **${pct(m.f1)}** |`;
+          }),
+          '',
+        ]
+      : []),
     ...(reality ? renderRealityEvalMarkdown(reality) : []),
   ].join('\n');
 }
 
 /** Compact benchmark dashboard with aggregate metrics and actionable failure examples. */
-export function renderBenchmarkDashboard(report: EvalReport, meta: { date: string; nodeVersion: string }): string {
+export function renderBenchmarkDashboard(report: EvalReport, meta: { date: string; nodeVersion: string }, holdout?: EvalReport): string {
   const rows = FIELDS.map((field) => {
     const m = report.fields[field];
     return `| ${field} | ${pct(m.precision)} | ${pct(m.recall)} | **${pct(m.f1)}** | ${m.tp} | ${m.fp} | ${m.fn} |`;
@@ -495,5 +538,20 @@ export function renderBenchmarkDashboard(report: EvalReport, meta: { date: strin
     '',
     'False positives reduce precision. Missed labels reduce recall. These examples are the starting point for the next extractor change, not evidence that the labels should be changed.',
     '',
+    ...(holdout
+      ? [
+          '## Holdout accuracy',
+          '',
+          `Reserved fixtures: **${holdout.fixtureCount}**. Holdout metrics are reported separately and do not replace the primary development-set score.`,
+          '',
+          '| Field | Precision | Recall | F1 |',
+          '|---|---:|---:|---:|',
+          ...FIELDS.map((field) => {
+            const m = holdout.fields[field];
+            return `| ${field} | ${pct(m.precision)} | ${pct(m.recall)} | **${pct(m.f1)}** |`;
+          }),
+          '',
+        ]
+      : []),
   ].join('\n');
 }

@@ -1,0 +1,37 @@
+name: README drift (base and head)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  readme-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
+          persist-credentials: false
+
+      # Use the checker from base so the pull request cannot change the judging code.
+      # Replace @main with a reviewed release commit when adopting this workflow.
+      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@main
+        with:
+          head-path: head
+          base-path: base
+          readme-path: README.md
+          fail-on: new-contradiction
+          repo: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.head.sha }}

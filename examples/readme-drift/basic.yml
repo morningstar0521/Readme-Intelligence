@@ -1,0 +1,20 @@
+name: README drift
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  readme-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Replace @main with a reviewed release commit when adopting this workflow.
+      - uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@main
+        with:
+          head-path: .
+          fail-on: new-contradiction

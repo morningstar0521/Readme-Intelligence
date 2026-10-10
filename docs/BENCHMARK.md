@@ -17,7 +17,7 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 
 | Metric | Value | Status |
 |---|---:|---|
-| Parse + extract p95 | 80.7 ms | met |
+| Parse + extract p95 | 83.5 ms | met |
 | Commands F1 target | 76.0% | not met |
 | Environment variables F1 target | 84.9% | not met |
 | Tech stack F1 target | 67.8% | not met |
@@ -48,3 +48,14 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 | sharkdp__bat | envVars | MANPAGER, PKG_ADD, PAGER, LESS | BAT_TABS |
 
 False positives reduce precision. Missed labels reduce recall. These examples are the starting point for the next extractor change, not evidence that the labels should be changed.
+
+## Holdout accuracy
+
+Reserved fixtures: **11**. Holdout metrics are reported separately and do not replace the primary development-set score.
+
+| Field | Precision | Recall | F1 |
+|---|---:|---:|---:|
+| commands | 72.7% | 74.6% | **73.6%** |
+| envVars | 64.7% | 91.7% | **75.9%** |
+| techStack | 56.8% | 80.6% | **66.7%** |
+| apiEndpoints | n/a | n/a | **n/a** |
