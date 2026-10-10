@@ -187,9 +187,11 @@ test('6. jump to source scrolls to the line in the README', async ({ page }) => 
     .getByRole('button', { name: /Jump to source/ })
     .first()
     .click();
-  // The highlight is intentionally short-lived. Waiting for it to be in the
-  // viewport directly avoids a race between two assertions and the 1.7s flash.
-  await expect(page.locator('.jump-highlight')).toBeInViewport();
+  // Verify the user-visible contract rather than the transient animation class.
+  // The source jump must bring the selected environment-variable block into view.
+  await expect(
+    page.getByTestId('markdown').getByText('DATABASE_URL=postgres://localhost/demo')
+  ).toBeInViewport();
 });
 
 test('7. a local file is rendered without any network request for its content', async ({
