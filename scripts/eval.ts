@@ -13,7 +13,7 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { evaluate, evaluateReality, loadFixtures, renderBenchmarkDashboard, renderResultsMarkdown, runReality, FIELDS, REGRESSION_FLOOR } from '../packages/core/tests/eval/evaluate';
+import { evaluate, evaluateReality, loadFixtures, renderBenchmarkDashboard, renderResultsMarkdown, runReality, splitFixtures, FIELDS, REGRESSION_FLOOR } from '../packages/core/tests/eval/evaluate';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -42,6 +42,8 @@ if (fixtures.length === 0) {
 }
 
 const report = evaluate(fixtures);
+const split = splitFixtures(fixtures);
+const holdout = evaluate(split.holdout);
 const pct = (v: number | null) => (v === null ? '  n/a ' : `${(v * 100).toFixed(1).padStart(5)}%`);
 
 console.log(`\nEvaluated ${report.fixtureCount} labeled fixtures (${unlabeled.length} unlabeled skipped)\n`);
@@ -53,6 +55,7 @@ for (const f of FIELDS) {
 console.log(`installSteps   exact ${pct(report.installSteps.exact)}  MAE ${report.installSteps.meanAbsoluteError.toFixed(2)}`);
 console.log(`license        accuracy ${pct(report.license.accuracy)}`);
 console.log(`timing         parse+extract p50 ${report.timing.p50.toFixed(1)} ms, p95 ${report.timing.p95.toFixed(1)} ms\n`);
+console.log(`holdout        ${holdout.fixtureCount} fixtures reserved for descriptive holdout metrics\n`);
 
 if (process.argv.includes('--verbose')) {
   for (const fx of report.perFixture) {
@@ -92,9 +95,9 @@ const out = renderResultsMarkdown(report, {
     acc[who] = (acc[who] ?? 0) + 1;
     return acc;
   }, {}),
-}, reality);
+}, reality, holdout);
 writeFileSync(path.join(root, 'docs', 'RESULTS.md'), out);
-writeFileSync(path.join(root, 'docs', 'BENCHMARK.md'), renderBenchmarkDashboard(report, { date: new Date().toISOString().slice(0, 10), nodeVersion: process.versions.node }));
+writeFileSync(path.join(root, 'docs', 'BENCHMARK.md'), renderBenchmarkDashboard(report, { date: new Date().toISOString().slice(0, 10), nodeVersion: process.versions.node }, holdout));
 console.log('Wrote docs/RESULTS.md');
 console.log('Wrote docs/BENCHMARK.md');
 

@@ -13,6 +13,7 @@ import {
   evaluateReality,
   renderRealityEvalMarkdown,
   loadSnapshot,
+  splitFixtures,
   LabelSchema,
   REGRESSION_FLOOR,
   type Fixture,
@@ -58,6 +59,20 @@ describe('metrics', () => {
   });
 });
 
+describe('benchmark fixture split', () => {
+  it('assigns fixtures deterministically with no overlap', () => {
+    const fixtures = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'].map((name) => ({ name } as Fixture));
+    const first = splitFixtures(fixtures);
+    const second = splitFixtures(fixtures);
+
+    expect(first).toEqual(second);
+    expect(new Set(first.development.map((fx) => fx.name)).size).toBe(first.development.length);
+    expect(new Set(first.holdout.map((fx) => fx.name)).size).toBe(first.holdout.length);
+    expect(new Set(first.development.map((fx) => fx.name)).intersection(new Set(first.holdout.map((fx) => fx.name))).size).toBe(0);
+    expect(first.development.length + first.holdout.length).toBe(fixtures.length);
+  });
+});
+
 describe('evaluate() on a synthetic labeled fixture', () => {
   const fixture: Fixture = {
     name: 'sample',
@@ -85,6 +100,7 @@ describe('evaluate() on a synthetic labeled fixture', () => {
     const mdReport = renderResultsMarkdown(report, { date: '2026-01-01', totalFixtures: 1, unlabeled: 0, nodeVersion: 'test' });
     expect(mdReport).toContain('| commands |');
     expect(mdReport).toContain('Parse + extract p95');
+    expect(renderResultsMarkdown(report, { date: '2026-01-01', totalFixtures: 1, unlabeled: 0, nodeVersion: 'test' }, undefined, report)).toContain('## Holdout accuracy');
     expect(renderBenchmarkDashboard(report, { date: '2026-01-01', nodeVersion: 'test' })).toContain('Highest-impact failure examples');
   });
 });
