@@ -41,6 +41,18 @@ describe('extractTechStack', () => {
     expect(techNames(md('## Built With', '', '| Layer | Tech |', '|---|---|', '| Database | PostgreSQL |', '| Backend | Node.js |'))).toEqual(['Node.js', 'PostgreSQL']);
   });
 
+  it('recognizes programming languages in HTML client-library tables', () => {
+    const readme = md(
+      '<table>',
+      '<tr><th>Language</th><th>Client</th></tr>',
+      '<tr><td>JavaScript (TypeScript)</td><td>client-js</td></tr>',
+      '<tr><td>Python</td><td>client-py</td></tr>',
+      '<tr><td>Flutter</td><td>client-flutter</td></tr>',
+      '</table>'
+    );
+    expect(techNames(readme)).toEqual(['JavaScript', 'TypeScript', 'Python']);
+  });
+
   it('matches whole words only', () => {
     expect(techNames('This is a reactive, expressive system built on gopher tunnels.')).toEqual([]);
   });

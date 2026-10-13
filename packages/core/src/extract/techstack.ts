@@ -347,6 +347,35 @@ function matchBadge(collector: Collector, alt: string, url: string, source: Sour
   }
 }
 
+/** Language cells in a client-library matrix explicitly identify supported client languages. */
+function matchClientLanguages(collector: Collector, html: string, source: SourceRef): void {
+  if (!/<th\b[^>]*>\s*Language\s*<\/th>/i.test(html) || !/<th\b[^>]*>\s*Client\s*<\/th>/i.test(html)) return;
+
+  const rows = html.match(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi) ?? [];
+  for (const row of rows) {
+    const cells = [...row.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)];
+    if (cells.length === 0) continue;
+    const language = stripHtml(cells[0]![1] ?? '');
+    if (!language) continue;
+
+    for (const entry of TECH_DICTIONARY) {
+      if (entry.category !== 'language') continue;
+      const candidates = [
+        ...(entry.aliases ?? []).map((value) => ({ value, flags: 'i' })),
+        ...(entry.strict ?? []).map((value) => ({ value, flags: '' })),
+      ];
+      const matched = candidates
+        .map(({ value, flags }) => ({ value, re: wholeWordRegExp(value, flags) }))
+        .find(({ re }) => re.test(language));
+      if (!matched) continue;
+
+      const stoplist = PRODUCT_NAME_STOPLIST[entry.name as keyof typeof PRODUCT_NAME_STOPLIST] ?? [];
+      if (stoplist.some((product) => language.toLowerCase().includes(product.toLowerCase()))) continue;
+      collector.add(entry, 'text', snippetAround(language, wholeWordRegExp(matched.value, matched.re.flags)), source, true);
+    }
+  }
+}
+
 function proseOf(node: RootContent): string {
   if (node.type === 'code' || node.type === 'html' || node.type === 'yaml' || node.type === 'definition') return '';
   return blockText(node);
@@ -409,6 +438,7 @@ function scanBlock(collector: Collector, block: Block): void {
     if (block.node.type === 'html') htmls.push(block.node as Html);
     else visit(block.node, 'html', (h: Html) => void htmls.push(h));
     for (const h of htmls) {
+      matchClientLanguages(collector, h.value, refFor(block, h));
       const re = /<img\b[^>]*>/gi;
       let m: RegExpExecArray | null;
       while ((m = re.exec(h.value)) !== null) {

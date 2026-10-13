@@ -10,17 +10,17 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 |---|---:|---:|---:|---:|---:|---:|
 | commands | 71.2% | 85.8% | **77.8%** | 331 | 134 | 55 |
 | envVars | 86.8% | 88.1% | **87.4%** | 59 | 9 | 8 |
-| techStack | 66.1% | 71.3% | **68.6%** | 144 | 74 | 58 |
+| techStack | 65.8% | 74.3% | **69.8%** | 150 | 78 | 52 |
 | apiEndpoints | 100.0% | 100.0% | **100.0%** | 3 | 0 | 0 |
 
 ## Performance and target status
 
 | Metric | Value | Status |
 |---|---:|---|
-| Parse + extract p95 | 88.7 ms | met |
+| Parse + extract p95 | 84.2 ms | met |
 | Commands F1 target | 77.8% | not met |
 | Environment variables F1 target | 87.4% | met |
-| Tech stack F1 target | 68.6% | not met |
+| Tech stack F1 target | 69.8% | not met |
 
 ## Highest-impact failure examples
 
@@ -30,10 +30,10 @@ Evaluated **59** labeled README fixtures using deterministic, README-only extrac
 | sharkdp__bat | commands | git show, git diff, bat -> batcat, cargo install, bat --theme=default $@, bat --theme=GitHub $@ | alias cat=bat --paging=never, yaml2json .travis.yml | json_pp | bat -l json, find … -exec bat {} +, fd … -X bat, batgrep needle src/, tail -f /var/log/pacman.log | bat --paging=never -l log, man 2 select, help cp, help git commit, alias -g -- -h=-h 2>&1 | bat --language=help --style=plain, alias -g -- --help=--help 2>&1 | bat --language=help --style=plain, abbr -a --position anywhere -- --help --help | bat -plhelp, abbr -a --position anywhere -- -h -h | bat -plhelp, abbr -e -- --help, abbr -e -- -h, ls \-h, batcat --version, ln -s /usr/bin/batcat ~/.local/bin/bat, alias bat=batcat, zypper install bat, alias cat=bat --theme auto:system --theme-dark default --theme-light GitHub, iconv -f ISO-8859-1 -t UTF-8 my-file.php | bat, bash assets/create.sh |
 | louislam__uptime-kuma | commands | mkdir uptime-kuma, cd uptime-kuma, curl -o compose.yaml https://raw.githubusercontent.com/louislam/uptime-kuma/master/compose.yaml, docker compose up -d, docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:2, docker run ... -p 127.0.0.1:3001:3001 ..., git clone https://github.com/louislam/uptime-kuma.git, npm run setup, node server/server.js, npm install pm2 -g && pm2 install pm2-logrotate | docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1, docker pull louislam/uptime-kuma:1, docker stop uptime-kuma, docker rm uptime-kuma |
 | karpathy__nanoGPT | commands | python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0, python sample.py --out_dir=out-shakespeare-char --device=cpu, python data/openwebtext/prepare.py, python sample.py, python train.py, python train.py config/eval_gpt2.py, python train.py config/eval_gpt2_medium.py, python train.py config/eval_gpt2_large.py, python train.py config/eval_gpt2_xl.py, python train.py config/finetune_shakespeare.py, python sample.py --init_from=gpt2-xl --start=What is the answer to life, the universe, and everything? --num_samples=5 --max_new_tokens=100, python sample.py --start=FILE:prompt.txt | - |
-| supabase__supabase | techStack | html, supabase, firebase | typescript, javascript, python, dart, kotlin, swift, ruby |
 | jellyfin__jellyfin | commands | git clone https://github.com/jellyfin/jellyfin.git, dotnet run, cd jellyfin, dotnet run --project Jellyfin.Server --webdir /absolute/path/to/jellyfin-web/dist, dotnet build, cd Jellyfin.Server/bin/Debug/net10.0, dotnet test | docker pull jellyfin/jellyfin, docker run -d -v /path/to/config:/config -v /path/to/cache:/cache -v /path/to/media:/media --net=host jellyfin/jellyfin:latest |
 | openai__whisper | commands | scoop install ffmpeg, pip install, export PATH=$HOME/.cargo/bin:$PATH, pip install setuptools-rust, whisper audio.flac audio.mp3 audio.wav --model turbo, whisper japanese.wav --language Japanese, whisper japanese.wav --model medium --language Japanese --task translate, whisper --help | whisper audio.flac audio.mp3 audio.wav --model medium |
 | ollama__ollama | commands | ollama, ollama launch claude, ollama launch openclaw, ollama run gemma4, pip install ollama, npm i ollama | ollama run llama3.2, ollama pull llama3.2 |
+| supabase__supabase | techStack | c#, go, java, rust, html, supabase, firebase | dart |
 | dubinc__dub | techStack | css, redis, planetscale, nextauth.js, turborepo, pnpm | react |
 | gohugoio__hugo | commands | CGO_ENABLED=0 go install github.com/gohugoio/hugo, CGO_ENABLED=0 go install -tags withdeploy github.com/gohugoio/hugo, CGO_ENABLED=1 go install -tags extended github.com/gohugoio/hugo, CGO_ENABLED=1 go install -tags extended,withdeploy github.com/gohugoio/hugo, hugo env --logLevel info | brew install hugo, snap install hugo |
 | run-llama__llama_index | commands | pip install llama-index-core, pip install llama-index-llms-openai, pip install llama-index-llms-ollama, pip install llama-index-embeddings-huggingface, echo Verifying: $file, gh attestation verify $file -R $REPO || echo Failed to verify: $file | pip install llama-index |
