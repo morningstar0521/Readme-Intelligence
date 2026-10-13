@@ -80,7 +80,7 @@ Legend:
 | Unit tests (slug, TOC, URL resolver, GitHub parser, each extractor 10+ cases, health, Zod) | Done: 590 tests in 18 files, 0 failures (includes 23 render, 60 XSS, 86 Reality Check and 18 drift tests). Run with the real installed packages; confirm with `pnpm test` |
 | XSS suite, 30+ payloads | Done: 50 payloads, 60 tests passing |
 | Fixture set 50+ READMEs + hand labels | Done: 59 READMEs. Labels were checked against the README text. Original drafts kept in `labels-backup-original/` outside the repo |
-| `scripts/eval.ts` + `docs/RESULTS.md` + regression threshold | Done. Current development-set results: commands F1 76.0%, env vars 84.9%, tech stack 67.8% (PRD targets 85 / 85 / 80: **not met**). Regression floor 0.70 / 0.50 in `eval.test.ts` and `pnpm eval` |
+| `scripts/eval.ts` + `docs/RESULTS.md` + regression threshold | Done. Current development-set results: commands F1 77.8%, env vars 87.4%, tech stack 69.8% (PRD targets 85 / 85 / 80: commands and tech stack **not met**; env vars met). Regression floor 0.70 / 0.50 in `eval.test.ts` and `pnpm eval` |
 | Playwright 3-5 e2e tests | Done, verify: 10 tests in `apps/web/e2e/smoke.spec.ts` (including Reality Check with mocked GitHub) |
 | Coverage >= 85% on core | Done, verify: threshold set in `vitest.config.ts`; run `pnpm test:coverage` |
 

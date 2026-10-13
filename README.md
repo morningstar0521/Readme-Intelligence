@@ -34,9 +34,9 @@ Development-set results on 59 hand-labeled README fixtures:
 
 | Field | F1 | Precision | Recall |
 | --- | ---: | ---: | ---: |
-| Commands | 76.0% | 69.1% | 84.4% |
-| Environment variables | 84.9% | 81.9% | 88.1% |
-| Tech stack | 67.8% | 65.0% | 70.8% |
+| Commands | 77.8% | 71.2% | 85.8% |
+| Environment variables | 87.4% | 86.8% | 88.1% |
+| Tech stack | 69.8% | 65.8% | 74.3% |
 | API endpoints | 100.0% | 100.0% | 100.0% |
 
 These are development-set measurements, not an independent holdout result. The benchmark uses field-specific canonical matching for equivalent command variants, and the complete failure breakdown is in [docs/RESULTS.md](docs/RESULTS.md).
