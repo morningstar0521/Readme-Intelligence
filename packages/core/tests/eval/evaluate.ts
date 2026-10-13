@@ -126,6 +126,17 @@ export function normalizeCommandLabel(cmd: string): string {
     .replace(/\b(?!https?:\/\/)([^\s]+)@latest\b/gi, '$1')
     .replace(/;+$/, '')
     .trim();
+  // Strip trailing comments ( # comment) but only if no unclosed quotes before the comment
+  const idx = normalized.search(/\s+#/);
+  if (idx !== -1) {
+    const beforeComment = normalized.slice(0, idx);
+    const singleQuotes = (beforeComment.match(/'/g) || []).length;
+    const doubleQuotes = (beforeComment.match(/"/g) || []).length;
+    const backticks = (beforeComment.match(/`/g) || []).length;
+    if (singleQuotes % 2 === 0 && doubleQuotes % 2 === 0 && backticks % 2 === 0) {
+      normalized = normalized.slice(0, idx).trimEnd();
+    }
+  }
   normalized = normalized.replace(/^(?:python3?|py)\s+-m\s+pip\b/i, 'pip');
   normalized = normalized.replace(/^(pip3?)\s+install\s+((?:-[A-Za-z][\w-]*(?:=\S+)?\s+)+)/i, '$1 install ');
   normalized = normalized.replace(/\b([@A-Za-z0-9_./-]+)\[[^\]]+\]/g, '$1');

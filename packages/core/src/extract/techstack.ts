@@ -45,13 +45,42 @@ const CATEGORY_ORDER: TechCategory[] = [
 ];
 
 const MAX_EVIDENCE = 5;
-const PROJECT_CONTEXT_RE = /\b(?:uses?|using|used|built\s+(?:with|using|for)|powered\s+by|written\s+in|developed\s+in|based\s+on|requires?|implemented\s+(?:in|with)|stack\s+includes?)\b/i;
+const PROJECT_CONTEXT_RE = /\b(?:uses?|using|used|built\s+(?:with|using|for)|powered\s+by|written\s+in|developed\s+in|based\s+on|requires?|implemented\s+(?:in|with)|stack\s+includes?|written\s+using|coded\s+in|programmed\s+in|language\s+(?:is|:)|written\s+in)\b/i;
 const EXCLUDED_BEFORE_CONTEXT_RE = /\b(?:integrat(?:e|es|ed|ion|ions)|connects?|connected|supports?|supported|exports?|exported|compatible|works?|quick\s+start|examples?|such\s+as|used\s+by|community-maintained|generat(?:e|es|ed|ing))\b/i;
 const EXCLUDED_AFTER_CONTEXT_RE = /^\s*(?:sdk|clients?|bindings?)\b/i;
 const NEGATED_TECH_CONTEXT_RE = /\b(?:not|never|without|does\s+not|doesn['’]t|do\s+not|don['’]t|avoid(?:s|ed|ing)?)\s+(?:(?:use|using|choose|choosing|include|including|support|supporting)\s+[^.!?\n]{0,60}|[^.!?\s]*(?:\s+(?:and|or))?)\s*$/i;
 const TRANSPILE_OUTPUT_NAMES = new Set(['Dart', 'Sass', 'CSS']);
 const LONG_CATALOG_RE = /(?:[^,]*,){3,}[^,]*\band\s+more\b/i;
 const HOSTED_SERVICE_CONTEXT_RE = /\b(?:managed|hosted)\b[^.!?\n]{0,80}$/i;
+
+/** Product names that contain ambiguous technology terms but are not the technology itself. */
+const PRODUCT_NAME_STOPLIST: Record<string, string[]> = {
+  'Go': ['Expo Go', 'GoPro', 'GoDaddy', 'GoLang', 'GoKit', 'GoTo', 'GoCD', 'GoGS', 'GoJS', 'GoVue'],
+  'Rust': ['Rust-Oleum', 'Rustic', 'Rustler'],
+  'Swift': ['Taylor Swift', 'SwiftUI', 'SwiftPlayground'],
+  'C': ['C#', 'C++', 'CMake', 'CSharp', 'Objective-C'],
+  'HTML': ['HTML5', 'HTML/CSS'],
+  'CSS': ['CSS3', 'CSS-in-JS', 'Tailwind CSS'],
+  'Julia': ['JuliaSet'],
+  'R': ['RStudio', 'RMarkdown', 'Rcpp'],
+  'Zig': ['ZigZag'],
+  'Remix': ['Remix OS', 'Remix IDE'],
+  'Astro': ['Astro.js', 'Astro.build'],
+  'Bootstrap': ['Bootstrap 5', 'Bootstrap 4', 'React Bootstrap'],
+  'Expo': ['Expo Go', 'Expo SDK', 'Expo CLI', 'Expo Router'],
+  'Express': ['Express.js', 'ExpressJS', 'Express VPN'],
+  'Gin': ['Gin Tonic', 'Gin Rummy'],
+  'Fastify': [],
+  'Nest': ['NestJS', 'Nest.js'],
+  'Svelte': ['SvelteKit', 'Svelte.js'],
+  'Solid': ['SolidJS', 'Solid.js', 'Solidity'],
+  'Preact': ['Preact X', 'Preact CLI'],
+  'Qwik': ['Qwik City'],
+  'Elysia': [],
+  'Hono': [],
+  'Koa': ['Koa.js', 'KoaJS'],
+  'Bun': ['Bun.js', 'Bun.sh', 'Bunny'],
+} as const;
 
 /**
  * Tools commonly mentioned while documenting contribution or installation workflows.
@@ -73,6 +102,50 @@ const INCIDENTAL_STACK_NAMES = new Set([
   'R',
   'Ruff',
 ]);
+
+/**
+ * Technologies that are ONLY counted with very strong evidence (badge, code import, language tag).
+ * These are commonly mentioned in prose as "supports X" or "works with X" rather than "built with X".
+ */
+const UBIQUITOUS_TECH_NAMES = new Set([
+  'HTML',
+  'CSS',
+  'JavaScript',
+  'Node.js',
+  'Docker',
+  'Docker Compose',
+  'PostgreSQL',
+  'MySQL',
+  'Redis',
+  'MongoDB',
+  'SQLite',
+  'TypeScript',
+  'Python',
+  'Go',
+  'Rust',
+]);
+
+/**
+ * Check if a text snippet contains strong implementation context (not just "supports" or "works with").
+ */
+function hasImplementationContext(text: string): boolean {
+  const implPatterns = [
+    /\b(?:built|written|implemented|coded|developed|created)\s+(?:with|in|using)\b/i,
+    /\b(?:uses?|using)\s+(?:for\s+)?(?:the\s+)?(?:frontend|backend|api|database|ui)\b/i,
+    /\b(?:our|this|the)\s+(?:stack|application|app|project)\s+(?:uses?|is\s+built)\b/i,
+    /\b(?:tech\s+stack|technology\s+stack|built\s+with|powered\s+by)\b/i,
+    // "is 100% TypeScript", "written in TypeScript", "100% TypeScript", "writing in X"
+    /\b(?:is|written\s+in|writing\s+in)\s+\d+%\s+\w+/i,
+    /\b(?:library|project|codebase|application)\s+is\s+\w+/i,
+    /\b(?:100%|fully|entirely)\s+\w+/i,
+    // "writing React and JavaScript", "build with React and TypeScript"
+    /\b(?:writing|building)\s+(?:with|in)\s+\w+/i,
+    /\b(?:built|written|implemented)\s+(?:in|using)\s+\w+/i,
+    // "writing JavaScript", "building React", "writing TypeScript" (no "in")
+    /\b(?:writing|building)\s+\w+/i,
+  ];
+  return implPatterns.some((re) => re.test(text));
+}
 
 interface Found {
   entry: TechEntry;
@@ -156,12 +229,25 @@ function matchText(
     // to claim that the project uses that technology. Require project-context
     // language while preserving strong evidence from headings, badges, commands,
     // code, and dedicated stack sections.
-    if (!strong && type === 'text' && !PROJECT_CONTEXT_RE.test(text)) continue;
+    // For ubiquitous technologies, use implementation context check instead of PROJECT_CONTEXT_RE
+    if (!strong && type === 'text') {
+      if (UBIQUITOUS_TECH_NAMES.has(term.entry.name)) {
+        if (!hasImplementationContext(text)) continue;
+      } else if (!PROJECT_CONTEXT_RE.test(text)) {
+        continue;
+      }
+    }
     if (!(term.caseSensitive ? work : workLower).includes(term.needle)) continue;
     const termMatch = term.re.exec(work);
     if (!termMatch) continue;
     const before = work.slice(Math.max(0, termMatch.index - 80), termMatch.index);
     const after = work.slice(termMatch.index + termMatch[0].length, termMatch.index + termMatch[0].length + 50);
+    // Skip if the match is part of a known product name (e.g., "Expo Go" for Go language)
+    const stoplist = PRODUCT_NAME_STOPLIST[term.entry.name as keyof typeof PRODUCT_NAME_STOPLIST];
+    if (stoplist) {
+      const context = (before + termMatch[0] + after).toLowerCase();
+      if (stoplist.some((product) => context.includes(product.toLowerCase()))) continue;
+    }
     if (!strong && type === 'text' && LONG_CATALOG_RE.test(text)) continue;
     if (!strong && type === 'text' && HOSTED_SERVICE_CONTEXT_RE.test(before)) continue;
     if (type === 'text' && term.entry.name === 'CSS' && /tailwind\s+css/i.test(text)) continue;
@@ -289,19 +375,34 @@ function proseUnits(node: RootContent): { text: string; line: number }[] {
 function scanBlock(collector: Collector, block: Block): void {
   // Deployment targets and deployment tooling describe where/how the project is
   // shipped, not the implementation stack. Keep those claims in deployment data.
-  if (block.section === 'deployment') return;
+  // But we still want to capture badges and code blocks from deployment sections.
+  const isDeploymentSection = block.section === 'deployment';
 
   const inTech = block.section === 'techstack';
   const allowAmbiguous = inTech || block.section === 'prerequisites';
 
   if (block.isHeading) {
-    matchText(collector, block.headingText ?? '', refFor(block), 'heading', inTech, allowAmbiguous || inTech, block.section === 'prerequisites');
+    if (!isDeploymentSection) {
+      matchText(collector, block.headingText ?? '', refFor(block), 'heading', inTech, allowAmbiguous || inTech, block.section === 'prerequisites');
+    }
     return;
   }
 
-  // Badges and images (markdown images and <img> in HTML blocks)
+  // Badges and images (markdown images and <img> in HTML blocks) - process even in deployment sections
   visit(block.node, 'image', (img: Image) => {
-    if (isBadgeUrl(img.url)) matchBadge(collector, img.alt ?? '', img.url, refFor(block, img));
+    if (isBadgeUrl(img.url)) {
+      // In deployment sections, filter out generic "Deploy on X" / "Deploy to X" option buttons
+      // Keep only badges that look like the primary deployment method for this project
+      if (isDeploymentSection) {
+        const alt = (img.alt ?? '').toLowerCase();
+        // Skip generic deployment option buttons
+        if (/deploy\s+(?:on|to)\s+\w+/i.test(alt) && !/\b(?:this|our|my|the)\s+(?:project|app|repo)\b/i.test(alt)) {
+          // But keep if it's a "Deploy with X" for this project
+          if (!/deploy\s+with\s+\w+/i.test(alt)) return;
+        }
+      }
+      matchBadge(collector, img.alt ?? '', img.url, refFor(block, img));
+    }
   });
   if (block.node.type === 'html' || block.node.type === 'paragraph') {
     const htmls: Html[] = [];
@@ -313,12 +414,20 @@ function scanBlock(collector: Collector, block: Block): void {
       while ((m = re.exec(h.value)) !== null) {
         const src = /\bsrc\s*=\s*["']([^"']+)["']/i.exec(m[0])?.[1] ?? '';
         const alt = /\balt\s*=\s*["']([^"']*)["']/i.exec(m[0])?.[1] ?? '';
-        if (src && isBadgeUrl(src)) matchBadge(collector, alt, src, refFor(block, h));
+        if (src && isBadgeUrl(src)) {
+          if (isDeploymentSection) {
+            const altLower = alt.toLowerCase();
+            if (/deploy\s+(?:on|to)\s+\w+/i.test(altLower) && !/\b(?:this|our|my|the)\s+(?:project|app|repo)\b/i.test(altLower)) {
+              if (!/deploy\s+with\s+\w+/i.test(altLower)) return;
+            }
+          }
+          matchBadge(collector, alt, src, refFor(block, h));
+        }
       }
     }
   }
 
-  // Code blocks: language tags and import patterns
+  // Code blocks: language tags and import patterns - process even in deployment sections
   visit(block.node, 'code', (code: Code) => {
     const lang = (code.lang ?? '').toLowerCase().trim();
     const source = refFor(block, code);
@@ -336,12 +445,14 @@ function scanBlock(collector: Collector, block: Block): void {
     }
   });
 
-  // Prose
-  for (const unit of proseUnits(block.node)) {
-    const source = refFor(block);
-    source.line = unit.line || block.line;
-    const contextual = allowAmbiguous || PROJECT_CONTEXT_RE.test(unit.text);
-    matchText(collector, unit.text, source, 'text', inTech, contextual, block.section === 'prerequisites');
+  // Prose - skip in deployment sections
+  if (!isDeploymentSection) {
+    for (const unit of proseUnits(block.node)) {
+      const source = refFor(block);
+      source.line = unit.line || block.line;
+      const contextual = allowAmbiguous || PROJECT_CONTEXT_RE.test(unit.text);
+      matchText(collector, unit.text, source, 'text', inTech, contextual, block.section === 'prerequisites');
+    }
   }
 }
 

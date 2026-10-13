@@ -67,11 +67,19 @@ function isCommentLine(line: string): boolean {
   return /^(#|\/\/|::|rem\s|REM\s)/.test(line) || line === 'REM' || line === '#';
 }
 
-/** Remove a trailing " # comment" when the line has no quotes (to avoid cutting strings). */
+/** Remove a trailing " # comment" when the line has no quotes before the comment (to avoid cutting strings). */
 function stripTrailingComment(line: string): string {
-  if (/["'`]/.test(line)) return line;
   const idx = line.search(/\s+#/);
-  return idx === -1 ? line : line.slice(0, idx).trimEnd();
+  if (idx === -1) return line;
+  // Only skip stripping if there are unclosed quotes before the comment
+  const beforeComment = line.slice(0, idx);
+  const singleQuotes = (beforeComment.match(/'/g) || []).length;
+  const doubleQuotes = (beforeComment.match(/"/g) || []).length;
+  const backticks = (beforeComment.match(/`/g) || []).length;
+  if (singleQuotes % 2 === 1 || doubleQuotes % 2 === 1 || backticks % 2 === 1) {
+    return line;
+  }
+  return line.slice(0, idx).trimEnd();
 }
 
 /** First "real" token after optional `sudo` and `VAR=value` prefixes. */
@@ -83,8 +91,82 @@ function commandToken(line: string): string | null {
   return tok ?? null;
 }
 
+/**
+ * Check if a line looks like a filename or code example rather than an executable command.
+ * Returns true if the line should be filtered out as a false positive.
+ */
+function looksLikeNonCommand(line: string): boolean {
+  const trimmed = line.trim();
+
+  // Filenames with extensions that aren't executable scripts
+  // Allow .sh, .bash, .bat, .cmd, .ps1 as they are executable scripts
+  if (/\.(md|txt|json|yaml|yml|toml|xml|html|css|js|ts|py|rs|go|java|cpp|h|hpp|cs|rb|php)$/i.test(trimmed.split(/\s+/)[0])) {
+    // But allow if it's a known command prefix
+    const firstToken = trimmed.split(/\s+/)[0];
+    if (!COMMAND_PREFIXES.has(firstToken) && !COMMAND_PREFIXES.has(firstToken.toLowerCase())) {
+      return true;
+    }
+  }
+
+  // Lines that look like git grep/rg examples with complex regex patterns
+  if (/^(rg|git\s+grep|grep)\s+.*-P\s|^(rg|git\s+grep|grep)\s+.*-E\s|^(rg|git\s+grep|grep)\s+.*-w\s/.test(trimmed)) {
+    return true;
+  }
+
+  // Python module execution examples (python -m module.submodule)
+  if (/^python3?\s+-m\s+[a-z_]+\.[a-z_]+/.test(trimmed)) {
+    return true;
+  }
+
+  // Lines that are just variable assignments or exports without a command
+  if (/^[A-Za-z_][A-Za-z0-9_]*=/.test(trimmed) && !/^(export\s+)?[A-Za-z_][A-Za-z0-9_]*=/.test(trimmed)) {
+    return true;
+  }
+
+  // Lines that look like shell prompt examples with no real command
+  if (/^\$\s*$|^>\s*$|^%\s*$/.test(trimmed)) {
+    return true;
+  }
+
+  // File paths that start with ./ or ../ but don't look like executables
+  if (/^\.\/[^.][\w/.-]*\.(md|txt|json|yaml|yml|toml|xml|html|css|py|rs|go|java|cpp|h|hpp|cs|rb|php)(\s|$)/.test(trimmed)) {
+    return true;
+  }
+
+  // Kernel/build system commands that are examples, not project commands
+  if (/^make\s+(?:defconfig|menuconfig|oldconfig|clean|distclean|mrproper)\b/.test(trimmed)) {
+    return true;
+  }
+  if (/^make\s+-j\d+\b/.test(trimmed)) {
+    return true;
+  }
+
+  // Environment variable prefix examples (LC_ALL=C, LC_ALL=en_US.UTF-8, etc.)
+  if (/^[A-Z_][A-Z0-9_]*=\S+\s+(?:git\s+grep|grep|rg)\b/.test(trimmed)) {
+    return true;
+  }
+
+  // Meaningless rg/grep examples with placeholder patterns
+  if (/^rg\s+(\[A-Za-z\]\{30\}|the|--json)\b/.test(trimmed)) {
+    return true;
+  }
+  if (/^git\s+grep\s+.*-E\s+-n\s+-w\s+\[A-Z\]/.test(trimmed)) {
+    return true;
+  }
+
+  // Chained git clone + cd commands that are just repo setup examples
+  if (/^git\s+clone\s+\S+\s*&&\s*cd\s+/.test(trimmed)) {
+    return true;
+  }
+
+  return false;
+}
+
 /** True if the line starts with a known command prefix. */
 export function isCommandLine(line: string): boolean {
+  // Filter out lines that look like non-commands (filenames, code examples, etc.)
+  if (looksLikeNonCommand(line)) return false;
+
   if (/^\$env[:.]/i.test(line.trim())) return true;
   const tok = commandToken(line);
   if (!tok) return false;
@@ -116,7 +198,13 @@ export function normalizeCommand(cmd: string): string {
   let normalized = cmd.replace(/\s+/g, ' ').trim();
   normalized = normalized.replace(/^(?:python3?|py)\s+-m\s+pip\b/i, 'pip');
   normalized = normalized.replace(/^(npx\s+\S+)@latest\b/i, '$1');
-  return normalized;
+  // Remove trailing semicolons
+  normalized = normalized.replace(/;+$/, '');
+  // Remove package extras [extra]
+  normalized = normalized.replace(/\b([@A-Za-z0-9_./-]+)\[[^\]]+\]/g, '$1');
+  // Remove common install flags that don't affect the command identity
+  normalized = normalized.replace(/\s+--(?:save(?:-dev)?|upgrade|user|force-reinstall|no-deps|pre|editable|no-cache-dir)\b/gi, '');
+  return normalized.replace(/\s+/g, ' ').trim();
 }
 
 /**
@@ -156,6 +244,8 @@ export function commandLineRatio(value: string): number {
   for (const raw of joinContinuations(value.split('\n'))) {
     const line = stripPrompt(raw.trim()).trim();
     if (!line || isCommentLine(line)) continue;
+    // Filter out non-commands
+    if (looksLikeNonCommand(line)) continue;
     total++;
     if (isCommandLine(stripTrailingComment(line))) commands++;
   }

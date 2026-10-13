@@ -32,6 +32,9 @@ const NAME_STOPLIST = new Set([
   'TCP', 'UDP', 'DNS', 'AWS', 'GCP', 'LTS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRUE',
   'FALSE', 'NULL', 'NONE', 'WARNING', 'ERROR', 'INFO', 'DEBUG', 'TIP', 'IMPORTANT', 'CAUTION', 'LICENSE', 'FAQ',
   'PDF', 'CSV', 'XML', 'ASCII', 'UTF8', 'UTF', 'IDE', 'GPU', 'CPU', 'RAM', 'USB', 'NPM', 'MVP', 'WIP', 'ETA', 'PATH',
+  // Common HTML attributes that look like env vars
+  'WIDTH', 'HEIGHT', 'SRC', 'ALT', 'HREF', 'ID', 'CLASS', 'STYLE', 'TITLE', 'NAME', 'TYPE', 'VALUE', 'DATA',
+  'ROLE', 'TARGET', 'REL', 'COLSPAN', 'ROWSPAN', 'SPAN', 'WIDTH', 'HEIGHT',
 ]);
 
 const SECRET_NAME_RE = /(KEY|SECRET|TOKEN|PASSWORD|PASSWD|PASS\b|PRIVATE|CREDENTIAL|AUTH)/;
@@ -172,6 +175,10 @@ export function parseEnvBlock(code: Code): { name: string; value: string; descri
       return;
     }
     const name = m[1]!;
+    if (!isEnvLikeName(name)) {
+      pendingComment = [];
+      return;
+    }
     let rest = m[2] ?? '';
     let inlineComment: string | null = null;
     const quoted = /^(["'])(.*?)\1(.*)$/.exec(rest.trim());
