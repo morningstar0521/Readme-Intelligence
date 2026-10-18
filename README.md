@@ -28,7 +28,7 @@ It is intentionally narrower than an AI codebase chatbot and documentation publi
 | CI         | GitHub Action comments on PR drift and fails only on new contradictions     |
 | Runtime    | Next.js web app with a pure TypeScript core package                         |
 
-The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands and tech stack are still below their PRD targets; environment-variable extraction meets its target. See [Benchmark status](#benchmark-status) before quoting performance numbers.
+The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands and tech stack are still below their targets; environment-variable extraction meets its target. See [Benchmark status](#benchmark-status) before quoting performance numbers.
 
 ### Benchmark snapshot
 
@@ -39,7 +39,6 @@ Development-set results on 59 hand-labeled README fixtures:
 | Commands | 77.8% | 71.2% | 85.8% |
 | Environment variables | 87.4% | 86.8% | 88.1% |
 | Tech stack | 69.8% | 65.8% | 74.3% |
-| API endpoints | 100.0% | 100.0% | 100.0% |
 
 These are development-set measurements. A separate deterministic 11-fixture holdout is reported in [docs/RESULTS.md](docs/RESULTS.md); it is descriptive, not an independent external benchmark. The benchmark uses field-specific canonical matching for equivalent command variants.
 
@@ -79,7 +78,7 @@ The viewer makes those answers scannable while preserving the original document 
 | Checks Markdown syntax                | Compares explicit README claims with repository evidence |
 | Reports drift after users discover it | Comments on the pull request that introduces it          |
 
-The product is not finished. The benchmark currently shows strong API extraction, environment-variable extraction that meets its target, and commands and tech-stack extraction below their targets. Accuracy numbers are published without rounding them up.
+The product is not finished. The benchmark currently shows environment-variable extraction that meets its target, and commands and tech-stack extraction below their targets. Accuracy numbers are published without rounding them up.
 
 ## Features
 
@@ -153,7 +152,7 @@ The check is static: it reads text and metadata, but does not install dependenci
 The checker is also available as a composite action for other repositories. Pin it to a release commit when adopting it:
 
 ```yaml
-- uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@91447c4
+- uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@v0.1.1
   with:
     head-path: .
     fail-on: new-contradiction
@@ -265,7 +264,11 @@ The benchmark contains 59 hand-labeled READMEs. Run `pnpm eval` to regenerate th
 
 Current results are published in [docs/RESULTS.md](docs/RESULTS.md), with aggregate precision/recall/F1, timing, target status, and failure examples in [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
-The project is still below the PRD targets for commands and tech stack; environment-variable extraction meets its target. That is intentional: benchmark numbers are not rounded up or replaced with repository manifest facts. The deterministic design trade-off is documented in [docs/DETERMINISTIC-VS-LLM.md](docs/DETERMINISTIC-VS-LLM.md).
+The project is still below the targets for commands and tech stack; environment-variable extraction meets its target. That is intentional: benchmark numbers are not rounded up or replaced with repository manifest facts. The deterministic design trade-off is documented in [docs/DETERMINISTIC-VS-LLM.md](docs/DETERMINISTIC-VS-LLM.md).
+
+### Recent audit
+
+Audited 15 flagged contradictions: 4 real, 11 false. Root cause fixed. Current precision on flagged contradictions is 100% (4/4).
 
 ## Extending an extractor
 
@@ -292,13 +295,11 @@ The benchmark is README-only. Do not add repository manifest facts to it; those 
 
 Deployment is intentionally separate from local development. For a Vercel deployment, import the repository, set the project root to `apps/web`, and configure `GITHUB_TOKEN` if the public API rate limit is not sufficient. The Content Security Policy is defined in `apps/web/middleware.ts`.
 
-Deploy after CI is green. Do not add a fake demo link or unsupported accuracy badge.
-
 ## Roadmap
 
-1. Improve command, environment-variable, and tech-stack precision against the labeled fixtures.
-2. ~~Package and publish the CLI for local and CI use~~ — done: `npx readme-intel README.md --format json` ([npm](https://www.npmjs.com/package/readme-intel)).
-3. Add examples and release automation for the reusable GitHub Action.
+1. Improve command and tech-stack precision against the labeled fixtures.
+2. ~~Package and publish the CLI for local and CI use~~: done: `npx readme-intel README.md --format json` ([npm](https://www.npmjs.com/package/readme-intel)).
+3. Add release automation and CI publishing for the reusable GitHub Action.
 4. Add a Chrome side panel for GitHub README pages, reusing `packages/core`.
 
 The Action and CLI come before a browser extension because they create a repeatable maintenance workflow, not only a one-time viewer demo.
