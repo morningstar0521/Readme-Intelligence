@@ -26,7 +26,7 @@ It is intentionally narrower than an AI codebase chatbot and documentation publi
 | CI         | GitHub Action comments on PR drift and fails only on new contradictions     |
 | Runtime    | Next.js web app with a pure TypeScript core package                         |
 
-The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands, environment variables, and tech stack are still below their PRD targets. See [Benchmark status](#benchmark-status) before quoting performance numbers.
+The benchmark is useful evidence of engineering quality, not a claim that the extractor is finished. Commands and tech stack are still below their PRD targets; environment-variable extraction meets its target. See [Benchmark status](#benchmark-status) before quoting performance numbers.
 
 ### Benchmark snapshot
 
@@ -39,7 +39,7 @@ Development-set results on 59 hand-labeled README fixtures:
 | Tech stack | 69.8% | 65.8% | 74.3% |
 | API endpoints | 100.0% | 100.0% | 100.0% |
 
-These are development-set measurements, not an independent holdout result. The benchmark uses field-specific canonical matching for equivalent command variants, and the complete failure breakdown is in [docs/RESULTS.md](docs/RESULTS.md).
+These are development-set measurements. A separate deterministic 11-fixture holdout is reported in [docs/RESULTS.md](docs/RESULTS.md); it is descriptive, not an independent external benchmark. The benchmark uses field-specific canonical matching for equivalent command variants.
 
 ## Live demo
 
@@ -77,7 +77,7 @@ The viewer makes those answers scannable while preserving the original document 
 | Checks Markdown syntax                | Compares explicit README claims with repository evidence |
 | Reports drift after users discover it | Comments on the pull request that introduces it          |
 
-The product is not finished. The benchmark currently shows strong API extraction, but commands, environment variables, and tech-stack extraction remain below their targets. Accuracy numbers are published without rounding them up.
+The product is not finished. The benchmark currently shows strong API extraction, environment-variable extraction that meets its target, and commands and tech-stack extraction below their targets. Accuracy numbers are published without rounding them up.
 
 ## Features
 
@@ -254,7 +254,7 @@ The benchmark contains 59 hand-labeled READMEs. Run `pnpm eval` to regenerate th
 
 Current results are published in [docs/RESULTS.md](docs/RESULTS.md), with aggregate precision/recall/F1, timing, target status, and failure examples in [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
-The project is still below the PRD targets for commands, environment variables, and tech stack. That is intentional: benchmark numbers are not rounded up or replaced with repository manifest facts. The deterministic design trade-off is documented in [docs/DETERMINISTIC-VS-LLM.md](docs/DETERMINISTIC-VS-LLM.md).
+The project is still below the PRD targets for commands and tech stack; environment-variable extraction meets its target. That is intentional: benchmark numbers are not rounded up or replaced with repository manifest facts. The deterministic design trade-off is documented in [docs/DETERMINISTIC-VS-LLM.md](docs/DETERMINISTIC-VS-LLM.md).
 
 ## Extending an extractor
 
@@ -271,7 +271,7 @@ The benchmark is README-only. Do not add repository manifest facts to it; those 
 
 - Extraction is heuristic. Commands in images, prose-only setup, unusual tab layouts, and unsupported wording can be missed.
 - Section names and matching rules currently target English READMEs.
-- The benchmark is a tuned development set with no independent holdout yet; labels are currently recorded with an unknown author in the report.
+- The benchmark includes a tuned development set and a deterministic 11-fixture holdout reserved from extractor tuning. Holdout results are descriptive, not an independent external benchmark; labels are currently recorded with an unknown author in the report.
 - Reality Check reads at most 60 repository files, including a 30-file source sample, so it cannot prove every repository fact.
 - Relative images in local files and pasted text cannot be loaded without a base URL.
 - Mermaid, KaTeX, and footnotes are not rendered yet.
@@ -281,7 +281,7 @@ The benchmark is README-only. Do not add repository manifest facts to it; those 
 
 Deployment is intentionally separate from local development. For a Vercel deployment, import the repository, set the project root to `apps/web`, and configure `GITHUB_TOKEN` if the public API rate limit is not sufficient. The Content Security Policy is defined in `apps/web/middleware.ts`.
 
-Deploy after CI is green, then add a short screen recording or hosted demo URL here. Do not add a fake demo link or unsupported accuracy badge.
+Deploy after CI is green. Do not add a fake demo link or unsupported accuracy badge.
 
 ## Roadmap
 
