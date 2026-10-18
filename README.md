@@ -1,5 +1,7 @@
 # README Intelligence
 
+[![npm version](https://img.shields.io/npm/v/readme-intel.svg)](https://www.npmjs.com/package/readme-intel)
+
 README Intelligence helps developers understand an unfamiliar GitHub repository before running anything.
 
 Open a repository and get a source-linked map of its commands, environment variables, setup steps, technology evidence, API endpoints, deployment notes, links, and documentation health. On pull requests, the same deterministic engine detects new contradictions between the README and the repository.
@@ -91,6 +93,15 @@ The product is not finished. The benchmark currently shows strong API extraction
 - Reality Check for GitHub repositories, with per-claim evidence and contradiction detection
 - GitHub Action for pull-request README drift detection
 - Dark, light, and system themes
+
+## Install as a CLI
+
+```bash
+npx readme-intel README.md
+npx readme-intel README.md --format json
+```
+
+The CLI is published on [npm](https://www.npmjs.com/package/readme-intel). It bundles the same deterministic core as the web app.
 
 ## Run it locally
 
@@ -286,7 +297,7 @@ Deploy after CI is green. Do not add a fake demo link or unsupported accuracy ba
 ## Roadmap
 
 1. Improve command, environment-variable, and tech-stack precision against the labeled fixtures.
-2. Package and publish the CLI for local and CI use: `npx readme-intel README.md --format json`.
+2. ~~Package and publish the CLI for local and CI use~~ — done: `npx readme-intel README.md --format json` ([npm](https://www.npmjs.com/package/readme-intel)).
 3. Add examples and release automation for the reusable GitHub Action.
 4. Add a Chrome side panel for GitHub README pages, reusing `packages/core`.
 
