@@ -77,7 +77,7 @@ Legend:
 
 | Item | Status |
 |---|---|
-| Unit tests (slug, TOC, URL resolver, GitHub parser, each extractor 10+ cases, health, Zod) | Done: 590 tests in 18 files, 0 failures (includes 23 render, 60 XSS, 86 Reality Check and 18 drift tests). Run with the real installed packages; confirm with `pnpm test` |
+| Unit tests (slug, TOC, URL resolver, GitHub parser, each extractor 10+ cases, health, Zod) | Done: 600 tests in 18 files, 0 failures. Run with the real installed packages; confirm with `pnpm test` |
 | XSS suite, 30+ payloads | Done: 50 payloads, 60 tests passing |
 | Fixture set 50+ READMEs + hand labels | Done: 59 READMEs. Labels were checked against the README text. Original drafts kept in `labels-backup-original/` outside the repo |
 | `scripts/eval.ts` + `docs/RESULTS.md` + regression threshold | Done. Current development-set results: commands F1 77.8%, env vars 87.4%, tech stack 69.8% (PRD targets 85 / 85 / 80: commands and tech stack **not met**; env vars met). Regression floor 0.70 / 0.50 in `eval.test.ts` and `pnpm eval` |
