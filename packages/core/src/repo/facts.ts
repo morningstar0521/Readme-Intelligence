@@ -6,6 +6,7 @@ import {
   parseDockerfile,
   parseEnvExample,
   parseGoMod,
+  parseLockfile,
   parseMakefile,
   parsePackageJson,
   parsePyproject,
@@ -46,6 +47,11 @@ function inScope(s: RepoSnapshot, path: string): boolean {
   return d === '' || d === s.baseDir;
 }
 
+function lockfileEvidence(s: RepoSnapshot, path: string): RepoEvidence {
+  const parsed = parseLockfile(baseName(path), s.files[path] ?? '');
+  return parsed ? evidenceOf(s, path, parsed.line, parsed.snippet) : evidenceOf(s, path);
+}
+
 export function extractRepoFacts(s: RepoSnapshot): RepoFacts {
   const f: RepoFacts = {
     manifests: [],
@@ -81,12 +87,13 @@ export function extractRepoFacts(s: RepoSnapshot): RepoFacts {
     f.runtimes.push({ value: { runtime: l.value.runtime, spec: l.value.spec, minMajor, minMinor }, evidence: evidenceOf(s, path, l.line, l.snippet) });
   };
 
-  // Lockfiles: presence in the tree is enough.
+  // Lockfiles prove a package manager only when their header is available as content evidence.
   for (const path of s.tree) {
     const name = baseName(path);
     if (LOCKFILES[name] && inScope(s, path)) {
-      f.lockfiles.push({ value: name, evidence: evidenceOf(s, path) });
-      addManager(LOCKFILES[name] as PackageManager, evidenceOf(s, path));
+      const evidence = lockfileEvidence(s, path);
+      f.lockfiles.push({ value: name, evidence });
+      addManager(LOCKFILES[name] as PackageManager, evidence);
     }
     if (!f.licenseFile && isLicensePath(path)) f.licenseFile = { value: path, evidence: evidenceOf(s, path) };
     if (!f.contributingFile && isContributingPath(path)) f.contributingFile = { value: path, evidence: evidenceOf(s, path) };

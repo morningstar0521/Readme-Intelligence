@@ -28,6 +28,20 @@ function snippetAt(content: string, line: number): string {
   return line > 0 ? (lines(content)[line - 1] ?? '').trim().slice(0, 160) : '';
 }
 
+/** Finds the lockfile header that proves which package manager created it. */
+export function parseLockfile(name: string, content: string): Lined<string> | null {
+  const pattern = name === 'pnpm-lock.yaml'
+    ? /^\s*lockfileVersion:\s*\S+/m
+    : name === 'package-lock.json'
+      ? /^\s*"lockfileVersion"\s*:\s*[^,]+,?\s*$/m
+      : name === 'yarn.lock'
+        ? /^\s*#\s*yarn lockfile v\d+\s*$/im
+        : null;
+  if (!pattern) return null;
+  const line = lineOfMatch(content, pattern);
+  return line > 0 ? { value: name, line, snippet: snippetAt(content, line) } : null;
+}
+
 function objectSnippet(content: string, line: number): string {
   const source = lines(content).slice(line - 1).join('\n');
   const start = source.indexOf('{');

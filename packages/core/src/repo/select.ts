@@ -88,6 +88,7 @@ export function selectRepoFiles(entries: TreeEntry[], baseDir: string): string[]
   const dirs = baseDir ? [baseDir, ''] : [''];
   for (const dir of dirs) {
     for (const name of [...MANIFESTS, ...RUNTIME_FILES, ...DOCKER_FILES, 'Makefile']) add(join(dir, name));
+    for (const name of Object.keys(LOCKFILES)) add(join(dir, name));
   }
 
   // Monorepo packages (apps/web/package.json...): read for dependencies, so "Next.js" in the README is not "README only".

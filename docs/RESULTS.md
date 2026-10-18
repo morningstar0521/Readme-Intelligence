@@ -68,7 +68,7 @@ The deterministic holdout contains **11** fixtures reserved from extractor tunin
 
 - Fixtures with a repository snapshot: **59**, with hand-labeled reality claims: **0**
 - Mean Setup Readiness: 65.5 / 100
-- Claims by status (all snapshots): 13 contradiction, 69 README only, 1580 undocumented, 29 unverified, 595 verified
+- Claims by status (all snapshots): 4 contradiction, 69 README only, 1580 undocumented, 37 unverified, 596 verified
 - Matching: exact claim id for contradictions, exact variable name for undocumented env vars. Precision is the number that matters: a false contradiction costs user trust.
 
 Precision and recall are not reported yet: no fixture has `reality.labeled: true`.

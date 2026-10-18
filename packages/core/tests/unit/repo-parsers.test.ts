@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   minVersion,
   parsePackageJson,
+  parseLockfile,
   parseRequirements,
   parsePyproject,
   parseGoMod,
@@ -70,6 +71,20 @@ describe('parsePackageJson', () => {
   it('detects the npm placeholder test script', () => {
     expect(isPlaceholderTestScript('echo "Error: no test specified" && exit 1')).toBe(true);
     expect(isPlaceholderTestScript('jest')).toBe(false);
+  });
+});
+
+describe('parseLockfile', () => {
+  it.each([
+    ['pnpm-lock.yaml', md('lockfileVersion: \'9.0\'', 'settings:')],
+    ['package-lock.json', md('{', '  "lockfileVersion": 3,', '}')],
+    ['yarn.lock', md('# yarn lockfile v1', '')],
+  ])('finds package-manager evidence in %s', (name, content) => {
+    expect(parseLockfile(name, content)).toMatchObject({ snippet: expect.stringContaining('lockfile') });
+  });
+
+  it('returns no evidence when the identifying header is absent', () => {
+    expect(parseLockfile('pnpm-lock.yaml', 'packages:')).toBeNull();
   });
 });
 
@@ -279,7 +294,8 @@ describe('selectRepoFiles', () => {
 
   it('skips vendored, built, test and declaration files, and files over the size limit', () => {
     const picked = selectRepoFiles([...tree, { path: 'src/huge-config.ts', size: 5_000_000 }], '');
-    for (const p of ['node_modules/x/index.js', 'tests/env.test.ts', 'dist/server.js', 'src/types.d.ts', 'src/huge-config.ts', 'pnpm-lock.yaml']) expect(picked).not.toContain(p);
+    for (const p of ['node_modules/x/index.js', 'tests/env.test.ts', 'dist/server.js', 'src/types.d.ts', 'src/huge-config.ts']) expect(picked).not.toContain(p);
+    expect(picked).toContain('pnpm-lock.yaml');
   });
 
   it('caps the number of files', () => {

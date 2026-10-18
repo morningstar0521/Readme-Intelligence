@@ -246,6 +246,8 @@ describe('checkRepository: precision guards', () => {
     expect(status(run(md('# A', 'See [the guide](docs/missing.md).'), snapshot({}, ['docs/other.md'])), 'link:docs/missing.md')).toBe('unverified');
     expect(status(run(md('# A', 'See [the guide](docs/missing.md).'), snapshot({}, [], { truncated: true })), 'link:docs/missing.md')).not.toBe('contradiction');
     expect(status(run(md('# A', fence('bash', 'npm install')), snapshot({ 'package.json': '{}' }, ['pnpm-lock.yaml'])), 'pm:node')).toBe('unverified');
+    const withLockfileContent = run(md('# A', fence('bash', 'npm install')), snapshot({ 'package.json': '{}', 'pnpm-lock.yaml': "lockfileVersion: '9.0'\n" }));
+    expect(status(withLockfileContent, 'pm:node')).toBe('contradiction');
     expect(status(run(md('# A', '## Prerequisites', '- Node.js 16+'), snapshot({ 'package.json': '{\n  "engines": { "node": ">=20" }\n}' })), 'runtime:node')).toBe('contradiction');
   });
 

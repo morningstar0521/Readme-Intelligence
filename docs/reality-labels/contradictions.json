@@ -1,5 +1,19 @@
 [
   {
+    "fixture": "colinhacks__zod",
+    "repo": "colinhacks/zod",
+    "repo_ref": "main",
+    "snapshot_ref": "main",
+    "sha_available": false,
+    "claim_id": "pm:node",
+    "field": "package-manager",
+    "readme_line": 80,
+    "readme_value": "README uses npm, repository uses pnpm",
+    "repo_evidence": [
+      "pnpm-lock.yaml:1 lockfileVersion: '9.0'"
+    ]
+  },
+  {
     "fixture": "date-fns__date-fns",
     "repo": "date-fns/date-fns",
     "repo_ref": "main",
