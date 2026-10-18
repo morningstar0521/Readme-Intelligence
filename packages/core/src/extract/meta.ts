@@ -1,5 +1,4 @@
-import type { Paragraph, RootContent } from 'mdast';
-import { toString as mdastToString } from 'mdast-util-to-string';
+import type { RootContent } from 'mdast';
 import type { Badge, Evidenced, LinkItem, ReadmeSignals } from '../types';
 import type { DocContext } from './context';
 import { blockText, blocksIn, hasSection, refFor } from './context';
@@ -23,7 +22,7 @@ export function extractLicense(ctx: DocContext, links: LinkItem[], badges: Badge
   // 1. License section
   const blocks = blocksIn(ctx, 'license');
   for (const block of blocks) {
-    if (block.isHeading) continue;
+    if (block.isHeading || block.node.type !== 'paragraph') continue;
     const text = blockText(block.node);
     if (!text) continue;
     const name = licenseNameIn(text);
@@ -31,8 +30,8 @@ export function extractLicense(ctx: DocContext, links: LinkItem[], badges: Badge
   }
   for (const block of blocks) {
     if (block.isHeading || block.node.type !== 'paragraph') continue;
-    const text = collapseWhitespace(mdastToString(block.node as Paragraph));
-    if (text) return { value: truncate(text, 120), source: refFor(block), confidence: 'explicit' };
+    const text = collapseWhitespace(blockText(block.node));
+    if (text && !/\blicen[cs]e\b/i.test(text)) return { value: truncate(text, 120), source: refFor(block), confidence: 'explicit' };
   }
   // 2. Explicit licensing prose outside a dedicated License section.
   for (const block of ctx.blocks) {

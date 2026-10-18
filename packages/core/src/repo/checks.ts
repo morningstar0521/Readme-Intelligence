@@ -36,7 +36,7 @@ class ClaimSet {
       existing.detail = claim.detail;
     }
     for (const r of claim.readme) if (!existing.readme.some((x) => x.line === r.line)) existing.readme.push(r);
-    for (const r of claim.repo) if (!existing.repo.some((x) => x.path === r.path && x.line === r.line)) existing.repo.push(r);
+    for (const r of claim.repo) if (!existing.repo.some((x) => x.path === r.path && (x.kind === 'tree-absence' && r.kind === 'tree-absence' || x.kind === 'content' && r.kind === 'content' && x.line === r.line))) existing.repo.push(r);
   }
 }
 
@@ -125,7 +125,9 @@ function checkScripts(set: ClaimSet, s: RepoSnapshot, f: RepoFacts, commands: Co
         );
       } else if (hasPackageJson && !ref.workspaceScoped) {
         const pkg = f.manifests.find((m) => basename(m.value) === 'package.json')!;
-        set.add({ id, category: 'command', status: 'contradiction', title: `\`${c.command}\` runs a script that does not exist`, detail: `No "${ref.script}" script in ${pkg.value}. Available: ${f.scripts.map((x) => x.value.name).join(', ') || 'none'}.`, readme: [c.source], repo: [pkg.evidence] });
+        const evidence = f.scriptSections.find((section) => section.value === pkg.value)?.evidence ?? pkg.evidence;
+        const status = ref.script === 'start' ? 'unverified' : 'contradiction';
+        set.add({ id, category: 'command', status, title: `\`${c.command}\` runs a script that was not found`, detail: `No "${ref.script}" script was found in ${pkg.value}. Available: ${f.scripts.map((x) => x.value.name).join(', ') || 'none'}.`, readme: [c.source], repo: [evidence] });
       } else {
         set.add({ id, category: 'command', status: 'unverified', title: `\`${c.command}\` could not be checked`, detail: ref.workspaceScoped ? 'The command targets a workspace package that was not inspected.' : 'No package.json found next to the README or at the repository root.', readme: [c.source], repo: [] });
       }
@@ -538,7 +540,9 @@ function checkLicense(set: ClaimSet, s: RepoSnapshot, f: RepoFacts, intel: Intel
     const a = licenseFamily(readmeLicense.value);
     const b = licenseFamily(f.licenseName);
     if (a && b && a !== b) {
-      set.add({ id: 'license', category: 'license', status: 'contradiction', title: `README says ${readmeLicense.value}, LICENSE file says ${f.licenseName}`, detail: 'The license in the README and the LICENSE file disagree.', readme: [readmeLicense.source], repo: [f.licenseFile.evidence] });
+      const snippetFamily = licenseFamily(f.licenseFile.evidence.kind === 'content' ? f.licenseFile.evidence.snippet : null);
+      const status = snippetFamily === a ? 'verified' : snippetFamily === b ? 'contradiction' : 'unverified';
+      set.add({ id: 'license', category: 'license', status, title: `README says ${readmeLicense.value}, LICENSE file says ${f.licenseName}`, detail: status === 'verified' ? 'The LICENSE evidence also contains the README license.' : 'The license evidence is not explicit enough to confirm a conflict.', readme: [readmeLicense.source], repo: [f.licenseFile.evidence] });
     } else if (a && b) {
       set.add({ id: 'license', category: 'license', status: 'verified', title: `License matches: ${f.licenseName}`, detail: `${f.licenseFile.value} confirms the README.`, readme: [readmeLicense.source], repo: [f.licenseFile.evidence] });
     } else {
@@ -581,7 +585,7 @@ function checkLinks(set: ClaimSet, s: RepoSnapshot, intel: Intelligence, hast: H
     if (exists) {
       set.add({ id, category: 'link', status: 'verified', title: `${what === 'image' ? 'Image' : 'Link'} target exists: ${target.path}`, detail: 'The file is in the repository.', readme: [source], repo: [evidenceOf(s, target.path)] });
     } else {
-      set.add({ id, category: 'link', status: 'contradiction', title: `Broken ${what}: ${target.path}`, detail: `The README ${what === 'image' ? 'shows an image' : 'links to a file'} that is not in the repository at ${s.ref}.`, readme: [source], repo: [] });
+      set.add({ id, category: 'link', status: 'unverified', title: `Missing ${what}: ${target.path}`, detail: `The README ${what === 'image' ? 'shows an image' : 'links to a file'} that was not found in the inspected repository tree.`, readme: [source], repo: [] });
     }
   };
   for (const l of intel.links) check(l.url, l.source, 'link');
@@ -632,7 +636,7 @@ function checkReferencedFiles(set: ClaimSet, s: RepoSnapshot, commands: CommandI
       if (hit) {
         set.add({ id, category: 'file', status: 'verified', title: `\`${c.command}\` uses an existing ${ref.kind === 'dir' ? 'folder' : 'file'}`, detail: `${hit} exists.`, readme: [c.source], repo: [evidenceOf(s, hit)] });
       } else {
-        set.add({ id, category: 'file', status: 'contradiction', title: `\`${c.command}\` refers to a missing ${ref.kind === 'dir' ? 'folder' : 'file'}: ${ref.path}`, detail: `${ref.path} is not in the repository at ${s.ref}. The instruction is probably stale.`, readme: [c.source], repo: [] });
+        set.add({ id, category: 'file', status: 'unverified', title: `\`${c.command}\` refers to an unchecked ${ref.kind === 'dir' ? 'folder' : 'file'}: ${ref.path}`, detail: `${ref.path} was not found in the inspected repository tree.`, readme: [c.source], repo: [] });
       }
     }
     if (dest) created.add(dest);
@@ -642,6 +646,14 @@ function checkReferencedFiles(set: ClaimSet, s: RepoSnapshot, commands: CommandI
 // ------------------------------------------------------------------ entry point
 
 const ORDER: Record<ClaimStatus, number> = { contradiction: 0, 'readme-only': 1, 'repo-only': 2, unverified: 3, verified: 4 };
+
+function hasExplicitContradictionEvidence(claim: Claim): boolean {
+  return claim.repo.some((evidence) => {
+    if (evidence.kind === 'content') return evidence.line > 0 && evidence.snippet.trim().length > 0 && evidence.snippet.trim() !== evidence.path;
+    if (evidence.kind === 'tree-absence') return evidence.treeTruncated === false;
+    return false;
+  });
+}
 
 export function checkRepository(input: RealityInput, snapshot: RepoSnapshot): RealityReport {
   const facts = extractRepoFacts(snapshot);
@@ -668,6 +680,9 @@ export function checkRepository(input: RealityInput, snapshot: RepoSnapshot): Re
     }
   }
 
+  for (const claim of set.claims.values()) {
+    if (claim.status === 'contradiction' && !hasExplicitContradictionEvidence(claim)) claim.status = 'unverified';
+  }
   const claims = [...set.claims.values()].sort((a, b) => ORDER[a.status] - ORDER[b.status] || a.category.localeCompare(b.category) || a.id.localeCompare(b.id));
   const counts: Record<ClaimStatus, number> = { verified: 0, contradiction: 0, 'readme-only': 0, 'repo-only': 0, unverified: 0 };
   for (const c of claims) counts[c.status]++;

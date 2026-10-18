@@ -1,0 +1,45 @@
+[
+  {
+    "fixture": "date-fns__date-fns",
+    "repo": "date-fns/date-fns",
+    "repo_ref": "main",
+    "snapshot_ref": "main",
+    "sha_available": false,
+    "claim_id": "pm:node",
+    "field": "package-manager",
+    "readme_line": 59,
+    "readme_value": "README uses npm, repository uses pnpm",
+    "repo_evidence": [
+      "pnpm-lock.yaml:0 pnpm-lock.yaml",
+      ".github/workflows/browser_tests.yaml:12 pnpm install"
+    ]
+  },
+  {
+    "fixture": "louislam__uptime-kuma",
+    "repo": "louislam/uptime-kuma",
+    "repo_ref": "master",
+    "snapshot_ref": "master",
+    "sha_available": false,
+    "claim_id": "runtime:node",
+    "field": "runtime",
+    "readme_line": 77,
+    "readme_value": "README says Node.js 20.4, the repository disagrees",
+    "repo_evidence": [
+      "package.json:10 \"node\": \">= 26.2.0\""
+    ]
+  },
+  {
+    "fixture": "sharkdp__bat",
+    "repo": "sharkdp/bat",
+    "repo_ref": "master",
+    "snapshot_ref": "master",
+    "sha_available": false,
+    "claim_id": "runtime:rust",
+    "field": "runtime",
+    "readme_line": 430,
+    "readme_value": "README says Rust 1.79, the repository disagrees",
+    "repo_evidence": [
+      "Cargo.toml:14 rust-version = \"1.88\""
+    ]
+  }
+]

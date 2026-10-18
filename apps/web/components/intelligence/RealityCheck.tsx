@@ -33,7 +33,7 @@ function StatusBadge({ status }: { status: ClaimStatus }) {
 }
 
 /** One claim with its evidence tree: README lines on one branch, repository files on the other. */
-function ClaimRow({ claim }: { claim: Claim }) {
+function ClaimRow({ claim, snapshot }: { claim: Claim; snapshot: RealityReport['snapshot'] }) {
   const [open, setOpen] = useState(claim.status === 'contradiction');
   const branches = claim.readme.length + claim.repo.length;
   return (
@@ -57,16 +57,17 @@ function ClaimRow({ claim }: { claim: Claim }) {
               ))}
               {claim.repo.map((e, i) => {
                 const last = claim.readme.length + i === branches - 1;
+                const label = `${e.path}${e.kind === 'content' && e.line > 0 ? `:${e.line}` : ''}`;
+                const href = e.kind === 'content' ? `https://github.com/${snapshot.owner}/${snapshot.repo}/blob/${encodeURIComponent(snapshot.ref)}/${e.path.split('/').map(encodeURIComponent).join('/')}${e.line > 0 ? `#L${e.line}` : ''}` : null;
                 return (
                   <li key={`e${i}`} className="flex min-w-0 items-center gap-1 text-fg-2">
                     <span aria-hidden>{last ? '└─' : '├─'}</span>
-                    <a href={e.url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex min-w-0 items-center gap-1 text-link hover:underline" title={e.snippet}>
+                    {href ? <a href={href} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex min-w-0 items-center gap-1 text-link hover:underline" title={e.kind === 'content' ? e.snippet : undefined}>
                       <span className="truncate">
-                        {e.path}
-                        {e.line > 0 ? `:${e.line}` : ''}
+                        {label}
                       </span>
                       <ExternalLink className="h-3 w-3 shrink-0" aria-hidden />
-                    </a>
+                    </a> : <span className="truncate" title={e.kind === 'tree-absence' ? 'Path absent from the complete repository tree' : undefined}>{label}</span>}
                   </li>
                 );
               })}
@@ -155,8 +156,8 @@ export function RealityCheckCard({ state, available, onRun }: RealityCheckProps)
             <p className="mt-2 text-sm text-fg-2">Nothing in this group.</p>
           ) : (
             <ul className="mt-2 space-y-1.5">
-              {visible.map((c) => (
-                <ClaimRow key={c.id} claim={c} />
+                {visible.map((c) => (
+                <ClaimRow key={c.id} claim={c} snapshot={state.report.snapshot} />
               ))}
             </ul>
           )}

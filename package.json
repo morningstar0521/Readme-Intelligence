@@ -18,6 +18,7 @@
     "cli": "tsx packages/cli/src/index.ts",
     "cli:build": "pnpm --filter @readme-intel/cli build",
     "eval": "tsx scripts/eval.ts",
+    "reality:benchmark": "tsx scripts/reality-benchmark.ts",
     "fixtures:fetch": "tsx scripts/fetch-fixtures.ts",
     "fixtures:labels": "tsx scripts/label-template.ts",
     "reality": "tsx scripts/reality.ts",

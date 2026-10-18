@@ -58,7 +58,7 @@ export const READINESS_RULES: Rule[] = [
     evaluate: (_i, f) => {
       if (!hasCode(f)) return { passed: true, reason: 'No code manifests found: not applicable.' };
       if (f.lockfiles.length > 0) return { passed: true, reason: `Found ${f.lockfiles.map((l) => l.value).join(', ')}.` };
-      const pinned = f.dependencies.filter((d) => d.value.ecosystem === 'python' && /==/.test(d.evidence.snippet));
+      const pinned = f.dependencies.filter((d) => d.value.ecosystem === 'python' && d.evidence.kind === 'content' && /==/.test(d.evidence.snippet));
       const python = f.dependencies.filter((d) => d.value.ecosystem === 'python');
       if (python.length > 0 && pinned.length / python.length >= 0.8) return { passed: true, reason: 'Python requirements are pinned with ==.' };
       return { passed: false, reason: 'No lockfile found, so every install can resolve different dependency versions.' };

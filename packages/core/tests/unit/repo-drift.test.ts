@@ -94,6 +94,22 @@ describe('diffRealityReports', () => {
     expect(base.claims.filter((c) => c.status === 'contradiction')).toEqual([]);
   });
 
+  it('only reports a missing linked file as a contradiction when drift removes it', () => {
+    const withGuide = runLocal(BASE);
+    const withoutGuideFiles = { ...BASE };
+    delete withoutGuideFiles['docs/guide.md'];
+    const withoutGuide = runLocal(withoutGuideFiles);
+    const singleSnapshotClaim = withoutGuide.claims.find((c) => c.id === 'link:docs/guide.md');
+    expect(singleSnapshotClaim?.status).toBe('unverified');
+    expect(singleSnapshotClaim?.repo).toEqual([]);
+
+    const drift = diffRealityReports(withGuide, withoutGuide);
+    expect(drift.newContradictions.find((c) => c.id === 'link:docs/guide.md')).toMatchObject({
+      status: 'contradiction',
+      repo: [{ kind: 'tree-absence', path: 'docs/guide.md', treeTruncated: false }],
+    });
+  });
+
   it('identical revisions produce an empty diff', () => {
     const d = diffRealityReports(base, runLocal(BASE));
     expect(d.newContradictions).toEqual([]);

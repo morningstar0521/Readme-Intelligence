@@ -53,6 +53,7 @@ describe('parsePackageJson', () => {
       ['dev', 'next dev', 6],
       ['test', 'vitest run', 7],
     ]);
+    expect(p.scriptsSection).toMatchObject({ line: 5, snippet: expect.stringContaining('"dev": "next dev"') });
     expect(p.dependencies.map((d) => [d.value.name, d.value.dev, d.line])).toEqual([
       ['next', false, 9],
       ['vitest', true, 11],

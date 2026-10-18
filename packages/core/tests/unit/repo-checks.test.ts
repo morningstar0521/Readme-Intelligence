@@ -118,7 +118,7 @@ describe('checkRepository: consistent Node project', () => {
 
   it('links evidence to exact GitHub lines', () => {
     const dev = r.claims.find((c) => c.id === 'script:dev')!;
-    expect(dev.repo[0]!.url).toMatch(/^https:\/\/github\.com\/acme\/app\/blob\/main\/package\.json#L\d+$/);
+    expect(dev.repo[0]).toMatchObject({ kind: 'content', path: 'package.json', line: expect.any(Number) });
     expect(dev.readme[0]!.line).toBeGreaterThan(0);
   });
 
@@ -178,7 +178,7 @@ describe('checkRepository: contradictions', () => {
     ['license', 'Apache vs MIT'],
     ['file:server', 'cd into a missing folder'],
   ])('%s is a contradiction (%s)', (id) => {
-    expect(status(r, id)).toBe('contradiction');
+    expect(status(r, id)).toBe(['pm:node', 'docker:compose', 'file:.env.sample', 'link:docs/old-guide.md', 'file:server'].includes(id) ? 'unverified' : 'contradiction');
   });
 
   it('does not flag `cd <repo name>` after git clone', () => {
@@ -188,7 +188,7 @@ describe('checkRepository: contradictions', () => {
   it('contradictions come first and lower the readiness score', () => {
     expect(r.claims[0]!.status).toBe('contradiction');
     const failed = r.readiness.checks.filter((c) => !c.passed).map((c) => c.id);
-    expect(failed).toEqual(expect.arrayContaining(['R04', 'R05', 'R09', 'R10']));
+    expect(failed).toEqual(expect.arrayContaining(['R05', 'R06', 'R10']));
   });
 
   it('runtime contradiction names both sources', () => {
@@ -223,7 +223,7 @@ describe('checkRepository: Python project', () => {
     expect(status(r, 'runtime:python')).toBe('contradiction');
     expect(status(r, 'tech:FastAPI')).toBe('verified');
     expect(status(r, 'tech:MongoDB')).toBe('readme-only');
-    expect(status(r, 'file:requirements-dev.txt')).toBe('contradiction');
+    expect(status(r, 'file:requirements-dev.txt')).toBe('unverified');
     expect(status(r, 'env:OPENAI_API_KEY')).toBe('repo-only');
   });
 
@@ -236,6 +236,19 @@ describe('checkRepository: Python project', () => {
 // ------------------------------------------------------------------ precision guards
 
 describe('checkRepository: precision guards', () => {
+  it('does not call a missing README path a contradiction in one snapshot', () => {
+    expect(status(run(md('# A', 'See [the guide](docs/missing.md).'), snapshot({}, ['docs/other.md'])), 'link:docs/missing.md')).toBe('unverified');
+    expect(status(run(md('# A', fence('bash', 'cd backend')), snapshot({})), 'file:backend')).toBe('unverified');
+  });
+
+  it('requires explicit values on both sides for contradictions', () => {
+    expect(status(run(md('# A', fence('bash', 'pnpm lint')), snapshot({ 'package.json': '{"scripts":{}}' })), 'script:lint')).toBe('contradiction');
+    expect(status(run(md('# A', 'See [the guide](docs/missing.md).'), snapshot({}, ['docs/other.md'])), 'link:docs/missing.md')).toBe('unverified');
+    expect(status(run(md('# A', 'See [the guide](docs/missing.md).'), snapshot({}, [], { truncated: true })), 'link:docs/missing.md')).not.toBe('contradiction');
+    expect(status(run(md('# A', fence('bash', 'npm install')), snapshot({ 'package.json': '{}' }, ['pnpm-lock.yaml'])), 'pm:node')).toBe('unverified');
+    expect(status(run(md('# A', '## Prerequisites', '- Node.js 16+'), snapshot({ 'package.json': '{\n  "engines": { "node": ">=20" }\n}' })), 'runtime:node')).toBe('contradiction');
+  });
+
   it('a truncated tree never produces "missing file" or broken-link contradictions', () => {
     const r = run(BAD_README, { ...BAD_REPO, truncated: true });
     for (const id of ['file:.env.sample', 'link:docs/old-guide.md', 'docker:compose', 'file:server']) expect(status(r, id)).not.toBe('contradiction');
@@ -250,8 +263,14 @@ describe('checkRepository: precision guards', () => {
     const pkg = snapshot({ 'package.json': JSON.stringify({ scripts: {}, devDependencies: { prisma: '5' } }) });
     expect(status(run(md('# A', fence('bash', 'pnpm prisma migrate dev')), pkg), 'script:prisma')).toBe('verified');
     expect(status(run(md('# A', fence('bash', 'yarn tsx scripts/a.ts')), pkg), 'script:tsx')).toBe('unverified');
-    // Common script names are still contradictions.
+    // Common script names are unverified without an explicit script value.
     expect(status(run(md('# A', fence('bash', 'pnpm lint')), pkg), 'script:lint')).toBe('contradiction');
+  });
+
+  it('does not treat dependency license prose as the project license', () => {
+    const readme = md('# Hugo', '## License', '', 'For the Hugo source code, see [LICENSE](/LICENSE).', '', '- libwebp, BSD-3-Clause license');
+    const r = run(readme, snapshot({ LICENSE: 'Apache License, Version 2.0' }));
+    expect(r.claims.find((claim) => claim.id === 'license')).not.toMatchObject({ status: 'contradiction' });
   });
 
   it('a missing vercel.json does not make Vercel "README only"', () => {
@@ -290,7 +309,7 @@ describe('checkRepository: precision guards', () => {
     const hast: HastRoot = { type: 'root', children: [{ type: 'element', tagName: 'img', properties: { src: 'https://raw.githubusercontent.com/acme/app/main/docs/shot.png', dataLine: 7 }, children: [] }] };
     const r = run('# A', snapshot({}, ['docs/other.png']), hast);
     const c = r.claims.find((x) => x.id === 'image:docs/shot.png')!;
-    expect(c.status).toBe('contradiction');
+    expect(c.status).toBe('unverified');
     expect(c.readme[0]!.line).toBe(7);
   });
 

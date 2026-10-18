@@ -25,8 +25,12 @@ export function blobUrl(s: Pick<RepoSnapshot, 'owner' | 'repo' | 'ref'>, path: s
   return `https://github.com/${s.owner}/${s.repo}/blob/${encodeURIComponent(s.ref)}/${encoded}${line > 0 ? `#L${line}` : ''}`;
 }
 
-export function evidenceOf(s: RepoSnapshot, path: string, line = 0, snippet = ''): RepoEvidence {
-  return { path, line, snippet: snippet || path, url: blobUrl(s, path, line) };
+export function evidenceOf(_s: RepoSnapshot, path: string, line = 0, snippet = ''): RepoEvidence {
+  if (line === 0 && _s.files[path] !== undefined) {
+    line = 1;
+    snippet = _s.files[path]!.split(/\r?\n/, 1)[0]!.trim().slice(0, 160);
+  }
+  return { kind: 'content', path, line, snippet: snippet || path };
 }
 
 function located<T>(s: RepoSnapshot, path: string, l: Lined<T>): Located<T> {
@@ -50,6 +54,7 @@ export function extractRepoFacts(s: RepoSnapshot): RepoFacts {
     packageManagers: [],
     lockfiles: [],
     scripts: [],
+    scriptSections: [],
     dependencies: [],
     runtimes: [],
     envExample: [],
@@ -113,6 +118,7 @@ export function extractRepoFacts(s: RepoSnapshot): RepoFacts {
           continue;
         }
         f.manifests.push({ value: path, evidence: evidenceOf(s, path) });
+        if (pkg.scriptsSection) f.scriptSections.push({ value: path, evidence: evidenceOf(s, path, pkg.scriptsSection.line, pkg.scriptsSection.snippet) });
         for (const sc of pkg.scripts) f.scripts.push(located(s, path, sc));
         deps();
         for (const e of pkg.engines) addRuntime(path, { value: { runtime: 'node', spec: e.value.spec }, line: e.line, snippet: e.snippet });

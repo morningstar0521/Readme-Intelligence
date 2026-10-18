@@ -21,13 +21,9 @@ export interface RepoSnapshot {
   files: Record<string, string>;
 }
 
-export interface RepoEvidence {
-  path: string;
-  /** 1-based line, 0 when the evidence is the file's existence. */
-  line: number;
-  snippet: string;
-  url: string;
-}
+export type RepoEvidence =
+  | { kind: 'content'; path: string; line: number; snippet: string }
+  | { kind: 'tree-absence'; path: string; treeTruncated: boolean };
 
 export type Ecosystem = 'node' | 'python' | 'go' | 'rust' | 'ruby' | 'php' | 'java' | 'dotnet';
 export type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun' | 'pip' | 'poetry' | 'uv' | 'pipenv' | 'conda' | 'go' | 'cargo' | 'bundler' | 'composer' | 'maven' | 'gradle';
@@ -48,6 +44,8 @@ export interface RepoFacts {
   lockfiles: Located<string>[];
   /** npm scripts: name -> command. */
   scripts: Located<{ name: string; command: string }>[];
+  /** The scripts object, used as explicit evidence when a README script is absent. */
+  scriptSections: Located<string>[];
   dependencies: Located<{ name: string; ecosystem: Ecosystem; dev: boolean }>[];
   /** Runtime version requirements (engines, .nvmrc, requires-python, go directive...). */
   runtimes: Located<{ runtime: 'node' | 'python' | 'go' | 'rust' | 'ruby' | 'java'; spec: string; minMajor: number | null; minMinor: number | null }>[];

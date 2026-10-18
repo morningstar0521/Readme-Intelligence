@@ -10,7 +10,7 @@
  *   --candidates  print every non-verified Reality Check claim per fixture (labeled or not),
  *                 so you can judge each one and copy the real ones into the label's "reality" block
  */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { evaluate, evaluateReality, loadFixtures, renderBenchmarkDashboard, renderResultsMarkdown, runReality, splitFixtures, FIELDS, REGRESSION_FLOOR } from '../packages/core/tests/eval/evaluate';
@@ -25,7 +25,7 @@ if (process.argv.includes('--candidates')) {
     const open = report.claims.filter((c) => c.status !== 'verified');
     console.log(`\n## ${fx.name}  readiness ${report.readiness.score}/100  (${open.length} non-verified claims)`);
     for (const c of open) {
-      const where = [...c.readme.map((r) => `README:${r.line}`), ...c.repo.map((e) => `${e.path}${e.line ? `:${e.line}` : ''}`)].join(', ');
+      const where = [...c.readme.map((r) => `README:${r.line}`), ...c.repo.map((e) => `${e.path}${e.kind === 'content' && e.line > 0 ? `:${e.line}` : ''}`)].join(', ');
       console.log(`  [${c.status}] ${c.id}  ${c.title}${where ? `  <- ${where}` : ''}`);
     }
   }
@@ -69,8 +69,15 @@ if (process.argv.includes('--verbose')) {
 }
 
 const reality = evaluateReality(fixtures);
+const flaggedSummary = JSON.parse(readFileSync(path.join(root, 'docs', 'reality-labels', 'flagged-contradictions.json'), 'utf8')).summary as {
+  audited: number;
+  real: number;
+  false: number;
+  precision: number;
+};
+console.log(`reality: ${flaggedSummary.audited} labeled (${flaggedSummary.real} real, ${flaggedSummary.false} false, precision ${(flaggedSummary.precision * 100).toFixed(1)}%)`);
 if (reality.withSnapshot > 0) {
-  console.log(`reality check  ${reality.withSnapshot} snapshots, ${reality.labeled} labeled, mean readiness ${reality.meanReadiness?.toFixed(1) ?? 'n/a'}`);
+  console.log(`reality check  ${reality.withSnapshot} snapshots, ${flaggedSummary.audited} claims labeled, mean readiness ${reality.meanReadiness?.toFixed(1) ?? 'n/a'}`);
   if (reality.labeled > 0) {
     console.log(`  contradictions   precision ${pct(reality.contradictions.precision)}  recall ${pct(reality.contradictions.recall)}`);
     console.log(`  undocumented env precision ${pct(reality.undocumentedEnv.precision)}  recall ${pct(reality.undocumentedEnv.recall)}`);

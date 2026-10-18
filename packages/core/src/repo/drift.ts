@@ -1,5 +1,5 @@
 import { blobUrl } from './facts';
-import type { Claim, ClaimStatus, RealityReport } from './types';
+import type { Claim, ClaimStatus, RealityReport, RepoEvidence } from './types';
 
 /**
  * Documentation drift: compare the Reality Check of a base revision with a head revision
@@ -29,20 +29,39 @@ export interface RealityDiff {
   changes: StatusChange[];
 }
 
+export function treeAbsenceOf(report: RealityReport, path: string): RepoEvidence | null {
+  if (report.snapshot.truncated) return null;
+  return { kind: 'tree-absence', path, treeTruncated: false };
+}
+
+function driftClaims(report: RealityReport, base: RealityReport): Claim[] {
+  return report.claims.map((claim) => {
+    const previous = base.claims.find((candidate) => candidate.id === claim.id);
+    if (claim.status !== 'unverified' || previous?.status !== 'verified') return claim;
+    if (claim.repo.some((evidence) => evidence.kind === 'content')) return { ...claim, status: 'contradiction' };
+    if (!/^(file|link):/.test(claim.id)) return claim;
+    const path = claim.id.slice(claim.id.indexOf(':') + 1);
+    const evidence = treeAbsenceOf(report, path);
+    return evidence ? { ...claim, status: 'contradiction', repo: [evidence] } : claim;
+  });
+}
+
 export function diffRealityReports(base: RealityReport, head: RealityReport): RealityDiff {
-  const baseById = new Map(base.claims.map((c) => [c.id, c]));
-  const headById = new Map(head.claims.map((c) => [c.id, c]));
+  const effectiveBaseClaims = driftClaims(base, head);
+  const effectiveHeadClaims = driftClaims(head, base);
+  const baseById = new Map(effectiveBaseClaims.map((c) => [c.id, c]));
+  const effectiveHeadById = new Map(effectiveHeadClaims.map((c) => [c.id, c]));
 
-  const newContradictions = head.claims.filter((c) => c.status === 'contradiction' && baseById.get(c.id)?.status !== 'contradiction');
-  const openContradictions = head.claims.filter((c) => c.status === 'contradiction' && baseById.get(c.id)?.status === 'contradiction');
-  const resolvedContradictions = base.claims.filter((c) => c.status === 'contradiction' && headById.get(c.id)?.status !== 'contradiction');
-  const newUndocumentedEnv = head.claims.filter((c) => c.category === 'env' && c.status === 'repo-only' && baseById.get(c.id)?.status !== 'repo-only');
+  const newContradictions = effectiveHeadClaims.filter((c) => c.status === 'contradiction' && baseById.get(c.id)?.status !== 'contradiction');
+  const openContradictions = effectiveHeadClaims.filter((c) => c.status === 'contradiction' && baseById.get(c.id)?.status === 'contradiction');
+  const resolvedContradictions = effectiveBaseClaims.filter((c) => c.status === 'contradiction' && effectiveHeadById.get(c.id)?.status !== 'contradiction');
+  const newUndocumentedEnv = effectiveHeadClaims.filter((c) => c.category === 'env' && c.status === 'repo-only' && baseById.get(c.id)?.status !== 'repo-only');
 
-  const ids = new Set([...baseById.keys(), ...headById.keys()]);
+  const ids = new Set([...baseById.keys(), ...effectiveHeadById.keys()]);
   const changes: StatusChange[] = [];
   for (const id of [...ids].sort()) {
     const b = baseById.get(id);
-    const h = headById.get(id);
+    const h = effectiveHeadById.get(id);
     const from = b?.status ?? null;
     const to = h?.status ?? null;
     if (from !== to) changes.push({ id, title: (h ?? b)!.title, from, to });
@@ -91,17 +110,17 @@ function readmeRefs(report: RealityReport, claim: Claim, o: RenderOptions): stri
   return refs.length ? refs.join(', ') : '-';
 }
 
-function repoRefs(claim: Claim, o: RenderOptions): string {
+function repoRefs(report: RealityReport, claim: Claim, o: RenderOptions): string {
   const refs = claim.repo.slice(0, 3).map((e) => {
-    const label = `${e.path}${e.line > 0 ? `:${e.line}` : ''}`;
-    return o.links ? `[${cell(label)}](${e.url})` : cell(label);
+    const label = `${e.path}${e.kind === 'content' && e.line > 0 ? `:${e.line}` : ''}`;
+    return o.links ? `[${cell(label)}](${blobUrl(report.snapshot, e.path, e.kind === 'content' ? e.line : 0)})` : cell(label);
   });
   if (claim.repo.length > 3) refs.push(`+${claim.repo.length - 3} more`);
   return refs.length ? refs.join(', ') : 'not found';
 }
 
 function claimTable(report: RealityReport, claims: Claim[], o: RenderOptions): string[] {
-  return ['| Claim | README | Repository |', '|---|---|---|', ...claims.map((c) => `| ${cell(c.title)}<br><sub>${cell(c.detail)}</sub> | ${readmeRefs(report, c, o)} | ${repoRefs(c, o)} |`)];
+  return ['| Claim | README | Repository |', '|---|---|---|', ...claims.map((c) => `| ${cell(c.title)}<br><sub>${cell(c.detail)}</sub> | ${readmeRefs(report, c, o)} | ${repoRefs(report, c, o)} |`)];
 }
 
 const signed = (n: number) => (n > 0 ? `+${n}` : `${n}`);
@@ -161,7 +180,7 @@ export function renderRealityText(head: RealityReport, diff: RealityDiff | null)
     if (claims.length === 0) return;
     lines.push('', `${label}:`);
     for (const cl of claims) {
-      const where = [...cl.readme.filter((r) => r.line > 0).map((r) => `README:${r.line}`), ...cl.repo.slice(0, 2).map((e) => `${e.path}${e.line ? `:${e.line}` : ''}`)].join(', ');
+      const where = [...cl.readme.filter((r) => r.line > 0).map((r) => `README:${r.line}`), ...cl.repo.slice(0, 2).map((e) => `${e.path}${e.kind === 'content' && e.line > 0 ? `:${e.line}` : ''}`)].join(', ');
       lines.push(`  [${cl.status}] ${cl.id}  ${cl.title}${where ? `  <- ${where}` : ''}`);
     }
   };

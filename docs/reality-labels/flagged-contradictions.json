@@ -1,0 +1,28 @@
+{
+  "labeled": true,
+  "labeled_by": "Shubh",
+  "labeled_at": "2026-10-19",
+  "summary": {
+    "audited": 15,
+    "real": 4,
+    "false": 11,
+    "precision": 0.267
+  },
+  "rows": [
+    { "claim_id": "license", "fixture": "BurntSushi__ripgrep", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "File-existence evidence cannot establish a license conflict." },
+    { "claim_id": "file:../..", "fixture": "calcom__cal.com", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "No explicit repository value supports a contradiction." },
+    { "claim_id": "file:cal.diy", "fixture": "calcom__cal.com", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "No explicit repository value supports a contradiction." },
+    { "claim_id": "link:launchpad.37signals.com/integrations", "fixture": "calcom__cal.com", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "This external link has no repository evidence." },
+    { "claim_id": "pm:node", "fixture": "colinhacks__zod", "verdict": "real", "root_cause": "", "notes": "The audit confirms this as a real contradiction." },
+    { "claim_id": "pm:node", "fixture": "date-fns__date-fns", "verdict": "real", "root_cause": "", "notes": "The audit confirms this as a real contradiction." },
+    { "claim_id": "script:start", "fixture": "expressjs__express", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "Package.json existence alone is insufficient evidence." },
+    { "claim_id": "license", "fixture": "formbricks__formbricks", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "The LICENSE existence marker has no explicit license value." },
+    { "claim_id": "license", "fixture": "gohugoio__hugo", "verdict": "false", "root_cause": "wrong-scope", "notes": "The README statement concerns libwebp, not the repository license." },
+    { "claim_id": "file:Jellyfin.Server/bin/Debug/net10.0", "fixture": "jellyfin__jellyfin", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "No explicit repository value supports a contradiction." },
+    { "claim_id": "runtime:node", "fixture": "louislam__uptime-kuma", "verdict": "real", "root_cause": "", "notes": "The README and repository engine requirement are explicit and conflicting." },
+    { "claim_id": "file:myapp", "fixture": "rails__rails", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "No explicit repository value supports a contradiction." },
+    { "claim_id": "make:install", "fixture": "sharkdp__bat", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "No explicit Makefile value was available." },
+    { "claim_id": "runtime:rust", "fixture": "sharkdp__bat", "verdict": "real", "root_cause": "", "notes": "The README and Cargo.toml version are explicit and conflicting." },
+    { "claim_id": "link:tutorial", "fixture": "tiangolo__fastapi", "verdict": "false", "root_cause": "ambiguous-evidence", "notes": "The link has no repository evidence." }
+  ]
+}

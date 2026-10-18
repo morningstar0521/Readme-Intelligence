@@ -28,6 +28,28 @@ function snippetAt(content: string, line: number): string {
   return line > 0 ? (lines(content)[line - 1] ?? '').trim().slice(0, 160) : '';
 }
 
+function objectSnippet(content: string, line: number): string {
+  const source = lines(content).slice(line - 1).join('\n');
+  const start = source.indexOf('{');
+  if (start < 0) return snippetAt(content, line);
+  let depth = 0;
+  let quoted = false;
+  let escaped = false;
+  for (let i = start; i < source.length; i++) {
+    const char = source[i]!;
+    if (quoted) {
+      if (escaped) escaped = false;
+      else if (char === '\\') escaped = true;
+      else if (char === '"') quoted = false;
+      continue;
+    }
+    if (char === '"') quoted = true;
+    else if (char === '{') depth++;
+    else if (char === '}' && --depth === 0) return source.slice(start, i + 1).trim().slice(0, 320);
+  }
+  return snippetAt(content, line);
+}
+
 // ------------------------------------------------------------------ versions
 
 export interface VersionMin {
@@ -64,6 +86,7 @@ export function minVersion(spec: string): VersionMin {
 export interface PackageJsonInfo {
   name: string | null;
   scripts: Lined<{ name: string; command: string }>[];
+  scriptsSection: Lined<string> | null;
   dependencies: Lined<{ name: string; dev: boolean }>[];
   engines: Lined<{ runtime: 'node'; spec: string }>[];
   packageManager: Lined<string> | null;
@@ -79,7 +102,7 @@ export function parsePackageJson(content: string): PackageJsonInfo | null {
   }
   if (!json || typeof json !== 'object') return null;
   const obj = json as Record<string, unknown>;
-  const out: PackageJsonInfo = { name: typeof obj.name === 'string' ? obj.name : null, scripts: [], dependencies: [], engines: [], packageManager: null, workspaces: Boolean(obj.workspaces) };
+  const out: PackageJsonInfo = { name: typeof obj.name === 'string' ? obj.name : null, scripts: [], scriptsSection: null, dependencies: [], engines: [], packageManager: null, workspaces: Boolean(obj.workspaces) };
 
   const sectionLine = (key: string) => lineOfMatch(content, new RegExp(`"${escapeRe(key)}"\\s*:`));
   const keyLine = (section: string, key: string) => {
@@ -89,6 +112,8 @@ export function parsePackageJson(content: string): PackageJsonInfo | null {
   };
 
   if (obj.scripts && typeof obj.scripts === 'object') {
+    const line = sectionLine('scripts');
+    if (line > 0) out.scriptsSection = { value: objectSnippet(content, line), line, snippet: objectSnippet(content, line) };
     for (const [name, command] of Object.entries(obj.scripts as Record<string, unknown>)) {
       if (typeof command !== 'string') continue;
       const line = keyLine('scripts', name);
