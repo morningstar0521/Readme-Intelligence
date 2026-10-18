@@ -1,17 +1,53 @@
 {
-  "name": "@readme-intel/cli",
+  "name": "readme-intel",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "description": "Deterministic README intelligence CLI.",
+  "description": "Deterministic README analyzer for GitHub repos. Extracts commands, env vars, tech stack, and API endpoints with source-line evidence. Catches README drift in PRs. No LLM.",
+  "keywords": [
+    "readme",
+    "documentation",
+    "static-analysis",
+    "cli",
+    "developer-tools",
+    "readme-analyzer",
+    "drift-detection",
+    "github-action",
+    "onboarding",
+    "typescript"
+  ],
+  "license": "MIT",
   "bin": {
-    "readme-intel": "./dist/index.js"
+    "readme-intel": "./bin/readme-intel.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morningstar0521/Readme-Intelligence.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://readme-intelligence.vercel.app/",
+  "bugs": {
+    "url": "https://github.com/morningstar0521/Readme-Intelligence/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
-    "build": "tsc --noEmit -p tsconfig.json",
+    "build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
+    "prepublishOnly": "pnpm build && pnpm test",
+    "test": "pnpm typecheck",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
-  "dependencies": {
-    "@readme-intel/core": "workspace:*"
+  "devDependencies": {
+    "esbuild": "0.28.2"
   }
 }

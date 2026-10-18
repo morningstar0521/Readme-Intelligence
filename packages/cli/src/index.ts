@@ -27,6 +27,10 @@ function parseArgs(argv: string[]): Args {
       console.log('Usage: readme-intel <README.md> [--format text|md|json]');
       process.exit(0);
     }
+    if (arg === '--version' || arg === '-v') {
+      console.log('0.1.0');
+      process.exit(0);
+    }
     if (arg === '--format') {
       const value = argv[++i];
       if (value !== 'text' && value !== 'md' && value !== 'json') usage(`unknown format "${value ?? ''}"`);
