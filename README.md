@@ -152,7 +152,7 @@ The check is static: it reads text and metadata, but does not install dependenci
 The checker is also available as a composite action for other repositories. Pin it to a release commit when adopting it:
 
 ```yaml
-- uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@v0.1.1
+- uses: morningstar0521/Readme-Intelligence/.github/actions/readme-drift@v0.1.4
   with:
     head-path: .
     fail-on: new-contradiction
