@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
 import { readFileSync } from 'node:fs';
-import path from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { analyzeReadme, type AnalysisResult, type Intelligence } from '@readme-intel/core';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
 
 type Format = 'text' | 'md' | 'json';
 
@@ -28,7 +32,7 @@ function parseArgs(argv: string[]): Args {
       process.exit(0);
     }
     if (arg === '--version' || arg === '-v') {
-      console.log('0.1.0');
+      console.log(pkg.version);
       process.exit(0);
     }
     if (arg === '--format') {
@@ -46,7 +50,7 @@ function parseArgs(argv: string[]): Args {
 }
 
 function readmePath(file: string): string {
-  const resolved = path.resolve(process.cwd(), file);
+  const resolved = resolve(process.cwd(), file);
   try {
     return readFileSync(resolved, 'utf8');
   } catch {
@@ -55,7 +59,7 @@ function readmePath(file: string): string {
 }
 
 function sourceFor(file: string) {
-  return { kind: 'local' as const, fileName: path.basename(file) };
+  return { kind: 'local' as const, fileName: basename(file) };
 }
 
 function jsonReport(result: AnalysisResult, file: string): string {

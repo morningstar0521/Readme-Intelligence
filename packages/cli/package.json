@@ -1,6 +1,6 @@
 {
   "name": "readme-intel",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "type": "module",
   "description": "Deterministic README analyzer for GitHub repos. Extracts commands, env vars, tech stack, and API endpoints with source-line evidence. Catches README drift in PRs. No LLM.",
   "keywords": [
