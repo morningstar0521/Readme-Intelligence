@@ -304,6 +304,10 @@ Deployment is intentionally separate from local development. For a Vercel deploy
 
 The Action and CLI come before a browser extension because they create a repeatable maintenance workflow, not only a one-time viewer demo.
 
+## Featured in
+
+- [XERJ Corpus Hub](https://hub.xerj.org/contributors/morningstar0521): indexed as a reference implementation that AI coding agents can search, with attribution.
+
 ## License
 
 MIT
